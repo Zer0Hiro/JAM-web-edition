@@ -14,7 +14,7 @@ const lesson03 = {
       title: "Same note, different vibe",
       content: `A guitar and a flute can play the same note but sound totally different. Why? The **shape** of the sound wave is different!
 
-JAM gives you 5 wave shapes to pick from. Each one has its own personality.`,
+JEM gives you 5 wave shapes to pick from. Each one has its own personality.`,
     },
     {
       title: "Meet the waves",

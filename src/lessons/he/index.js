@@ -24,7 +24,7 @@ export const phases = [
   {
     id: 1,
     title: "יסודות",
-    description: "למדו את הבסיס של צליל ושפת JAM",
+    description: "למדו את הבסיס של צליל ושפת JEM",
     color: "#22d3ee",
     lessons: [lesson01, lesson02, lesson03],
   },

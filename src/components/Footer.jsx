@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo / brand */}
           <div className="text-center md:text-start">
-            <span className="text-xl font-bold gradient-text">JAM</span>
+            <span className="text-xl font-bold gradient-text">JEM</span>
             <p className="text-sm text-[var(--color-text-muted)] mt-1">
               {t.footer.tagline}
             </p>

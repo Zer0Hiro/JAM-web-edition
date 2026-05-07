@@ -5,16 +5,16 @@ const lesson01 = {
   subtitle: "Make your first sound with code",
   phase: 1,
   difficulty: 1,
-  goal: "Write your very first JAM program and hear a sound come out!",
+  goal: "Write your very first JEM program and hear a sound come out!",
   concepts: ["BPM (tempo)", "INSTRUMENT block", "SEQUENCE and PLAY"],
   estimatedMinutes: 10,
 
   steps: [
     {
-      title: "What is JAM?",
-      content: `JAM lets you make music by typing words. You type, it plays. Like texting a robot that makes sounds for you!
+      title: "What is JEM?",
+      content: `JEM lets you make music by typing words. You type, it plays. Like texting a robot that makes sounds for you!
 
-Every JAM program needs three things:
+Every JEM program needs three things:
 1. A **tempo** -- how fast the beat goes
 2. An **instrument** -- what kind of sound
 3. A **sequence** -- which notes to play`,
@@ -31,7 +31,7 @@ BPM 120
     },
     {
       title: "Make an instrument",
-      content: `Now tell JAM what sound you want:
+      content: `Now tell JEM what sound you want:
 
 \`\`\`
 INSTRUMENT tone:
@@ -49,7 +49,7 @@ INSTRUMENT tone:
     },
     {
       title: "Pick your notes",
-      content: `Tell JAM what notes to play:
+      content: `Tell JEM what notes to play:
 
 \`\`\`
 SEQUENCE melody:
@@ -64,13 +64,13 @@ SEQUENCE melody:
     },
     {
       title: "Hit play!",
-      content: `Last step -- tell JAM to actually play it:
+      content: `Last step -- tell JEM to actually play it:
 
 \`\`\`
 PLAY_SEQUENCE melody
 \`\`\`
 
-Without this line, JAM knows your song but won't play it. It's like writing a recipe but forgetting to cook!`,
+Without this line, JEM knows your song but won't play it. It's like writing a recipe but forgetting to cook!`,
     },
   ],
 

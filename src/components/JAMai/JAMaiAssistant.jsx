@@ -138,7 +138,7 @@ export default function JAMaiAssistant({ lessonId = null, code = null }) {
               </div>
 
               <div className="mt-0.5 text-xs font-medium text-slate-300">
-                JAM learning assistant
+                JEM learning assistant
               </div>
             </div>
           </div>

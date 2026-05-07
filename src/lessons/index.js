@@ -25,7 +25,7 @@ export const phases = [
   {
     id: 1,
     title: "Fundamentals",
-    description: "Learn the basics of sound and the JAM language",
+    description: "Learn the basics of sound and the JEM language",
     color: "#22d3ee",
     lessons: [lesson01, lesson02, lesson03],
   },

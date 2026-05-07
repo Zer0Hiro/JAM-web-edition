@@ -1,7 +1,7 @@
 import CodeEditor from "./CodeEditor";
 import { useLanguage } from "../i18n/context";
 
-const SANDBOX_CODE = `# JAM Sandbox -- experiment freely!
+const SANDBOX_CODE = `# JEM Sandbox -- experiment freely!
 # Try changing notes, waveforms, tempos, and instruments.
 
 BPM 120

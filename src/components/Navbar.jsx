@@ -12,6 +12,7 @@ export default function Navbar({ onNavigate, currentView }) {
     { label: t.nav.lessons, view: "lessons" },
     { label: t.nav.sandbox, view: "sandbox" },
     { label: t.nav.sounds, view: "library" },
+    { label: t.nav.guide, view: "guide" },
   ];
 
   function handleNav(view) {
@@ -30,7 +31,7 @@ export default function Navbar({ onNavigate, currentView }) {
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)] flex items-center justify-center">
             <Volume2 size={16} className="text-white" />
           </div>
-          <span className="text-lg font-bold gradient-text">JAM</span>
+          <span className="text-lg font-bold gradient-text">JEM</span>
         </button>
 
         {/* Desktop nav */}
