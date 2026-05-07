@@ -18,6 +18,7 @@ const he = {
     startLearning: "התחילו ללמוד",
     tryEditor: "נסו את העורך",
     scrollToExplore: "גללו לגלות",
+    buildYourOwn: "בנו פרויקט בעצמכם",
   },
 
   // Feature Cards
