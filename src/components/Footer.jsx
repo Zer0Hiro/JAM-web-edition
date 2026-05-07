@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="text-center md:text-left">
             <span className="text-xl font-bold gradient-text">JAM</span>
             <p className="text-sm text-[var(--color-text-muted)] mt-1">
-              Junior Audio Maker
+              Just Arduino Music
             </p>
           </div>
 
@@ -25,16 +25,7 @@ export default function Footer() {
               <ExternalLink size={12} />
             </a>
             <a
-              href="https://www.arduino.cc/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-colors no-underline"
-            >
-              Arduino
-              <ExternalLink size={12} />
-            </a>
-            <a
-              href="https://github.com"
+              href="https://github.com/Zer0Hiro/jamWeb"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-colors no-underline"

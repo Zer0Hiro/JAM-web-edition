@@ -30,7 +30,7 @@ export default function Hero({ onStartLearning, onTryEditor }) {
       <div className="mb-6 fade-in-up" style={{ animationDelay: "0.1s" }}>
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-[var(--color-accent-purple)]/10 text-[var(--color-accent-purple)] border border-[var(--color-accent-purple)]/20">
           <Zap size={14} />
-          Arduino + Mozzi Sound Synthesis
+          Just Arduino Music
         </span>
       </div>
 

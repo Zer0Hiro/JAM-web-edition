@@ -54,7 +54,7 @@ export default function FeatureCards() {
             What is <span className="gradient-text">JAM</span>?
           </h2>
           <p className="text-[var(--color-text-secondary)] max-w-xl mx-auto">
-            JAM (Junior Audio Maker) is a free platform for learning sound
+            JAM (Just Arduino Music) is a free platform for learning sound
             synthesis through code. No prior coding or music experience required.
           </p>
         </div>
