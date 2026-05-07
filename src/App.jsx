@@ -10,7 +10,7 @@ import SoundLibrary from "./components/SoundLibrary";
 import Footer from "./components/Footer";
 import { getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
-import { MichaelAIAssistant } from './components/MichaelAI'
+import { JAMaiAssistant } from './components/JAMai'
 
 export default function App() {
   // Views: "home", "lessons", "sandbox", "lesson", "library"
@@ -74,7 +74,7 @@ export default function App() {
           onComplete={completeLesson}
           completed={completedLessons.has(selectedLesson.id)}
         />
-        <MichaelAIAssistant lessonId={selectedLesson.id} />
+        <JAMaiAssistant lessonId={selectedLesson.id} />
       </>
     );
   }
@@ -119,7 +119,8 @@ export default function App() {
       )}
 
       {currentView === "library" && <SoundLibrary />}
-      <MichaelAIAssistant />
+      <JAMaiAssistant />
     </div>
   );
 }
+

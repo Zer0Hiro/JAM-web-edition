@@ -1,5 +1,5 @@
 """
-MichaelAI RAG — local retrieval over JAM lesson files.
+JAMai RAG — local retrieval over JAM lesson files.
 
 Reads all lesson .js files from src/lessons/, scores them by keyword
 overlap with the user question, and returns the top matching chunks.
@@ -114,7 +114,7 @@ def _tokenize(text):
     return [t for t in tokens if t not in _STOPWORDS and len(t) > 2]
 
 
-def michael_ai_retrieve(question, lesson_id=None, top_k=3):
+def jamai_retrieve(question, lesson_id=None, top_k=3):
     """
     Score JAM lesson files by keyword overlap with the question.
     Optionally boost the lesson matching lesson_id.
@@ -149,3 +149,4 @@ def michael_ai_retrieve(question, lesson_id=None, top_k=3):
                 'snippet': lesson['snippet'],
             })
     return results
+

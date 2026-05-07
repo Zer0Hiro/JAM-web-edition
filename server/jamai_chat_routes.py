@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-from michael_ai_rag import michael_ai_retrieve
+from jamai_rag import jamai_retrieve
 
-michael_ai_chat_bp = Blueprint("michael_ai_chat", __name__)
+jamai_chat_bp = Blueprint("jamai_chat", __name__)
 
 _SUGGESTIONS = ["Explain this lesson", "Give me a hint", "Translate hard words"]
 
@@ -11,8 +11,8 @@ _NO_MATCH = (
 )
 
 
-@michael_ai_chat_bp.route("/api/michael-ai/chat", methods=["POST"])
-def michael_ai_chat():
+@jamai_chat_bp.route("/api/jamai/chat", methods=["POST"])
+def jamai_chat():
     data = request.get_json(silent=True) or {}
     message = data.get("message", "").strip()
     lesson_id = data.get("lessonId")
@@ -27,7 +27,7 @@ def michael_ai_chat():
         except (ValueError, TypeError):
             lid = None
 
-    results = michael_ai_retrieve(message, lesson_id=lid, top_k=3)
+    results = jamai_retrieve(message, lesson_id=lid, top_k=3)
 
     if not results:
         return jsonify({"answer": _NO_MATCH, "sources": [], "suggestions": _SUGGESTIONS})
@@ -55,3 +55,4 @@ def michael_ai_chat():
         "sources": sources,
         "suggestions": _SUGGESTIONS,
     })
+
