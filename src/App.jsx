@@ -10,6 +10,7 @@ import SoundLibrary from "./components/SoundLibrary";
 import Footer from "./components/Footer";
 import { getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
+import { MichaelAIAssistant } from './components/MichaelAI'
 
 export default function App() {
   // Views: "home", "lessons", "sandbox", "lesson", "library"
@@ -115,6 +116,7 @@ export default function App() {
       )}
 
       {currentView === "library" && <SoundLibrary />}
+      <MichaelAIAssistant />
     </div>
   );
 }
