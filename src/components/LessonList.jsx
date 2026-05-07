@@ -1,9 +1,10 @@
-import { phases } from "../lessons";
+import { getPhasesForLang } from "../lessons";
 import LessonCard from "./LessonCard";
 import { useLanguage } from "../i18n/context";
 
 export default function LessonList({ onSelectLesson, completedLessons = new Set() }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const phases = getPhasesForLang(lang);
   const totalLessons = phases.reduce((sum, p) => sum + p.lessons.length, 0);
 
   return (
