@@ -1,0 +1,1 @@
+export { default as JAMaiAssistant } from './JAMaiAssistant'

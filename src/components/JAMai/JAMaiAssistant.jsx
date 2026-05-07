@@ -9,7 +9,7 @@ import {
   Lightbulb,
   Languages,
 } from 'lucide-react'
-import { sendMichaelAIChatMessage } from './MichaelAIChatApi'
+import { sendJAMaiChatMessage } from './JAMaiChatApi'
 
 const quickActions = [
   {
@@ -29,7 +29,7 @@ const quickActions = [
   },
 ]
 
-export default function MichaelAIAssistant({ lessonId = null, code = null }) {
+export default function JAMaiAssistant({ lessonId = null, code = null }) {
   const [isOpen, setIsOpen] = useState(false)
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +37,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
     {
       role: 'assistant',
       content:
-        'Hi. I am MichaelAI Tutor for JAM. Ask me about the lesson, your code, English terms, or music concepts.',
+        'Hi. I am JAMai Tutor for JAM. Ask me about the lesson, your code, English terms, or music concepts.',
       sources: [],
     },
   ])
@@ -62,7 +62,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
     setIsLoading(true)
 
     try {
-      const data = await sendMichaelAIChatMessage({
+      const data = await sendJAMaiChatMessage({
         message: text,
         lessonId,
         code,
@@ -72,7 +72,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
         ...previousMessages,
         {
           role: 'assistant',
-          content: data.answer || 'MichaelAI could not generate an answer.',
+          content: data.answer || 'JAMai could not generate an answer.',
           sources: data.sources || [],
         },
       ])
@@ -82,7 +82,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
         {
           role: 'assistant',
           content:
-            'MichaelAI backend is not running yet, or /api/michael-ai/chat is not ready.',
+            'JAMai backend is not running yet, or /api/jamai/chat is not ready.',
           sources: [],
         },
       ])
@@ -109,7 +109,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
         </span>
 
         <span className="flex flex-col items-start leading-tight">
-          <span>MichaelAI Tutor</span>
+          <span>JAMai Tutor</span>
           <span className="text-[11px] font-medium text-slate-300">
             Ask · Learn · Debug
           </span>
@@ -133,7 +133,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
 
             <div>
               <div className="flex items-center gap-2 text-base font-bold tracking-tight">
-                MichaelAI Tutor
+                JAMai Tutor
                 <Sparkles size={15} className="text-fuchsia-400" />
               </div>
 
@@ -146,7 +146,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
           <button
             onClick={() => setIsOpen(false)}
             className="rounded-2xl p-2 text-slate-400 transition hover:bg-white/10 hover:text-white focus:outline-none focus:ring-4 focus:ring-cyan-400/20"
-            aria-label="Close MichaelAI Tutor"
+            aria-label="Close JAMai Tutor"
           >
             <X size={18} />
           </button>
@@ -190,7 +190,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
                 {!isUser && (
                   <div className="mb-1 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-cyan-300">
                     <Bot size={12} />
-                    MichaelAI
+                    JAMai
                   </div>
                 )}
 
@@ -222,7 +222,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
             <div className="rounded-3xl rounded-bl-md border border-cyan-300/20 bg-[#252c57] px-4 py-3 text-sm text-slate-300 shadow-sm shadow-cyan-500/10">
               <div className="mb-1 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-cyan-300">
                 <Bot size={12} />
-                MichaelAI
+                JAMai
               </div>
               Thinking...
             </div>
@@ -245,14 +245,14 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
             onClick={() => handleSend()}
             disabled={isLoading || !input.trim()}
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 via-sky-400 to-fuchsia-500 text-white transition hover:scale-105 hover:shadow-lg hover:shadow-cyan-400/25 disabled:cursor-not-allowed disabled:opacity-40 focus:outline-none focus:ring-4 focus:ring-cyan-400/20"
-            aria-label="Send message to MichaelAI"
+            aria-label="Send message to JAMai"
           >
             <Send size={18} />
           </button>
         </div>
 
         <div className="mt-2 text-center font-mono text-[10px] text-slate-400">
-          MichaelAI module · /api/michael-ai/chat
+          JAMai module · /api/jamai/chat
         </div>
       </div>
     </aside>

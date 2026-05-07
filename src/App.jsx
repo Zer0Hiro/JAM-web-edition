@@ -9,7 +9,7 @@ import Sandbox from "./components/Sandbox";
 import Footer from "./components/Footer";
 import { getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
-import { MichaelAIAssistant } from './components/MichaelAI'
+import { JAMaiAssistant } from './components/JAMai'
 
 export default function App() {
   // Views: "home", "lessons", "sandbox", "lesson"
@@ -73,7 +73,7 @@ export default function App() {
           onComplete={completeLesson}
           completed={completedLessons.has(selectedLesson.id)}
         />
-        <MichaelAIAssistant lessonId={selectedLesson.id} />
+        <JAMaiAssistant lessonId={selectedLesson.id} />
       </>
     );
   }
@@ -116,7 +116,7 @@ export default function App() {
           <Footer />
         </div>
       )}
-      <MichaelAIAssistant />
+      <JAMaiAssistant />
     </div>
   );
 }
