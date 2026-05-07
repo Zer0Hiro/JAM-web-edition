@@ -197,33 +197,53 @@ export default function LessonView({
             {/* Challenges */}
             {lesson.challenges && lesson.challenges.length > 0 && (
               <div className="mb-8">
-                <h2 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                  <Sparkles size={18} style={{ color: phaseColor }} />
-                  Try It Yourself
-                </h2>
-                <div className="space-y-2">
-                  {lesson.challenges.map((challenge) => (
-                    <div
-                      key={challenge.id}
-                      className="p-4 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)]"
-                    >
-                      <p className="text-sm text-[var(--color-text-primary)] mb-2">
-                        {challenge.text}
-                      </p>
-                      <button
-                        onClick={() => toggleChallenge(challenge.id)}
-                        className="text-xs text-[var(--color-accent-purple)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent border-0 p-0"
+                <div className="p-5 rounded-2xl border-2 border-dashed" style={{ borderColor: `${phaseColor}40`, backgroundColor: `${phaseColor}08` }}>
+                  <h2 className="text-lg font-bold mb-1 flex items-center gap-2">
+                    <Sparkles size={20} style={{ color: phaseColor }} />
+                    Your turn! Try these:
+                  </h2>
+                  <p className="text-xs text-[var(--color-text-muted)] mb-4">
+                    Edit the code on the right and press Play to hear your changes. No wrong answers!
+                  </p>
+                  <div className="space-y-3">
+                    {lesson.challenges.map((challenge, idx) => (
+                      <div
+                        key={challenge.id}
+                        className="p-4 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)] shadow-sm"
                       >
-                        {expandedChallenges[challenge.id] ? "Hide hint" : "Show hint"}
-                      </button>
-                      {expandedChallenges[challenge.id] && (
-                        <p className="mt-2 text-xs text-[var(--color-text-muted)] italic bg-[var(--color-bg-secondary)] p-2 rounded-lg">
-                          <Lightbulb size={12} className="inline mr-1" />
-                          {challenge.hint}
-                        </p>
-                      )}
-                    </div>
-                  ))}
+                        <div className="flex items-start gap-3">
+                          <span
+                            className="flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white"
+                            style={{ backgroundColor: phaseColor }}
+                          >
+                            {idx + 1}
+                          </span>
+                          <div className="flex-1">
+                            <p className="text-sm text-[var(--color-text-primary)] font-medium mb-2">
+                              {challenge.text}
+                            </p>
+                            <button
+                              onClick={() => toggleChallenge(challenge.id)}
+                              className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg transition-colors cursor-pointer border-0"
+                              style={{
+                                backgroundColor: expandedChallenges[challenge.id] ? `${phaseColor}20` : 'var(--color-bg-secondary)',
+                                color: expandedChallenges[challenge.id] ? phaseColor : 'var(--color-text-muted)',
+                              }}
+                            >
+                              <Lightbulb size={12} />
+                              {expandedChallenges[challenge.id] ? "Hide hint" : "Need a hint?"}
+                            </button>
+                            {expandedChallenges[challenge.id] && (
+                              <p className="mt-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] p-3 rounded-lg border border-[var(--color-border)]">
+                                <Lightbulb size={12} className="inline mr-1" style={{ color: phaseColor }} />
+                                {challenge.hint}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}

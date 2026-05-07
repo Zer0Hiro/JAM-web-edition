@@ -5,58 +5,54 @@ const lesson07 = {
   subtitle: "Control how sounds fade in and out",
   phase: 3,
   difficulty: 3,
-  goal: "Understand ADSR envelopes and use them to create plucks, pads, and stabs.",
+  goal: "Use ADSR to make sounds that pluck, swell, or punch!",
   concepts: ["ADSR envelope", "Attack/Decay/Sustain/Release", "Sound shaping"],
-  estimatedMinutes: 15,
+  estimatedMinutes: 12,
 
   steps: [
     {
-      title: "What is an envelope?",
-      content: `When you pluck a guitar string, the sound is loud at first, then gradually fades away. When you press a piano key and hold it, the note starts quickly, sustains while you hold it, then fades when you release.
+      title: "Sounds have shapes!",
+      content: `Pluck a guitar string -- it's loud at first, then fades away. Press a piano key and hold it -- the note stays until you let go.
 
-This "shape" of volume over time is called an **envelope**. In synthesis, we control this with four parameters: **Attack, Decay, Sustain, Release** -- or **ADSR**.`,
+That "shape" of loud-to-quiet over time is called an **envelope**. In JAM, you control it with four numbers: **ADSR**.`,
     },
     {
-      title: "The four stages",
+      title: "What ADSR means",
       content: `\`\`\`
 ADSR 10 50 200 100
 \`\`\`
 
-Each number is a time in milliseconds:
+Four numbers, four stages (all in milliseconds):
 
-1. **Attack (10ms)** -- How quickly the sound reaches full volume. Short = snappy, long = gradual fade-in.
-2. **Decay (50ms)** -- How quickly it drops from the peak to the sustain level.
-3. **Sustain (200ms)** -- How long the sound holds at a steady level.
-4. **Release (100ms)** -- How quickly the sound fades out after the note ends.
+1. **Attack (10)** -- How fast the sound turns on. Small = snappy!
+2. **Decay (50)** -- How fast it drops from max volume.
+3. **Sustain (200)** -- How long it holds steady.
+4. **Release (100)** -- How fast it fades out at the end.
 
-Think of it like turning a dial up, letting it drop a bit, holding it steady, then turning it down to zero.`,
+Think of it like: turn the volume UP, let it DROP a bit, HOLD it, then fade OUT.`,
     },
     {
-      title: "Pluck vs pad",
-      content: `Different ADSR settings create totally different vibes:
+      title: "Pluck vs Pad",
+      content: `Different ADSR = totally different sound:
 
 **Pluck** (like a guitar pick):
 \`\`\`
 ADSR 2 80 0 60
 \`\`\`
-Very fast attack (2ms), quick decay (80ms), no sustain, short release. The sound pops and disappears.
+Super fast, pops and disappears.
 
-**Pad** (like a choir):
+**Pad** (like a dreamy choir):
 \`\`\`
 ADSR 300 100 400 500
 \`\`\`
-Slow attack (300ms), gentle decay, long sustain, long release. The sound swells in and lingers.
+Slow fade in, long hold, gentle fade out.
 
-**Stab** (like a brass hit):
-\`\`\`
-ADSR 5 100 50 30
-\`\`\`
-Instant attack, medium decay, short sustain, quick release. Punchy and aggressive.`,
+Try both in the code! Change the pad's ADSR and hear what happens.`,
     },
   ],
 
   code: `# Envelope Shapes
-# A pad with slow attack and a pluck with fast decay.
+# A dreamy pad and a snappy pluck!
 
 BPM 90
 
@@ -94,23 +90,23 @@ LOOP 4:
   challenges: [
     {
       id: "long-pad",
-      text: "Change the pad's attack to 500 and release to 800. It becomes even more dreamy!",
-      hint: "Long attacks and releases are what make ambient music feel so floaty.",
+      text: "Change the pad's attack to 500 and release to 800. Even dreamier!",
+      hint: "Long, slow envelopes are what make ambient and chill music feel so floaty.",
     },
     {
       id: "stab",
-      text: "Change the pluck ADSR to 5 100 50 30 for a punchy stab sound.",
-      hint: "Short, aggressive envelopes are used in EDM and house music all the time.",
+      text: "Change the pluck ADSR to 5 100 50 30. Now it's a punchy stab!",
+      hint: "Short and aggressive envelopes are used in EDM and dance music all the time.",
     },
     {
       id: "zero-release",
-      text: "Set the pluck's release to 0. The notes cut off instantly -- like a muted guitar.",
-      hint: "A release of 0 means the sound stops dead the moment the note duration ends.",
+      text: "Set the pluck's release to 0. The notes cut off instantly -- like a muted guitar!",
+      hint: "Release of 0 means the sound just stops dead. Try it!",
     },
   ],
 
   funFact:
-    "The ADSR envelope was invented by Vladimir Ussachevsky and Robert Moog in the 1960s for early analog synthesizers. Before ADSR, synthesizers could only produce continuous tones -- boring! ADSR gave electronic music its expressiveness.",
+    "ADSR envelopes were invented in the 1960s for the first synthesizers. Before that, synths could only make one continuous BZZZZZ sound. ADSR made electronic music actually expressive!",
 };
 
 export default lesson07;

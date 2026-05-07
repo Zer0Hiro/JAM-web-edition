@@ -5,34 +5,33 @@ const lesson05 = {
   subtitle: "Add drums to your music",
   phase: 2,
   difficulty: 2,
-  goal: "Create drum instruments and build a drum pattern using PATTERN and BEAT.",
+  goal: "Make drum sounds and build your first beat pattern!",
   concepts: ["DRUM instruments", "PATTERN block", "BEAT positioning"],
-  estimatedMinutes: 15,
+  estimatedMinutes: 12,
 
   steps: [
     {
-      title: "Drums are different",
-      content: `Drums work differently from melodic instruments. Instead of playing specific notes like C4 or G5, drums make short bursts of sound at a fixed pitch.
+      title: "Drums are special",
+      content: `Drums don't play notes like C4 or G5. They just go BOOM or TSHH at one pitch.
 
-In JAM, you create a drum with \`TYPE DRUM\` instead of \`TYPE SYNTH\`:
+Make a drum with \`TYPE DRUM\`:
 
 \`\`\`
 INSTRUMENT kick:
     TYPE DRUM
-    WAVE SIN       # deep thump
-    FREQ 60        # fixed low frequency
-    DECAY 80       # how quickly the sound fades
-    VOLUME 255     # max volume!
+    WAVE SIN
+    FREQ 60
+    DECAY 80
+    VOLUME 255
 \`\`\`
 
-- **FREQ** sets a fixed pitch (drums don't change notes)
-- **DECAY** controls how quickly the sound fades out (in milliseconds)
-- A sine wave at a low frequency makes a great kick drum!`,
+- **FREQ** = the pitch (low number = deep thump)
+- **DECAY** = how fast the sound fades away
+- **SIN wave + low FREQ** = perfect kick drum!`,
     },
     {
       title: "Snare and hi-hat",
-      content: `For a snare drum, use NOISE instead of SIN -- it creates that "crack" sound:
-
+      content: `**Snare** (the "crack" sound) -- use NOISE:
 \`\`\`
 INSTRUMENT snare:
     TYPE DRUM
@@ -42,8 +41,7 @@ INSTRUMENT snare:
     VOLUME 220
 \`\`\`
 
-For a hi-hat (the "tss tss tss" sound), use NOISE with a higher frequency and shorter decay:
-
+**Hi-hat** (the "tss tss" sound) -- NOISE but higher and shorter:
 \`\`\`
 INSTRUMENT hat:
     TYPE DRUM
@@ -51,13 +49,11 @@ INSTRUMENT hat:
     FREQ 800
     DECAY 30
     VOLUME 140
-\`\`\`
-
-Lower DECAY = shorter sound. Higher FREQ = brighter/clickier.`,
+\`\`\``,
     },
     {
-      title: "The PATTERN block",
-      content: `Instead of SEQUENCE (which plays notes one after another), PATTERN lets you place drum hits at specific beat positions within a bar:
+      title: "Place your beats",
+      content: `PATTERN lets you put drum hits at specific spots in a bar:
 
 \`\`\`
 PATTERN basic_beat:
@@ -67,32 +63,12 @@ PATTERN basic_beat:
     BEAT 4: snare
 \`\`\`
 
-Each BEAT line says "at beat X, trigger this instrument." Beats are numbered 1, 2, 3, 4 in a standard 4/4 time bar.
-
-The key difference: in a PATTERN, multiple instruments can play at the same beat position! That's how you layer a kick and hi-hat on beat 1.`,
-    },
-    {
-      title: "Layering sounds",
-      content: `You can stack multiple instruments on the same beat:
-
-\`\`\`
-PATTERN rock_beat:
-    BEAT 1: kick
-    BEAT 1: hat     # hat AND kick on beat 1
-    BEAT 2: snare
-    BEAT 2: hat     # hat AND snare on beat 2
-    BEAT 3: kick
-    BEAT 3: hat
-    BEAT 4: snare
-    BEAT 4: hat
-\`\`\`
-
-This creates a full drum groove where the hi-hat plays on every beat alongside the kick and snare. That's how real drum patterns work!`,
+Beats go 1, 2, 3, 4. You can even stack sounds on the same beat -- kick AND hi-hat at the same time!`,
     },
   ],
 
   code: `# Beat Drop
-# A full drum pattern with kick, snare, and hi-hat.
+# A drum pattern with kick, snare, and hi-hat!
 
 BPM 110
 
@@ -133,23 +109,23 @@ LOOP 4:
   challenges: [
     {
       id: "double-kick",
-      text: "Add another kick hit at BEAT 3.5 to create a double-kick pattern.",
-      hint: "You can use decimal beat positions like 1.5, 2.5, 3.5 for off-beat hits!",
+      text: "Add a line: BEAT 3.5: kick. Now you have a double-kick! Cool, right?",
+      hint: "You can use decimal numbers like 1.5, 2.5, 3.5 for hits between the main beats!",
     },
     {
       id: "faster",
-      text: "Change the BPM to 140. Now it sounds like a fast punk beat!",
-      hint: "The same pattern feels completely different at different tempos.",
+      text: "Change BPM to 140. It gets more intense!",
+      hint: "Same beat, different vibe. Speed changes how music feels!",
     },
     {
       id: "remove-hat",
-      text: "Remove all the hat lines. How does the beat feel without the hi-hat?",
-      hint: "Hi-hats add a sense of constant motion. Without them, the beat feels more open and spacey.",
+      text: "Delete all the hat lines. How does the beat feel without hi-hats?",
+      hint: "Hi-hats add that constant 'tss tss' energy. Without them it feels more open and spacey.",
     },
   ],
 
   funFact:
-    "Roland's TR-808 drum machine, released in 1980, was considered a commercial failure because it didn't sound like real drums. But hip-hop producers loved its deep bass kick and snappy snare. Today, the 808 kick is the most iconic sound in rap and pop music!",
+    "The Roland TR-808 drum machine flopped when it came out in 1980 because it didn't sound like real drums. But hip-hop producers LOVED its deep kick. Now it's the most famous drum sound in pop and rap!",
 };
 
 export default lesson05;

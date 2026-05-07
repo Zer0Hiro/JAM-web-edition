@@ -2,64 +2,63 @@ const lesson06 = {
   id: 6,
   slug: "loop-it",
   title: "Loop It!",
-  subtitle: "Repeat and layer sequences",
+  subtitle: "Repeat and build up your song",
   phase: 2,
   difficulty: 2,
-  goal: "Use LOOP blocks to repeat musical phrases and build song structure.",
+  goal: "Use LOOP to repeat music and build a song with different sections.",
   concepts: ["LOOP repetition", "Song structure", "Layering sequences and patterns"],
-  estimatedMinutes: 15,
+  estimatedMinutes: 12,
 
   steps: [
     {
-      title: "Why loops matter",
-      content: `Every song you've ever heard is built from loops -- short musical phrases that repeat over and over. The verse, the chorus, the beat -- they all repeat.
+      title: "Why repeat?",
+      content: `Every song you know is built from repeating parts. The chorus comes back, the beat keeps going.
 
-In JAM, the LOOP block repeats everything inside it a set number of times:
+LOOP makes things repeat:
 
 \`\`\`
 LOOP 4:
     PLAY_SEQUENCE melody
 \`\`\`
 
-This plays the "melody" sequence 4 times in a row. Without LOOP, you'd have to copy-paste the PLAY_SEQUENCE line 4 times -- messy!`,
+This plays "melody" four times. Without LOOP, you'd have to copy-paste everything. Yuck!`,
     },
     {
-      title: "Looping multiple things",
-      content: `You can put multiple items inside a LOOP to play them together each time:
+      title: "Loop multiple things",
+      content: `Put several things inside one LOOP:
 
 \`\`\`
 LOOP 4:
-    PLAY_SEQUENCE bassline
     PLAY_SEQUENCE melody
     PLAY_PATTERN drums
 \`\`\`
 
-Each time through the loop, JAM plays the bassline, then the melody, then the drums. This is how you build a full section of a song!`,
+Each time through: melody plays, then drums play. That's how you build a section of a song!`,
     },
     {
-      title: "Building song structure",
-      content: `Real songs have structure: intro, verse, chorus, etc. You can create this by using multiple LOOPs and sequences:
+      title: "Build a mini-song",
+      content: `Use different LOOPs for different sections:
 
 \`\`\`
-# Intro -- just the melody, 2 times
+# Intro -- just melody
 LOOP 2:
     PLAY_SEQUENCE melody
 
-# Main section -- melody + drums, 4 times
+# Main part -- melody + drums
 LOOP 4:
     PLAY_SEQUENCE melody
     PLAY_PATTERN drums
 
-# Ending -- one last melody
+# Ending
 PLAY_SEQUENCE melody
 \`\`\`
 
-This creates a clear beginning, middle, and end.`,
+Now your song has a beginning, middle, and end!`,
     },
   ],
 
   code: `# Loop It!
-# A melody with drums that builds up over time.
+# A melody that builds up when drums join in.
 
 BPM 120
 
@@ -112,23 +111,23 @@ PLAY_SEQUENCE melody`,
   challenges: [
     {
       id: "more-loops",
-      text: "Change the main section from LOOP 4 to LOOP 8. The song gets longer and more hypnotic!",
-      hint: "Electronic music often loops phrases 8 or 16 times to build atmosphere.",
+      text: "Change the main section to LOOP 8. It gets hypnotic!",
+      hint: "Electronic music often repeats the same thing 8 or 16 times. It puts you in a groove!",
     },
     {
       id: "add-hat",
-      text: "Add a hi-hat instrument and add BEAT 1/2/3/4 hat lines to the pattern.",
-      hint: "Copy the hat instrument definition from the Beat Drop lesson!",
+      text: "Add a hi-hat instrument and put it on all 4 beats in the pattern.",
+      hint: "Use TYPE DRUM, WAVE NOISE, FREQ 800, DECAY 30. Then add BEAT 1/2/3/4 hat lines!",
     },
     {
       id: "second-melody",
-      text: "Create a second SEQUENCE called 'melody2' with different notes, and alternate between them.",
-      hint: "You could play melody in the first LOOP and melody2 in the second LOOP.",
+      text: "Make a second SEQUENCE called melody2 with different notes. Play it after the main section!",
+      hint: "Create a new SEQUENCE block, then add PLAY_SEQUENCE melody2 somewhere in your arrangement.",
     },
   ],
 
   funFact:
-    "The concept of the musical 'loop' was pioneered by Pierre Schaeffer in 1948, who physically cut magnetic tape into rings that played continuously. Today, loops are the foundation of almost all electronic music production!",
+    "The idea of looping music was invented in 1948 by a guy who literally cut magnetic tape into circles that played forever. Today, loops are the building blocks of almost ALL electronic music!",
 };
 
 export default lesson06;

@@ -2,61 +2,59 @@ const lesson09 = {
   id: 9,
   slug: "mega-riff",
   title: "Mega Riff",
-  subtitle: "Build an epic multi-section composition",
+  subtitle: "Build an epic full song!",
   phase: 4,
   difficulty: 4,
-  goal: "Create a full song with intro, main section, and ending using everything you've learned.",
+  goal: "Create a full composition with intro, main section, and ending!",
   concepts: ["Song arrangement", "Musical form", "Combining all concepts"],
-  estimatedMinutes: 20,
+  estimatedMinutes: 15,
 
   steps: [
     {
-      title: "Thinking like a songwriter",
-      content: `Every great song tells a story through its structure. Even a short piece needs a beginning, middle, and end. Here's a simple template:
+      title: "Think like a songwriter",
+      content: `Every great song has structure:
 
-1. **Intro** -- Set the mood. Start with just one instrument.
-2. **Build** -- Add layers. Bring in the drums and bass.
-3. **Main section** -- Everything playing together at full power.
-4. **Ending** -- Strip things back. End on a strong note.
+1. **Intro** -- start simple, set the mood
+2. **Build** -- add more layers
+3. **Main section** -- everything at full blast!
+4. **Ending** -- bring it home
 
-You already know all the tools to do this: instruments, sequences, patterns, loops, and arrangement.`,
+You already know all the tools. Now let's use them all together!`,
     },
     {
-      title: "The retro game approach",
-      content: `Let's build a retro game-style riff. We'll use a SQUARE wave for that classic 8-bit sound, combined with punchy drums.
+      title: "The retro game sound",
+      content: `We'll use a SQUARE wave for that classic 8-bit video game vibe, plus punchy drums.
 
-The key to a good riff: use **repetition with variation**. The main phrase repeats, but small changes keep it interesting.
-
-Our riff will use a staccato (short, punchy) playing style with quick ADSR settings:
+The secret sauce is a short ADSR:
 \`\`\`
 ADSR 2 60 0 40
 \`\`\`
-This means: almost instant attack, quick decay, no sustain, short release. Each note pops and disappears.`,
+Each note pops and disappears instantly. Snappy!`,
     },
     {
-      title: "Arranging the full piece",
-      content: `Here's how we structure the arrangement:
+      title: "Arrange the whole thing",
+      content: `Here's the structure:
 
 \`\`\`
-# Intro -- lead alone, 2 bars
+# Intro -- just the melody
 LOOP 2:
     PLAY_SEQUENCE main_riff
 
-# Full section -- lead + drums, 4 bars
+# Full section -- melody + drums
 LOOP 4:
     PLAY_SEQUENCE main_riff
     PLAY_PATTERN drums
 
-# Ending -- one more riff
-PLAY_SEQUENCE main_riff
+# Ending
+PLAY_SEQUENCE ending
 \`\`\`
 
-The intro lets the listener get familiar with the melody. Then the drums kick in for the main section. The ending is a callback to the beginning, bringing everything full circle.`,
+Intro lets you hear the melody first. Then drums kick in. Ending wraps it up. Press Play and enjoy your masterpiece!`,
     },
   ],
 
   code: `# Mega Riff
-# An epic retro game-style composition.
+# An epic retro game-style song!
 
 BPM 120
 AUDIO_RATE 16384
@@ -120,23 +118,23 @@ PLAY_SEQUENCE ending`,
   challenges: [
     {
       id: "add-bass",
-      text: "Add a bass instrument (SAW wave, low notes like D2 and A2) and a bass sequence that plays under the main riff.",
-      hint: "Keep the bass simple -- just 2-3 long notes that follow the root notes of the melody.",
+      text: "Add a bass instrument (SAW wave, notes like D2 and A2) playing under the main riff!",
+      hint: "Keep the bass simple -- just 2-3 long, low notes. It's the foundation, not the star!",
     },
     {
       id: "vary-ending",
-      text: "Create a different ending sequence with a high note (like D6) held for 2 beats.",
-      hint: "Ending on a high, sustained note creates a dramatic finish!",
+      text: "Make the ending more dramatic! Try a high note like D6 held for 2 beats.",
+      hint: "Ending on a high, long note feels like a mic drop!",
     },
     {
       id: "longer-form",
-      text: "Add a 'bridge' section between the main section and ending with different notes.",
-      hint: "A bridge introduces new musical ideas to keep the song interesting before the final section.",
+      text: "Add a 'bridge' between the main section and ending with totally different notes.",
+      hint: "A bridge is a surprise section that keeps the song from getting boring!",
     },
   ],
 
   funFact:
-    "The melody in the example is inspired by Megalovania from Undertale, composed by Toby Fox. It became one of the most recognizable video game melodies ever, proving that simple waveforms and clever composition can create something legendary!",
+    "This melody is inspired by Megalovania from Undertale! Toby Fox proved that simple square waves and clever composition can create something legendary. You're using the exact same tools!",
 };
 
 export default lesson09;

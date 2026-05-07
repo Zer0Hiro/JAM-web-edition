@@ -5,54 +5,46 @@ const lesson02 = {
   subtitle: "Play different musical notes",
   phase: 1,
   difficulty: 1,
-  goal: "Learn how musical notes map to frequencies and play a simple scale.",
+  goal: "Learn how notes work and play a real musical scale!",
   concepts: ["Musical notes (C, D, E...)", "Octaves", "Note duration"],
-  estimatedMinutes: 12,
+  estimatedMinutes: 10,
 
   steps: [
     {
-      title: "How notes work",
-      content: `Every musical note is just a vibration at a specific speed. The note A4 vibrates 440 times per second -- we call this 440 Hz (Hertz).
+      title: "Notes are just vibrations",
+      content: `Every note is a vibration. Faster vibration = higher sound.
 
-In JAM, you write notes using **scientific pitch notation**: a letter name plus an octave number.
+Here are the main notes (like the white keys on a piano):
+- **C4** = Middle C
+- **D4, E4, F4, G4, A4, B4** = going up
+- **C5** = one octave higher than C4
 
-- **C4** = Middle C (262 Hz)
-- **D4** = (294 Hz)
-- **E4** = (330 Hz)
-- **F4** = (349 Hz)
-- **G4** = (392 Hz)
-- **A4** = (440 Hz)
-- **B4** = (494 Hz)
-- **C5** = (523 Hz) -- one octave higher than C4
-
-Higher octave numbers = higher pitch. C3 sounds lower than C4, which sounds lower than C5.`,
+Higher number after the letter = higher pitch. C3 is lower than C4, which is lower than C5.`,
     },
     {
       title: "Sharps and flats",
-      content: `Between some notes, there are "in-between" notes called sharps and flats:
+      content: `Between some notes there are "in-between" notes (the black keys on a piano):
 
-- **C#4** or **Cs4** = C sharp (a half step above C)
-- **Bb4** = B flat (a half step below B)
-- **D#4** = D sharp
-- **F#4** or **Fs4** = F sharp
+- **C#4** = C sharp (a tiny bit higher than C)
+- **Bb4** = B flat (a tiny bit lower than B)
 
-These give you access to ALL the keys on a piano keyboard -- the white *and* black keys.`,
+That gives you ALL the keys -- white and black!`,
     },
     {
-      title: "Note duration",
-      content: `The number after the note name controls how long it plays, measured in beats:
+      title: "How long notes last",
+      content: `The number after the note name is how many beats it plays:
 
-- **0.25** = a sixteenth note (very short)
-- **0.5** = an eighth note
-- **1** = a quarter note (one beat)
-- **2** = a half note
-- **4** = a whole note (held for a full bar in 4/4 time)
+- **0.25** = super short
+- **0.5** = short
+- **1** = one beat
+- **2** = long
+- **4** = really long
 
-At 120 BPM, one beat = 0.5 seconds. So a note with duration 2 plays for 1 full second.`,
+At 120 BPM, one beat = half a second.`,
     },
     {
-      title: "Building a scale",
-      content: `Let's play a C major scale -- all the white keys from C4 to C5:
+      title: "Play a scale!",
+      content: `A scale is all the notes going up in order. Here's C major:
 
 \`\`\`
 SEQUENCE scale:
@@ -66,12 +58,12 @@ SEQUENCE scale:
     PLAY synth C5 1
 \`\`\`
 
-Each note plays for half a beat (0.5), except the final C5 which rings out for a full beat. Try it out!`,
+Press Play and you'll hear it go up step by step!`,
     },
   ],
 
   code: `# Note by Note
-# Playing a C major scale -- the building block of Western music!
+# Playing a C major scale!
 
 BPM 120
 
@@ -96,23 +88,23 @@ PLAY_SEQUENCE scale`,
   challenges: [
     {
       id: "descending",
-      text: "Make the scale go back down after reaching C5 (C5, B4, A4, G4... back to C4).",
-      hint: "Just add more PLAY lines in reverse order after C5!",
+      text: "Make the scale go back down! Add C5, B4, A4, G4... all the way back to C4.",
+      hint: "Just add more PLAY lines in reverse order after the last one. Copy-paste and flip!",
     },
     {
       id: "minor-scale",
-      text: "Change E4 to Eb4 and B4 to Bb4. You just made a C minor scale! Does it sound sadder?",
-      hint: "Minor scales sound 'darker' because the intervals between notes are slightly different.",
+      text: "Change E4 to Eb4 and B4 to Bb4. Now it sounds sad! You just made a minor scale.",
+      hint: "Minor scales sound darker and moodier. Lots of movie villain themes use them!",
     },
     {
       id: "speed-up",
-      text: "Change all the 0.5 durations to 0.25 to play the scale twice as fast.",
-      hint: "This is called 'double time' -- the notes fly by at twice the speed!",
+      text: "Change all the 0.5 durations to 0.25. Zoom zoom!",
+      hint: "Now each note is twice as fast -- like a speed run!",
     },
   ],
 
   funFact:
-    "When you go up one octave, the frequency exactly doubles. A4 = 440 Hz, A5 = 880 Hz, A3 = 220 Hz. Your brain perceives these as the 'same' note, just higher or lower -- that's why octaves sound so natural!",
+    "When you go up one octave, the vibrations double. A4 = 440 vibrations per second, A5 = 880. Your brain hears them as the 'same note' but higher!",
 };
 
 export default lesson02;

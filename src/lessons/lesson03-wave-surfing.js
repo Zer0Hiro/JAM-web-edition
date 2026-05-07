@@ -2,67 +2,48 @@ const lesson03 = {
   id: 3,
   slug: "wave-surfing",
   title: "Wave Surfing",
-  subtitle: "Explore different waveform shapes",
+  subtitle: "Explore different sound shapes",
   phase: 1,
   difficulty: 1,
-  goal: "Hear the difference between sine, sawtooth, square, and triangle waves.",
+  goal: "Hear how SIN, SAW, SQUARE, and TRIANGLE sound different from each other.",
   concepts: ["Waveform types", "Timbre", "How oscillators shape sound"],
-  estimatedMinutes: 12,
+  estimatedMinutes: 10,
 
   steps: [
     {
-      title: "What is a waveform?",
-      content: `Sound is vibration, and the **shape** of that vibration determines what it sounds like. This shape is called a **waveform**.
+      title: "Same note, different vibe",
+      content: `A guitar and a flute can play the same note but sound totally different. Why? The **shape** of the sound wave is different!
 
-Think of it like this: a flute and a guitar can both play the same note (same pitch), but they sound totally different. That difference is the waveform -- also called **timbre** (pronounced "TAM-ber").
-
-JAM gives you 5 waveform types to play with: SIN, SAW, SQUARE, TRIANGLE, and NOISE.`,
+JAM gives you 5 wave shapes to pick from. Each one has its own personality.`,
     },
     {
-      title: "SIN -- the pure tone",
-      content: `\`\`\`
-WAVE SIN
+      title: "Meet the waves",
+      content: `**SIN** -- Smooth and pure. Like a whistle or a tuning fork.
+
+**SAW** -- Buzzy and bright. Great for bass and lead sounds.
+
+**SQUARE** -- Hollow and retro. This is the classic video game sound!
+
+**TRIANGLE** -- Soft and mellow. Like a gentle flute.
+
+**NOISE** -- Random static. Perfect for drums, not great for melodies!`,
+    },
+    {
+      title: "Try it yourself",
+      content: `In the code on the right, find this line:
+
 \`\`\`
-
-A sine wave is the smoothest, purest sound possible. No harmonics, no grit -- just a clean, mellow tone. It sounds like a tuning fork or a soft whistle.
-
-Use it for: gentle pads, sub-bass, test tones.`,
-    },
-    {
-      title: "SAW -- the buzzy one",
-      content: `\`\`\`
 WAVE SAW
 \`\`\`
 
-A sawtooth wave contains ALL the harmonics (overtones), which makes it sound rich, bright, and buzzy. It's the bread and butter of synthesizers.
+Change \`SAW\` to \`SQUARE\`, then press Play. Hear the difference?
 
-Use it for: leads, bass lines, anything that needs to cut through a mix.`,
-    },
-    {
-      title: "SQUARE -- the retro classic",
-      content: `\`\`\`
-WAVE SQUARE
-\`\`\`
-
-A square wave has only odd harmonics, giving it a hollow, "video game" quality. If you've ever played an old NES game, you've heard square waves.
-
-Use it for: chiptune melodies, retro game sounds, hollow tones.`,
-    },
-    {
-      title: "TRIANGLE -- the mellow middle",
-      content: `\`\`\`
-WAVE TRIANGLE
-\`\`\`
-
-A triangle wave is like a softer version of the square wave. It has the same odd harmonics but they're much quieter, giving it a mellow, flute-like character.
-
-Use it for: bass, mellow leads, background pads.`,
+Now try \`TRIANGLE\` and \`SIN\`. Each wave has its own character!`,
     },
   ],
 
   code: `# Wave Surfing
-# Compare different waveforms playing the same melody.
-# Try changing WAVE SIN to WAVE SAW, SQUARE, or TRIANGLE!
+# Change WAVE SAW to SIN, SQUARE, or TRIANGLE!
 
 BPM 120
 
@@ -86,23 +67,23 @@ PLAY_SEQUENCE riff`,
   challenges: [
     {
       id: "swap-wave",
-      text: "Change WAVE SAW to WAVE SQUARE. How does the mood change?",
-      hint: "Square waves have a hollow, 8-bit quality -- perfect for retro game music!",
+      text: "Change WAVE SAW to WAVE SQUARE. Does it sound like an old video game?",
+      hint: "Square waves were used in NES and Game Boy games. That's where the retro sound comes from!",
     },
     {
       id: "try-triangle",
-      text: "Try WAVE TRIANGLE. It's softer than SAW but brighter than SIN.",
-      hint: "Triangle waves sound almost like a recorder or soft flute.",
+      text: "Now try WAVE TRIANGLE. It's softer and more chill.",
+      hint: "Triangle waves sound a bit like a recorder or a soft flute.",
     },
     {
       id: "noise",
-      text: "Replace the waveform with WAVE NOISE. What happens? (It won't be musical!)",
-      hint: "Noise is random vibrations -- useful for drums and sound effects, not so great for melodies.",
+      text: "Try WAVE NOISE. What happens? (Spoiler: it's weird!)",
+      hint: "Noise is random vibrations -- great for drums and explosions, but melodies? Not so much!",
     },
   ],
 
   funFact:
-    "In 1822, mathematician Joseph Fourier proved that ANY sound -- your voice, a guitar, a car horn -- can be broken down into a combination of simple sine waves. This is called Fourier analysis, and it's the foundation of all digital audio!",
+    "In 1822, a mathematician named Fourier proved that ANY sound in the universe can be built by mixing simple sine waves together. Your voice, a dog bark, thunder -- all just sine waves stacked up!",
 };
 
 export default lesson03;

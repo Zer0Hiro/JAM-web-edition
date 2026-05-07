@@ -2,40 +2,38 @@ const lesson04 = {
   id: 4,
   slug: "tick-tock",
   title: "Tick Tock",
-  subtitle: "Create rhythm with rests and timing",
+  subtitle: "Create rhythm with pauses",
   phase: 2,
   difficulty: 2,
-  goal: "Use REST to create rhythmic patterns and pauses between notes.",
+  goal: "Use REST to add silence between notes and create a catchy rhythm.",
   concepts: ["REST command", "Rhythmic patterns", "Musical timing"],
-  estimatedMinutes: 12,
+  estimatedMinutes: 10,
 
   steps: [
     {
-      title: "Rhythm is silence + sound",
-      content: `Music isn't just about the notes you play -- it's about the **spaces between them**. A melody without any pauses would sound like one long blur of noise.
+      title: "Silence is part of music!",
+      content: `Music isn't just notes -- the spaces between notes matter too! Without pauses, everything sounds like one big blob of sound.
 
-The REST command creates silence for a given number of beats:
+\`REST\` creates silence:
 
 \`\`\`
-REST 1      # silence for 1 beat
-REST 0.5    # silence for half a beat
-REST 0.25   # a quick gap
+REST 1      # quiet for 1 beat
+REST 0.5    # quiet for half a beat
+REST 0.25   # tiny gap
 \`\`\`
 
-By mixing short notes with rests, you can create rhythms that make people want to tap their feet.`,
+Mix short notes with rests and you get rhythm!`,
     },
     {
-      title: "Short and snappy",
-      content: `Compare these two sequences:
-
-**No rests (boring):**
+      title: "Feel the difference",
+      content: `**Without rests (boring):**
 \`\`\`
 PLAY synth C4 1
 PLAY synth E4 1
 PLAY synth G4 1
 \`\`\`
 
-**With rests (rhythmic!):**
+**With rests (groovy!):**
 \`\`\`
 PLAY synth C4 0.25
 REST 0.25
@@ -44,30 +42,16 @@ REST 0.25
 PLAY synth G4 0.5
 \`\`\`
 
-The second version has energy and bounce because the notes are shorter and the rests give each note room to breathe.`,
+Same notes, but the second one bounces!`,
     },
     {
-      title: "Building a beat",
-      content: `Here's a simple rhythmic pattern using a sawtooth lead. Notice how the mix of short notes, long notes, and rests creates a catchy rhythm:
-
-\`\`\`
-SEQUENCE groove:
-    PLAY lead C4 0.25
-    PLAY lead C4 0.25
-    REST 0.25
-    PLAY lead Eb4 0.25
-    REST 0.5
-    PLAY lead G4 0.5
-    PLAY lead F4 0.25
-    REST 0.25
-\`\`\`
-
-This pattern repeats every 2.5 beats. The mix of even and uneven spacing makes it interesting to listen to.`,
+      title: "Build a groove",
+      content: `Press Play to hear the code on the right. Notice how the short notes and rests make it feel catchy and rhythmic, like a beat you'd hear in a game.`,
     },
   ],
 
   code: `# Tick Tock
-# A rhythmic melody using rests to create a bouncy feel.
+# A bouncy rhythm with rests!
 
 BPM 130
 
@@ -93,23 +77,23 @@ LOOP 3:
   challenges: [
     {
       id: "change-rhythm",
-      text: "Remove the REST 0.5 in the middle and replace it with REST 0.25. How does the feel change?",
-      hint: "Shorter rests make the rhythm tighter and more driving.",
+      text: "Change the REST 0.5 in the middle to REST 0.25. Does it feel tighter?",
+      hint: "Shorter rests = faster pace. The rhythm gets more intense!",
     },
     {
       id: "double-time",
-      text: "Change the BPM from 130 to 170. Now it feels like drum and bass!",
-      hint: "The exact same notes feel completely different at a different tempo.",
+      text: "Crank the BPM up to 170. Now it's super fast!",
+      hint: "Same notes, totally different energy. BPM changes everything!",
     },
     {
       id: "add-loop",
-      text: "Change LOOP 3 to LOOP 6. The pattern repeats more and starts to feel like a real track.",
-      hint: "Repetition is the secret sauce of all catchy music!",
+      text: "Change LOOP 3 to LOOP 6. More repetition = more hypnotic!",
+      hint: "Repetition is the secret ingredient of catchy music. That's why choruses repeat!",
     },
   ],
 
   funFact:
-    "The most common rhythm in pop music is called 'four on the floor' -- a kick drum on every beat. But the most popular drum pattern ever recorded is the 'Amen break,' a 7-second drum solo from 1969 that's been sampled in thousands of songs across hip-hop, jungle, and drum and bass!",
+    "The most famous drum break ever is the 'Amen break' -- just 7 seconds of drums from a 1969 song. It's been sampled in THOUSANDS of songs across hip-hop, jungle, and drum and bass!",
 };
 
 export default lesson04;
