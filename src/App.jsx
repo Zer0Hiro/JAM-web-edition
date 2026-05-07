@@ -63,16 +63,19 @@ export default function App() {
     const prev = getPrevLesson(selectedLesson.id);
 
     return (
-      <LessonView
-        lesson={selectedLesson}
-        onBack={() => handleNavigate("lessons")}
-        onNext={handleNextLesson}
-        onPrev={handlePrevLesson}
-        hasNext={!!next}
-        hasPrev={!!prev}
-        onComplete={completeLesson}
-        completed={completedLessons.has(selectedLesson.id)}
-      />
+      <>
+        <LessonView
+          lesson={selectedLesson}
+          onBack={() => handleNavigate("lessons")}
+          onNext={handleNextLesson}
+          onPrev={handlePrevLesson}
+          hasNext={!!next}
+          hasPrev={!!prev}
+          onComplete={completeLesson}
+          completed={completedLessons.has(selectedLesson.id)}
+        />
+        <MichaelAIAssistant lessonId={selectedLesson.id} />
+      </>
     );
   }
 
