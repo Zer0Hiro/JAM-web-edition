@@ -17,7 +17,7 @@ const lesson08 = {
 - **Melody** -- the main tune you'd hum
 - **Drums** -- the beat that keeps it all together
 
-In JAM, you make separate instruments for each layer and combine them!`,
+In JEM, you make separate instruments for each layer and combine them!`,
     },
     {
       title: "Build a bass line",
@@ -43,7 +43,7 @@ LOOP 4:
     PLAY_PATTERN beat
 \`\`\`
 
-JAM plays bass, then melody, then drums, and repeats. That's a real track!
+JEM plays bass, then melody, then drums, and repeats. That's a real track!
 
 Press Play to hear all three layers working together.`,
     },

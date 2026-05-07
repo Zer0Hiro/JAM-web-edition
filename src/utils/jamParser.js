@@ -1,5 +1,5 @@
 /**
- * Lightweight JAM DSL parser for the browser.
+ * Lightweight JEM DSL parser for the browser.
  *
  * This is a simplified parser that extracts enough information from .jam source
  * to power the in-browser Web Audio API preview. It does NOT generate C++ --
@@ -178,7 +178,7 @@ function findCommentStart(line) {
 }
 
 /**
- * Flatten a parsed JAM program into a list of timed audio events.
+ * Flatten a parsed JEM program into a list of timed audio events.
  */
 export function flattenToEvents(parsed) {
   const events = [];

@@ -1,8 +1,8 @@
 /**
- * Web Audio API engine for previewing JAM compositions in the browser.
+ * Web Audio API engine for previewing JEM compositions in the browser.
  *
  * This creates a simple synthesizer that plays back the flat event list
- * produced by the JAM parser. It approximates the Mozzi output using
+ * produced by the JEM parser. It approximates the Mozzi output using
  * the standard Web Audio API oscillator nodes and gain envelopes.
  */
 

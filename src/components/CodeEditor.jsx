@@ -7,7 +7,7 @@ import { parseJam, flattenToEvents } from "../utils/jamParser";
 import { getAudioEngine } from "../utils/audioEngine";
 import { useLanguage } from "../i18n/context";
 
-// ── Simple JAM syntax highlighting mode ─────────────────────────────────
+// ── Simple JEM syntax highlighting mode ─────────────────────────────────
 const jamLanguage = StreamLanguage.define({
   startState() {
     return {};

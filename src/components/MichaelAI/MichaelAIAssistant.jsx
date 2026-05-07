@@ -37,7 +37,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
     {
       role: 'assistant',
       content:
-        'Hi. I am MichaelAI Tutor for JAM. Ask me about the lesson, your code, English terms, or music concepts.',
+        'Hi. I am MichaelAI Tutor for JEM. Ask me about the lesson, your code, English terms, or music concepts.',
       sources: [],
     },
   ])
@@ -138,7 +138,7 @@ export default function MichaelAIAssistant({ lessonId = null, code = null }) {
               </div>
 
               <div className="mt-0.5 text-xs font-medium text-slate-300">
-                JAM learning assistant
+                JEM learning assistant
               </div>
             </div>
           </div>

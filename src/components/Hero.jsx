@@ -1,8 +1,8 @@
 import WaveformVisualizer from "./WaveformVisualizer";
-import { Volume2, Zap, ArrowDown } from "lucide-react";
+import { Volume2, Zap, ArrowDown, Cpu } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 
-export default function Hero({ onStartLearning, onTryEditor }) {
+export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
   const { t } = useLanguage();
 
   return (
@@ -77,6 +77,17 @@ export default function Hero({ onStartLearning, onTryEditor }) {
                      hover:text-[var(--color-accent-magenta)] transition-colors cursor-pointer"
         >
           {t.hero.tryEditor}
+        </button>
+
+        <button
+          onClick={onBuildYourOwn}
+          className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-lg
+                     bg-transparent text-[var(--color-text-primary)]
+                     border-2 border-[var(--color-accent-orange)]/40 hover:border-[var(--color-accent-orange)]
+                     hover:text-[var(--color-accent-orange)] transition-colors cursor-pointer"
+        >
+          <Cpu size={20} />
+          {t.hero.buildYourOwn}
         </button>
       </div>
 

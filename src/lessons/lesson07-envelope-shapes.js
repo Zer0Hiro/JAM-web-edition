@@ -14,7 +14,7 @@ const lesson07 = {
       title: "Sounds have shapes!",
       content: `Pluck a guitar string -- it's loud at first, then fades away. Press a piano key and hold it -- the note stays until you let go.
 
-That "shape" of loud-to-quiet over time is called an **envelope**. In JAM, you control it with four numbers: **ADSR**.`,
+That "shape" of loud-to-quiet over time is called an **envelope**. In JEM, you control it with four numbers: **ADSR**.`,
     },
     {
       title: "What ADSR means",

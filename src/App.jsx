@@ -7,6 +7,7 @@ import LessonList from "./components/LessonList";
 import LessonView from "./components/LessonView";
 import Sandbox from "./components/Sandbox";
 import SoundLibrary from "./components/SoundLibrary";
+import ArduinoGuide from "./components/ArduinoGuide";
 import Footer from "./components/Footer";
 import { getLessonById, getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
@@ -27,7 +28,7 @@ export default function App() {
 
   const handleNavigate = useCallback((view) => {
     setCurrentView(view);
-    setSelectedLesson(null);
+    setSelectedLessonId(null);
   }, []);
 
   const handleSelectLesson = useCallback((lesson) => {
@@ -41,6 +42,10 @@ export default function App() {
 
   const handleTryEditor = useCallback(() => {
     setCurrentView("sandbox");
+  }, []);
+
+  const handleBuildYourOwn = useCallback(() => {
+    setCurrentView("guide");
   }, []);
 
   const handleNextLesson = useCallback(() => {
@@ -91,6 +96,7 @@ export default function App() {
           <Hero
             onStartLearning={handleStartLearning}
             onTryEditor={handleTryEditor}
+            onBuildYourOwn={handleBuildYourOwn}
           />
           <FeatureCards />
           <HowItWorks />
@@ -121,6 +127,10 @@ export default function App() {
       )}
 
       {currentView === "library" && <SoundLibrary />}
+
+      {currentView === "guide" && (
+        <ArduinoGuide onBack={() => handleNavigate("home")} />
+      )}
       <MichaelAIAssistant />
     </div>
   );
