@@ -1,1 +1,0 @@
-export { default as MichaelAIAssistant } from './MichaelAIAssistant'

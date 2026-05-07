@@ -30,8 +30,8 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-from michael_ai_chat_routes import michael_ai_chat_bp
-app.register_blueprint(michael_ai_chat_bp)
+from jamai_chat_routes import jamai_chat_bp
+app.register_blueprint(jamai_chat_bp)
 
 
 def compile_source(source: str) -> dict:
@@ -120,3 +120,4 @@ if __name__ == "__main__":
     print("JAM Compile Server starting on http://localhost:5050")
     print(f"DSL path: {DSL_PATH}")
     app.run(host="0.0.0.0", port=5050, debug=True)
+
