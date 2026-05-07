@@ -115,9 +115,28 @@ export function parseJam(source) {
       } else if (currentBlock?.type === "sequence" && currentSequence) {
         if (tokens[0] === "PLAY" && tokens.length >= 4) {
           const inst = tokens[1];
-          const note = tokens[2];
-          const dur = parseFloat(tokens[3]) || 1;
-          currentSequence.events.push({ type: "play", instrument: inst, note, duration: dur });
+          if (tokens[2].startsWith("[")) {
+            const chordNotes = [];
+            let durIdx = 3;
+            const first = tokens[2].replace("[", "");
+            if (first) chordNotes.push(first);
+            for (let ci = 3; ci < tokens.length; ci++) {
+              const t = tokens[ci];
+              if (t.endsWith("]")) {
+                const last = t.replace("]", "");
+                if (last) chordNotes.push(last);
+                durIdx = ci + 1;
+                break;
+              }
+              chordNotes.push(t);
+            }
+            const dur = parseFloat(tokens[durIdx]) || 1;
+            currentSequence.events.push({ type: "chord", instrument: inst, notes: chordNotes, duration: dur });
+          } else {
+            const note = tokens[2];
+            const dur = parseFloat(tokens[3]) || 1;
+            currentSequence.events.push({ type: "play", instrument: inst, note, duration: dur });
+          }
         } else if (tokens[0] === "REST" && tokens[1]) {
           currentSequence.events.push({ type: "rest", duration: parseFloat(tokens[1]) || 1 });
         }
@@ -202,6 +221,21 @@ export function flattenToEvents(parsed) {
           adsr: inst?.adsr || [10, 50, 200, 100],
           volume: (inst?.volume || 200) / 255,
         });
+      } else if (ev.type === "chord") {
+        const inst = parsed.instruments[ev.instrument];
+        for (let ni = 0; ni < ev.notes.length; ni++) {
+          const isLast = ni === ev.notes.length - 1;
+          events.push({
+            type: "note",
+            instrument: ev.instrument,
+            freq: noteToFreq(ev.notes[ni]),
+            durationMs: ev.duration * msPerBeat,
+            wave: inst?.wave || "SIN",
+            adsr: inst?.adsr || [10, 50, 200, 100],
+            volume: (inst?.volume || 200) / 255,
+            simultaneous: !isLast,
+          });
+        }
       }
     }
   }
