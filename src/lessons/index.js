@@ -7,6 +7,7 @@ import lesson06 from "./lesson06-loop-it";
 import lesson07 from "./lesson07-envelope-shapes";
 import lesson08 from "./lesson08-multi-track";
 import lesson09 from "./lesson09-mega-riff";
+import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
 
 export const lessons = [
   lesson01,
@@ -51,20 +52,33 @@ export const phases = [
   },
 ];
 
-export function getLessonBySlug(slug) {
-  return lessons.find((l) => l.slug === slug);
+const lessonsByLang = { en: lessons, he: lessonsHe };
+const phasesByLang = { en: phases, he: phasesHe };
+
+export function getLessonsForLang(lang) {
+  return lessonsByLang[lang] || lessonsByLang.en;
 }
 
-export function getLessonById(id) {
-  return lessons.find((l) => l.id === id);
+export function getPhasesForLang(lang) {
+  return phasesByLang[lang] || phasesByLang.en;
 }
 
-export function getNextLesson(currentId) {
-  const idx = lessons.findIndex((l) => l.id === currentId);
-  return idx >= 0 && idx < lessons.length - 1 ? lessons[idx + 1] : null;
+export function getLessonBySlug(slug, lang = "en") {
+  return getLessonsForLang(lang).find((l) => l.slug === slug);
 }
 
-export function getPrevLesson(currentId) {
-  const idx = lessons.findIndex((l) => l.id === currentId);
-  return idx > 0 ? lessons[idx - 1] : null;
+export function getLessonById(id, lang = "en") {
+  return getLessonsForLang(lang).find((l) => l.id === id);
+}
+
+export function getNextLesson(currentId, lang = "en") {
+  const list = getLessonsForLang(lang);
+  const idx = list.findIndex((l) => l.id === currentId);
+  return idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;
+}
+
+export function getPrevLesson(currentId, lang = "en") {
+  const list = getLessonsForLang(lang);
+  const idx = list.findIndex((l) => l.id === currentId);
+  return idx > 0 ? list[idx - 1] : null;
 }
