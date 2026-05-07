@@ -6,29 +6,32 @@ import HowItWorks from "./components/HowItWorks";
 import LessonList from "./components/LessonList";
 import LessonView from "./components/LessonView";
 import Sandbox from "./components/Sandbox";
+import SoundLibrary from "./components/SoundLibrary";
 import Footer from "./components/Footer";
-import { getNextLesson, getPrevLesson } from "./lessons";
+import { getNextLesson, getPrevLesson, getLessonById } from "./lessons";
 import useProgress from "./hooks/useProgress";
+import { useLanguage } from "./i18n/context";
 import { JAMaiAssistant } from './components/JAMai'
 
 export default function App() {
-  // Views: "home", "lessons", "sandbox", "lesson"
+  const { lang } = useLanguage();
   const [currentView, setCurrentView] = useState("home");
-  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedLessonId, setSelectedLessonId] = useState(null);
   const { completedLessons, completeLesson } = useProgress();
 
-  // Scroll to top on view change
+  const selectedLesson = selectedLessonId ? getLessonById(selectedLessonId, lang) : null;
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [currentView, selectedLesson?.id]);
+  }, [currentView, selectedLessonId]);
 
   const handleNavigate = useCallback((view) => {
     setCurrentView(view);
-    setSelectedLesson(null);
+    setSelectedLessonId(null);
   }, []);
 
   const handleSelectLesson = useCallback((lesson) => {
-    setSelectedLesson(lesson);
+    setSelectedLessonId(lesson.id);
     setCurrentView("lesson");
   }, []);
 
@@ -41,25 +44,24 @@ export default function App() {
   }, []);
 
   const handleNextLesson = useCallback(() => {
-    if (!selectedLesson) return;
-    const next = getNextLesson(selectedLesson.id);
+    if (!selectedLessonId) return;
+    const next = getNextLesson(selectedLessonId, lang);
     if (next) {
-      setSelectedLesson(next);
+      setSelectedLessonId(next.id);
     }
-  }, [selectedLesson]);
+  }, [selectedLessonId, lang]);
 
   const handlePrevLesson = useCallback(() => {
-    if (!selectedLesson) return;
-    const prev = getPrevLesson(selectedLesson.id);
+    if (!selectedLessonId) return;
+    const prev = getPrevLesson(selectedLessonId, lang);
     if (prev) {
-      setSelectedLesson(prev);
+      setSelectedLessonId(prev.id);
     }
-  }, [selectedLesson]);
+  }, [selectedLessonId, lang]);
 
-  // Render lesson view
   if (currentView === "lesson" && selectedLesson) {
-    const next = getNextLesson(selectedLesson.id);
-    const prev = getPrevLesson(selectedLesson.id);
+    const next = getNextLesson(selectedLesson.id, lang);
+    const prev = getPrevLesson(selectedLesson.id, lang);
 
     return (
       <>
@@ -78,7 +80,6 @@ export default function App() {
     );
   }
 
-  // Render main views
   return (
     <div className="min-h-screen">
       <Navbar onNavigate={handleNavigate} currentView={currentView} />
@@ -116,6 +117,8 @@ export default function App() {
           <Footer />
         </div>
       )}
+
+      {currentView === "library" && <SoundLibrary />}
       <JAMaiAssistant />
     </div>
   );
