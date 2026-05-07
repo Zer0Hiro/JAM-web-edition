@@ -9,6 +9,7 @@ import Sandbox from "./components/Sandbox";
 import Footer from "./components/Footer";
 import { getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
+import { MichaelAIAssistant } from './components/MichaelAI'
 
 export default function App() {
   // Views: "home", "lessons", "sandbox", "lesson"
@@ -112,6 +113,7 @@ export default function App() {
           <Footer />
         </div>
       )}
+      <MichaelAIAssistant />
     </div>
   );
 }
