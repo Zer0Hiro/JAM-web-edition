@@ -9,8 +9,21 @@ import {
 } from "lucide-react";
 import Footer from "./Footer";
 import { useLanguage } from "../i18n/context";
+import step0Image from "../assets/0.jpeg";
+import step1Image from "../assets/1.jpeg";
+import step2Image from "../assets/2.jpeg";
+import step3Image from "../assets/3.jpeg";
+import step4Image from "../assets/4.jpeg";
 
 const STORAGE_KEY = "jam-arduino-guide-step";
+
+const STEP_IMAGES = {
+  0: step0Image, 
+  1: step1Image,
+  2: step2Image,
+  3: step3Image,
+  4: step4Image,
+};
 
 const STEP_COLORS = [
   "#22d3ee",
@@ -69,7 +82,8 @@ export default function ArduinoGuide({ onBack }) {
 
   const allDone = completedSteps.length === steps.length;
   const progress = (completedSteps.length / steps.length) * 100;
-  const step = steps[activeStep];
+  const stepData = steps[activeStep];
+  const step = { ...stepData, image: STEP_IMAGES[activeStep] || stepData.image };
   const color = STEP_COLORS[activeStep % STEP_COLORS.length];
 
   return (
@@ -168,19 +182,27 @@ export default function ArduinoGuide({ onBack }) {
               <p className="text-lg text-[var(--color-text-secondary)]">{step.subtitle}</p>
             </div>
 
-            {/* Image placeholder */}
-            <div
-              className="mb-8 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
-              style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
-            >
-              <ImageIcon size={48} style={{ color, opacity: 0.4 }} />
-              <p className="mt-4 text-sm text-[var(--color-text-muted)] text-center">
-                {step.imagePlaceholder || t.arduinoGuide.imagePlaceholder}
-              </p>
-              <span className="mt-2 text-xs font-mono text-[var(--color-text-muted)] opacity-60">
-                {step.imageFilename || `step-${activeStep + 1}.png`}
-              </span>
-            </div>
+            {/* Image or placeholder */}
+            {step.image ? (
+              <img
+                src={step.image}
+                alt={step.title}
+                className="mb-8 rounded-2xl w-full object-cover border border-[var(--color-border)]"
+              />
+            ) : (
+              <div
+                className="mb-8 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
+                style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
+              >
+                <ImageIcon size={48} style={{ color, opacity: 0.4 }} />
+                <p className="mt-4 text-sm text-[var(--color-text-muted)] text-center">
+                  {step.imagePlaceholder || t.arduinoGuide.imagePlaceholder}
+                </p>
+                <span className="mt-2 text-xs font-mono text-[var(--color-text-muted)] opacity-60">
+                  {step.imageFilename || `step-${activeStep + 1}.png`}
+                </span>
+              </div>
+            )}
 
             {/* Text content placeholder */}
             <div className="mb-8 p-6 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)]">
