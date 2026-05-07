@@ -7,6 +7,7 @@ import lesson06 from "./lesson06-loop-it";
 import lesson07 from "./lesson07-envelope-shapes";
 import lesson08 from "./lesson08-multi-track";
 import lesson09 from "./lesson09-mega-riff";
+import lesson10 from "./lesson10-chords";
 import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
 
 export const lessons = [
@@ -19,6 +20,7 @@ export const lessons = [
   lesson07,
   lesson08,
   lesson09,
+  lesson10,
 ];
 
 export const phases = [
@@ -41,7 +43,7 @@ export const phases = [
     title: "Expression",
     description: "Shape your sounds and layer instruments",
     color: "#f97316",
-    lessons: [lesson07, lesson08],
+    lessons: [lesson07, lesson08, lesson10],
   },
   {
     id: 4,

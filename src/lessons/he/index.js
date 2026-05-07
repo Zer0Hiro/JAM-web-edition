@@ -7,6 +7,7 @@ import lesson06 from "./lesson06";
 import lesson07 from "./lesson07";
 import lesson08 from "./lesson08";
 import lesson09 from "./lesson09";
+import lesson10 from "./lesson10";
 
 export const lessons = [
   lesson01,
@@ -18,6 +19,7 @@ export const lessons = [
   lesson07,
   lesson08,
   lesson09,
+  lesson10,
 ];
 
 export const phases = [
@@ -40,7 +42,7 @@ export const phases = [
     title: "ביטוי",
     description: "עצבו את הצלילים ושלבו כלי נגינה",
     color: "#f97316",
-    lessons: [lesson07, lesson08],
+    lessons: [lesson07, lesson08, lesson10],
   },
   {
     id: 4,
