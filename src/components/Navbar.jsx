@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { Menu, X, Volume2 } from "lucide-react";
+import { Menu, X, Volume2, Globe } from "lucide-react";
+import { useLanguage } from "../i18n/context";
 
 export default function Navbar({ onNavigate, currentView }) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const { t, lang, setLang, langs } = useLanguage();
 
   const navItems = [
-    { label: "Home", view: "home" },
-    { label: "Lessons", view: "lessons" },
-    { label: "Sandbox", view: "sandbox" },
+    { label: t.nav.home, view: "home" },
+    { label: t.nav.lessons, view: "lessons" },
+    { label: t.nav.sandbox, view: "sandbox" },
+    { label: t.nav.sounds, view: "library" },
   ];
 
   function handleNav(view) {
@@ -45,6 +49,35 @@ export default function Navbar({ onNavigate, currentView }) {
               {item.label}
             </button>
           ))}
+
+          {/* Language switcher */}
+          <div className="relative ms-2">
+            <button
+              onClick={() => setLangOpen(!langOpen)}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)]"
+            >
+              <Globe size={15} />
+              {langs.find((l) => l.code === lang)?.flag}
+            </button>
+            {langOpen && (
+              <div className="absolute top-full end-0 mt-1 py-1 rounded-lg bg-[var(--color-bg-card)] border border-[var(--color-border)] shadow-lg min-w-[140px] z-50">
+                {langs.map((l) => (
+                  <button
+                    key={l.code}
+                    onClick={() => { setLang(l.code); setLangOpen(false); }}
+                    className={`w-full text-start px-4 py-2 text-sm transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-2
+                      ${lang === l.code
+                        ? "text-[var(--color-accent-cyan)]"
+                        : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-secondary)]"
+                      }`}
+                  >
+                    <span>{l.flag}</span>
+                    <span>{l.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile menu toggle */}
@@ -63,7 +96,7 @@ export default function Navbar({ onNavigate, currentView }) {
             <button
               key={item.view}
               onClick={() => handleNav(item.view)}
-              className={`w-full text-left px-4 py-3 rounded-lg text-sm font-medium transition-colors cursor-pointer bg-transparent border-0
+              className={`w-full text-start px-4 py-3 rounded-lg text-sm font-medium transition-colors cursor-pointer bg-transparent border-0
                 ${
                   currentView === item.view
                     ? "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/10"
@@ -73,6 +106,24 @@ export default function Navbar({ onNavigate, currentView }) {
               {item.label}
             </button>
           ))}
+
+          {/* Mobile language picker */}
+          <div className="flex gap-2 px-4 pt-3 border-t border-[var(--color-border)] mt-2">
+            {langs.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => { setLang(l.code); setMobileOpen(false); }}
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm cursor-pointer border-0 transition-colors
+                  ${lang === l.code
+                    ? "bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)]"
+                    : "bg-transparent text-[var(--color-text-secondary)]"
+                  }`}
+              >
+                <span>{l.flag}</span>
+                <span>{l.label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </nav>

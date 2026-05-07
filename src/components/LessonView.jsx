@@ -9,6 +9,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import CodeEditor from "./CodeEditor";
+import { useLanguage } from "../i18n/context";
 
 export default function LessonView({
   lesson,
@@ -20,6 +21,7 @@ export default function LessonView({
   onComplete,
   completed,
 }) {
+  const { t } = useLanguage();
   const [expandedStep, setExpandedStep] = useState(0);
   const [expandedChallenges, setExpandedChallenges] = useState({});
   const [showFunFact, setShowFunFact] = useState(false);
@@ -38,9 +40,7 @@ export default function LessonView({
   }
 
   function renderMarkdown(text) {
-    // Very simple markdown-like rendering
     return text.split("\n\n").map((paragraph, pi) => {
-      // Code blocks
       if (paragraph.trim().startsWith("```")) {
         const code = paragraph.replace(/```\w*/g, "").trim();
         return (
@@ -54,13 +54,12 @@ export default function LessonView({
         );
       }
 
-      // Regular text with inline formatting
       let html = paragraph
         .replace(/\*\*(.+?)\*\*/g, '<strong class="text-[var(--color-text-primary)] font-semibold">$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
         .replace(/`(.+?)`/g, '<code class="bg-[var(--color-bg-primary)] px-1.5 py-0.5 rounded text-sm text-[var(--color-accent-cyan)]" style="font-family: var(--font-mono)">$1</code>')
-        .replace(/\n- /g, '</p><p class="ml-4 before:content-[\'•_\'] text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">')
-        .replace(/\n(\d+)\. /g, '</p><p class="ml-4 text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">$1. ');
+        .replace(/\n- /g, '</p><p class="ms-4 before:content-[\'•_\'] text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">')
+        .replace(/\n(\d+)\. /g, '</p><p class="ms-4 text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">$1. ');
 
       return (
         <p
@@ -82,7 +81,7 @@ export default function LessonView({
             className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer bg-transparent border-0"
           >
             <ArrowLeft size={16} />
-            All Lessons
+            {t.lessonView.allLessons}
           </button>
 
           <div className="flex items-center gap-2">
@@ -103,7 +102,7 @@ export default function LessonView({
               <button
                 onClick={onPrev}
                 className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)] transition-colors cursor-pointer bg-transparent border-0"
-                title="Previous lesson"
+                title={t.lessonView.previousLesson}
               >
                 <ArrowLeft size={16} />
               </button>
@@ -112,7 +111,7 @@ export default function LessonView({
               <button
                 onClick={onNext}
                 className="p-2 rounded-lg text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)] transition-colors cursor-pointer bg-transparent border-0"
-                title="Next lesson"
+                title={t.lessonView.nextLesson}
               >
                 <ArrowRight size={16} />
               </button>
@@ -132,13 +131,13 @@ export default function LessonView({
                   className="text-xs font-semibold uppercase tracking-wider"
                   style={{ color: phaseColor }}
                 >
-                  Phase {lesson.phase}
+                  {t.lessonView.phase} {lesson.phase}
                 </span>
                 <span className="text-xs text-[var(--color-text-muted)]">
                   {"///"}
                 </span>
                 <span className="text-xs text-[var(--color-text-muted)]">
-                  Lesson {lesson.id}
+                  {t.lessonView.lesson} {lesson.id}
                 </span>
               </div>
               <h1 className="text-3xl font-bold mb-2">{lesson.title}</h1>
@@ -162,7 +161,7 @@ export default function LessonView({
                 >
                   <button
                     onClick={() => setExpandedStep(expandedStep === idx ? -1 : idx)}
-                    className="w-full flex items-center justify-between p-4 text-left cursor-pointer bg-transparent border-0"
+                    className="w-full flex items-center justify-between p-4 text-start cursor-pointer bg-transparent border-0"
                   >
                     <div className="flex items-center gap-3">
                       <span
@@ -186,7 +185,7 @@ export default function LessonView({
                   </button>
 
                   {expandedStep === idx && (
-                    <div className="px-4 pb-4 pl-[52px]">
+                    <div className="px-4 pb-4 ps-[52px]">
                       {renderMarkdown(step.content)}
                     </div>
                   )}
@@ -200,10 +199,10 @@ export default function LessonView({
                 <div className="p-5 rounded-2xl border-2 border-dashed" style={{ borderColor: `${phaseColor}40`, backgroundColor: `${phaseColor}08` }}>
                   <h2 className="text-lg font-bold mb-1 flex items-center gap-2">
                     <Sparkles size={20} style={{ color: phaseColor }} />
-                    Your turn! Try these:
+                    {t.lessonView.tryThese}
                   </h2>
                   <p className="text-xs text-[var(--color-text-muted)] mb-4">
-                    Edit the code on the right and press Play to hear your changes. No wrong answers!
+                    {t.lessonView.tryTheseSubtitle}
                   </p>
                   <div className="space-y-3">
                     {lesson.challenges.map((challenge, idx) => (
@@ -231,11 +230,11 @@ export default function LessonView({
                               }}
                             >
                               <Lightbulb size={12} />
-                              {expandedChallenges[challenge.id] ? "Hide hint" : "Need a hint?"}
+                              {expandedChallenges[challenge.id] ? t.lessonView.hideHint : t.lessonView.needHint}
                             </button>
                             {expandedChallenges[challenge.id] && (
                               <p className="mt-2 text-xs text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] p-3 rounded-lg border border-[var(--color-border)]">
-                                <Lightbulb size={12} className="inline mr-1" style={{ color: phaseColor }} />
+                                <Lightbulb size={12} className="inline me-1" style={{ color: phaseColor }} />
                                 {challenge.hint}
                               </p>
                             )}
@@ -256,7 +255,7 @@ export default function LessonView({
                   className="flex items-center gap-2 text-sm font-medium text-[var(--color-accent-orange)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent border-0 p-0"
                 >
                   <Lightbulb size={16} />
-                  {showFunFact ? "Hide fun fact" : "Show fun fact"}
+                  {showFunFact ? t.lessonView.hideFunFact : t.lessonView.showFunFact}
                 </button>
                 {showFunFact && (
                   <div className="mt-3 p-4 rounded-xl bg-orange-950/20 border border-orange-500/20 text-sm text-[var(--color-text-secondary)]">
@@ -275,13 +274,13 @@ export default function LessonView({
                              bg-green-500 text-white hover:bg-green-600 transition-colors cursor-pointer border-0"
                 >
                   <CheckCircle2 size={16} />
-                  Mark as Complete
+                  {t.lessonView.markComplete}
                 </button>
               )}
               {completed && (
                 <span className="flex items-center gap-2 text-sm text-green-400 font-medium">
                   <CheckCircle2 size={16} />
-                  Completed
+                  {t.lessonView.completed}
                 </span>
               )}
               {hasNext && (
@@ -291,7 +290,7 @@ export default function LessonView({
                              text-[var(--color-text-primary)] border-2 border-[var(--color-border)]
                              hover:border-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent"
                 >
-                  Next Lesson
+                  {t.lessonView.nextLesson}
                   <ArrowRight size={16} />
                 </button>
               )}

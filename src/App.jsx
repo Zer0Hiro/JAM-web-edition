@@ -6,12 +6,13 @@ import HowItWorks from "./components/HowItWorks";
 import LessonList from "./components/LessonList";
 import LessonView from "./components/LessonView";
 import Sandbox from "./components/Sandbox";
+import SoundLibrary from "./components/SoundLibrary";
 import Footer from "./components/Footer";
 import { getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
 
 export default function App() {
-  // Views: "home", "lessons", "sandbox", "lesson"
+  // Views: "home", "lessons", "sandbox", "lesson", "library"
   const [currentView, setCurrentView] = useState("home");
   const [selectedLesson, setSelectedLesson] = useState(null);
   const { completedLessons, completeLesson } = useProgress();
@@ -112,6 +113,8 @@ export default function App() {
           <Footer />
         </div>
       )}
+
+      {currentView === "library" && <SoundLibrary />}
     </div>
   );
 }

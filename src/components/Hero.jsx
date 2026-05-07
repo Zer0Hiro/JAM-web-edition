@@ -1,7 +1,10 @@
 import WaveformVisualizer from "./WaveformVisualizer";
 import { Volume2, Zap, ArrowDown } from "lucide-react";
+import { useLanguage } from "../i18n/context";
 
 export default function Hero({ onStartLearning, onTryEditor }) {
+  const { t } = useLanguage();
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
       {/* Background gradient */}
@@ -30,7 +33,7 @@ export default function Hero({ onStartLearning, onTryEditor }) {
       <div className="mb-6 fade-in-up" style={{ animationDelay: "0.1s" }}>
         <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-[var(--color-accent-purple)]/10 text-[var(--color-accent-purple)] border border-[var(--color-accent-purple)]/20">
           <Zap size={14} />
-          Just Arduino Music
+          {t.hero.badge}
         </span>
       </div>
 
@@ -39,8 +42,8 @@ export default function Hero({ onStartLearning, onTryEditor }) {
         className="hero-title text-center font-bold leading-tight mb-4 fade-in-up"
         style={{ fontSize: "4rem", animationDelay: "0.2s" }}
       >
-        Turn Code Into{" "}
-        <span className="gradient-text">Music</span>
+        {t.hero.titleBefore}
+        <span className="gradient-text">{t.hero.titleHighlight}</span>
       </h1>
 
       {/* Subtitle */}
@@ -48,8 +51,7 @@ export default function Hero({ onStartLearning, onTryEditor }) {
         className="hero-subtitle text-center text-xl text-[var(--color-text-secondary)] max-w-2xl mb-8 fade-in-up"
         style={{ animationDelay: "0.3s" }}
       >
-        Learn to create sounds, beats, and songs with the JAM language.
-        Write code, hear it play, and upload it to an Arduino -- no experience needed.
+        {t.hero.subtitle}
       </p>
 
       {/* CTA buttons */}
@@ -64,7 +66,7 @@ export default function Hero({ onStartLearning, onTryEditor }) {
                      hover:scale-105 transition-transform pulse-glow cursor-pointer border-0"
         >
           <Volume2 size={20} className="group-hover:animate-bounce" />
-          Start Learning
+          {t.hero.startLearning}
         </button>
 
         <button
@@ -74,7 +76,7 @@ export default function Hero({ onStartLearning, onTryEditor }) {
                      border-2 border-[var(--color-border)] hover:border-[var(--color-accent-magenta)]
                      hover:text-[var(--color-accent-magenta)] transition-colors cursor-pointer"
         >
-          Try the Editor
+          {t.hero.tryEditor}
         </button>
       </div>
 
@@ -94,7 +96,7 @@ export default function Hero({ onStartLearning, onTryEditor }) {
 
       {/* Scroll indicator */}
       <div className="absolute bottom-8 flex flex-col items-center gap-2 text-[var(--color-text-muted)] animate-bounce">
-        <span className="text-xs uppercase tracking-widest">Scroll to explore</span>
+        <span className="text-xs uppercase tracking-widest">{t.hero.scrollToExplore}</span>
         <ArrowDown size={16} />
       </div>
     </section>

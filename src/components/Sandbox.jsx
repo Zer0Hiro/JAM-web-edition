@@ -1,4 +1,5 @@
 import CodeEditor from "./CodeEditor";
+import { useLanguage } from "../i18n/context";
 
 const SANDBOX_CODE = `# JAM Sandbox -- experiment freely!
 # Try changing notes, waveforms, tempos, and instruments.
@@ -46,16 +47,17 @@ LOOP 4:
     PLAY_PATTERN beat`;
 
 export default function Sandbox() {
+  const { t } = useLanguage();
+
   return (
     <section id="sandbox" className="py-20 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-3">
-            <span className="gradient-text">Sandbox</span>
+            <span className="gradient-text">{t.sandbox.title}</span>
           </h2>
           <p className="text-[var(--color-text-secondary)] max-w-lg mx-auto">
-            No rules, no lessons -- just you and the code. Write whatever you want
-            and hit Play to hear it. Break things. Experiment. Have fun.
+            {t.sandbox.subtitle}
           </p>
         </div>
 
@@ -63,18 +65,9 @@ export default function Sandbox() {
 
         {/* Quick reference */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <QuickRef
-            title="Waveforms"
-            items={["SIN -- smooth, pure", "SAW -- buzzy, bright", "SQUARE -- retro, hollow", "TRIANGLE -- mellow, soft", "NOISE -- random, percussive"]}
-          />
-          <QuickRef
-            title="Notes"
-            items={["C4 = Middle C", "A4 = 440 Hz", "C#4 / Db4 = sharps/flats", "C5 = octave above C4", "Duration: 0.25 to 4 beats"]}
-          />
-          <QuickRef
-            title="Structure"
-            items={["BPM sets tempo", "INSTRUMENT defines sounds", "SEQUENCE lists notes", "PATTERN places beats", "LOOP repeats sections"]}
-          />
+          <QuickRef title={t.sandbox.waveforms} items={t.sandbox.waveformItems} />
+          <QuickRef title={t.sandbox.notes} items={t.sandbox.noteItems} />
+          <QuickRef title={t.sandbox.structure} items={t.sandbox.structureItems} />
         </div>
       </div>
     </section>

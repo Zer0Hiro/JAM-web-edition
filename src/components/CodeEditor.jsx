@@ -5,6 +5,7 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { Play, Square, Download, RotateCcw, Loader2 } from "lucide-react";
 import { parseJam, flattenToEvents } from "../utils/jamParser";
 import { getAudioEngine } from "../utils/audioEngine";
+import { useLanguage } from "../i18n/context";
 
 // ── Simple JAM syntax highlighting mode ─────────────────────────────────
 const jamLanguage = StreamLanguage.define({
@@ -12,25 +13,18 @@ const jamLanguage = StreamLanguage.define({
     return {};
   },
   token(stream) {
-    // Comments
     if (stream.match(/#/)) {
-      // Check if it's a note accidental (preceded by a letter)
       const before = stream.string.slice(0, stream.pos - 1);
       if (before.length > 0 && /[A-Ga-g]$/.test(before)) {
-        // This is part of a note name like D#3, not a comment
         return null;
       }
       stream.skipToEnd();
       return "comment";
     }
 
-    // Numbers
     if (stream.match(/^-?\d+(\.\d+)?/)) return "number";
-
-    // Note names (e.g. C4, D#3, Bb2)
     if (stream.match(/^[A-Ga-g][#sb]?\d+/)) return "string";
 
-    // Keywords
     if (
       stream.match(
         /^(BPM|AUDIO_RATE|CONTROL_RATE|INSTRUMENT|TYPE|WAVE|ADSR|VOLUME|FREQ|DECAY|SEQUENCE|PATTERN|PLAY|REST|BEAT|LOOP|PLAY_SEQUENCE|PLAY_PATTERN|SYNTH|DRUM|SIN|SAW|SQUARE|TRIANGLE|NOISE)\b/
@@ -39,13 +33,9 @@ const jamLanguage = StreamLanguage.define({
       return "keyword";
     }
 
-    // Colon
     if (stream.match(/^:/)) return "punctuation";
-
-    // Identifiers
     if (stream.match(/^[a-zA-Z_]\w*/)) return "variableName";
 
-    // Skip whitespace
     stream.next();
     return null;
   },
@@ -57,6 +47,7 @@ export default function CodeEditor({
   onCodeChange,
   className = "",
 }) {
+  const { t } = useLanguage();
   const [code, setCode] = useState(initialCode);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isCompiling, setIsCompiling] = useState(false);
@@ -85,20 +76,19 @@ export default function CodeEditor({
     try {
       const parsed = parseJam(code);
 
-      // Basic validation
       const instNames = Object.keys(parsed.instruments);
       if (instNames.length === 0) {
-        setError("You need at least one INSTRUMENT block. Check the lesson for an example!");
+        setError(t.editor.noInstrument);
         return;
       }
       if (parsed.arrangement.length === 0) {
-        setError("Your code needs a PLAY_SEQUENCE or PLAY_PATTERN at the bottom to actually play something!");
+        setError(t.editor.noArrangement);
         return;
       }
 
       const events = flattenToEvents(parsed);
       if (events.length === 0) {
-        setError("No notes to play! Make sure your sequence has PLAY commands.");
+        setError(t.editor.noNotes);
         return;
       }
 
@@ -114,9 +104,9 @@ export default function CodeEditor({
       engine.play(events);
       setIsPlaying(true);
     } catch (e) {
-      setError(`Something went wrong: ${e.message}. Double-check your code for typos!`);
+      setError(t.editor.genericError(e.message));
     }
-  }, [code]);
+  }, [code, t]);
 
   const handleStop = useCallback(() => {
     const engine = getAudioEngine();
@@ -148,22 +138,21 @@ export default function CodeEditor({
       if (data.success) {
         setCompileResult({
           type: "success",
-          message: "Compiled successfully! Your code is ready for Arduino.",
+          message: t.editor.compileSuccess,
           cppCode: data.cpp,
         });
       } else {
-        setError(friendlyError(data.error));
+        setError(friendlyError(data.error, t));
       }
     } catch {
-      // Server not running -- just show a message
       setCompileResult({
         type: "info",
-        message: "Compile server not connected. Use the Play button to preview your sound in the browser!",
+        message: t.editor.compileOffline,
       });
     } finally {
       setIsCompiling(false);
     }
-  }, [code]);
+  }, [code, t]);
 
   return (
     <div className={`rounded-xl overflow-hidden border border-[var(--color-border)] bg-[var(--color-bg-card)] ${className}`}>
@@ -171,7 +160,7 @@ export default function CodeEditor({
       <div className="flex items-center justify-between px-4 py-2 bg-[var(--color-bg-elevated)] border-b border-[var(--color-border)]">
         <div className="flex items-center gap-2">
           {/* Traffic light dots */}
-          <div className="flex gap-1.5 mr-3">
+          <div className="flex gap-1.5 me-3">
             <div className="w-3 h-3 rounded-full bg-red-500/80" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
             <div className="w-3 h-3 rounded-full bg-green-500/80" />
@@ -188,10 +177,10 @@ export default function CodeEditor({
                        bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]
                        hover:bg-[var(--color-bg-card)] hover:text-[var(--color-text-primary)]
                        transition-colors cursor-pointer border-0"
-            title="Reset to original code"
+            title={t.editor.reset}
           >
             <RotateCcw size={14} />
-            Reset
+            {t.editor.reset}
           </button>
 
           <button
@@ -201,10 +190,10 @@ export default function CodeEditor({
                        bg-[var(--color-accent-purple)] text-white font-medium
                        hover:opacity-90 transition-opacity cursor-pointer
                        disabled:opacity-50 border-0"
-            title="Compile to Arduino C++"
+            title={t.editor.compile}
           >
             {isCompiling ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
-            Compile
+            {t.editor.compile}
           </button>
 
           <button
@@ -218,11 +207,11 @@ export default function CodeEditor({
           >
             {isPlaying ? (
               <>
-                <Square size={14} /> Stop
+                <Square size={14} /> {t.editor.stop}
               </>
             ) : (
               <>
-                <Play size={14} /> Play
+                <Play size={14} /> {t.editor.play}
               </>
             )}
           </button>
@@ -257,7 +246,7 @@ export default function CodeEditor({
       {/* Error / success display */}
       {error && (
         <div className="px-4 py-3 bg-red-950/50 border-t border-red-500/30 text-red-300 text-sm">
-          <span className="font-semibold">Oops!</span> {error}
+          <span className="font-semibold">{t.editor.oops}</span> {error}
         </div>
       )}
 
@@ -277,20 +266,11 @@ export default function CodeEditor({
 }
 
 // ── Friendly error messages ─────────────────────────────────────────────
-function friendlyError(rawError) {
-  if (!rawError) return "Something went wrong. Check your code for typos!";
-
-  if (rawError.includes("Lexer error"))
-    return "There's a word JAM doesn't recognize. Check for typos in your keywords (BPM, INSTRUMENT, PLAY, etc. must be UPPERCASE).";
-
-  if (rawError.includes("Parse error"))
-    return "JAM couldn't understand the structure of your code. Make sure indented lines are inside a block (INSTRUMENT, SEQUENCE, PATTERN, or LOOP).";
-
-  if (rawError.includes("Undefined instrument"))
-    return "You're trying to use an instrument that doesn't exist. Make sure you defined it with an INSTRUMENT block and spelled the name correctly!";
-
-  if (rawError.includes("Undefined sequence"))
-    return "You're trying to play a sequence that doesn't exist. Check the name in PLAY_SEQUENCE matches your SEQUENCE block.";
-
+function friendlyError(rawError, t) {
+  if (!rawError) return t.editor.genericCompileError;
+  if (rawError.includes("Lexer error")) return t.editor.lexerError;
+  if (rawError.includes("Parse error")) return t.editor.parseError;
+  if (rawError.includes("Undefined instrument")) return t.editor.undefinedInstrument;
+  if (rawError.includes("Undefined sequence")) return t.editor.undefinedSequence;
   return rawError;
 }

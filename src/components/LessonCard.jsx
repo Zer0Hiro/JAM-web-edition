@@ -1,4 +1,5 @@
 import { ChevronRight, Clock } from "lucide-react";
+import { useLanguage } from "../i18n/context";
 
 const PHASE_COLORS = {
   1: { bg: "rgba(34,211,238,0.1)", border: "rgba(34,211,238,0.3)", text: "#22d3ee" },
@@ -10,7 +11,7 @@ const PHASE_COLORS = {
 
 function DifficultyStars({ level, maxLevel = 5 }) {
   return (
-    <span className="inline-flex gap-0.5 text-sm" title={`Difficulty: ${level}/${maxLevel}`}>
+    <span className="inline-flex gap-0.5 text-sm" title={`${level}/${maxLevel}`}>
       {Array.from({ length: maxLevel }, (_, i) => (
         <span key={i} style={{ opacity: i < level ? 1 : 0.2 }}>
           {"⭐"}
@@ -21,12 +22,13 @@ function DifficultyStars({ level, maxLevel = 5 }) {
 }
 
 export default function LessonCard({ lesson, onClick, completed = false }) {
+  const { t } = useLanguage();
   const colors = PHASE_COLORS[lesson.phase] || PHASE_COLORS[1];
 
   return (
     <button
       onClick={() => onClick(lesson)}
-      className="lesson-card w-full text-left p-5 rounded-xl border transition-all cursor-pointer"
+      className="lesson-card w-full text-start p-5 rounded-xl border transition-all cursor-pointer"
       style={{
         backgroundColor: "var(--color-bg-card)",
         borderColor: completed ? colors.text : "var(--color-border)",
@@ -46,7 +48,7 @@ export default function LessonCard({ lesson, onClick, completed = false }) {
             <DifficultyStars level={lesson.difficulty} />
             {completed && (
               <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 font-medium">
-                Done
+                {t.lessonList.done}
               </span>
             )}
           </div>
@@ -77,7 +79,7 @@ export default function LessonCard({ lesson, onClick, completed = false }) {
           {/* Time estimate */}
           <div className="flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
             <Clock size={12} />
-            ~{lesson.estimatedMinutes} min
+            ~{lesson.estimatedMinutes} {t.lessonList.min}
           </div>
         </div>
 
