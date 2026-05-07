@@ -18,6 +18,7 @@ const en = {
     startLearning: "Start Learning",
     tryEditor: "Try the Editor",
     scrollToExplore: "Scroll to explore",
+    buildYourOwn: "Build Your Own",
   },
 
   // Feature Cards
