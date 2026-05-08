@@ -12,7 +12,7 @@ export default function Navbar({ onNavigate, currentView }) {
     { label: t.nav.lessons, view: "lessons" },
     { label: t.nav.sandbox, view: "sandbox" },
     { label: t.nav.sounds, view: "library" },
-    { label: t.nav.guide, view: "guide" },
+    { label: t.nav.guide, view: "buildGuides" },
   ];
 
   function handleNav(view) {
@@ -23,16 +23,29 @@ export default function Navbar({ onNavigate, currentView }) {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--color-bg-primary)]/80 backdrop-blur-lg border-b border-[var(--color-border)]">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        {/* Logo */}
-        <button
-          onClick={() => handleNav("home")}
-          className="flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0"
-        >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)] flex items-center justify-center">
-            <Volume2 size={16} className="text-white" />
-          </div>
-          <span className="text-lg font-bold gradient-text">JEM</span>
-        </button>
+        {/* Logo + Music Library (left group) */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => handleNav("home")}
+            className="flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0"
+          >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)] flex items-center justify-center">
+              <Volume2 size={16} className="text-white" />
+            </div>
+            <span className="text-lg font-bold gradient-text">JEM</span>
+          </button>
+
+          <button
+            onClick={() => handleNav("musicLibrary")}
+            className={`hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold transition-all duration-150 cursor-pointer border
+              ${currentView === "musicLibrary"
+                ? "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/15 border-[var(--color-accent-cyan)]/60 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
+                : "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/5 border-[var(--color-accent-cyan)]/25 hover:bg-[var(--color-accent-cyan)]/12 hover:border-[var(--color-accent-cyan)]/50 hover:shadow-[0_0_8px_rgba(0,240,255,0.18)]"
+              }`}
+          >
+            {t.nav.musicLibrary}
+          </button>
+        </div>
 
         {/* Desktop nav */}
         <div className="hidden md:flex items-center gap-1">
@@ -93,7 +106,7 @@ export default function Navbar({ onNavigate, currentView }) {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden px-4 pb-4 bg-[var(--color-bg-primary)] border-b border-[var(--color-border)]">
-          {navItems.map((item) => (
+          {[...navItems, { label: t.nav.musicLibrary, view: "musicLibrary" }].map((item) => (
             <button
               key={item.view}
               onClick={() => handleNav(item.view)}

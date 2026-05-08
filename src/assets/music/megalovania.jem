@@ -1,0 +1,125 @@
+    BPM 120
+
+    INSTRUMENT megalo_synth:
+        TYPE SYNTH
+        WAVE SQUARE
+        ADSR 5 100 80 20
+        VOLUME 220
+
+
+    SEQUENCE intro_1:
+        PLAY megalo_synth D4 0.25
+        PLAY megalo_synth D4 0.25
+        PLAY megalo_synth D5 0.5
+        PLAY megalo_synth A4 0.5
+        REST 0.25
+        PLAY megalo_synth G#4 0.5
+        PLAY megalo_synth G4 0.5
+        PLAY megalo_synth F4 0.5
+        PLAY megalo_synth D4 0.25
+        PLAY megalo_synth F4 0.25
+        PLAY megalo_synth G4 0.25
+
+    SEQUENCE intro_2:
+        PLAY megalo_synth C4 0.25
+        PLAY megalo_synth C4 0.25
+        PLAY megalo_synth D5 0.5
+        PLAY megalo_synth A4 0.5
+        REST 0.25
+        PLAY megalo_synth G#4 0.5
+        PLAY megalo_synth G4 0.5
+        PLAY megalo_synth F4 0.5
+        PLAY megalo_synth D4 0.25
+        PLAY megalo_synth F4 0.25
+        PLAY megalo_synth G4 0.25
+
+    SEQUENCE intro_3:
+        PLAY megalo_synth B3 0.25
+        PLAY megalo_synth B3 0.25
+        PLAY megalo_synth D5 0.5
+        PLAY megalo_synth A4 0.5
+        REST 0.25
+        PLAY megalo_synth G#4 0.5
+        PLAY megalo_synth G4 0.5
+        PLAY megalo_synth F4 0.5
+        PLAY megalo_synth D4 0.25
+        PLAY megalo_synth F4 0.25
+        PLAY megalo_synth G4 0.25
+
+    SEQUENCE intro_4:
+        # Используем A#3 для Си-бемоль
+        PLAY megalo_synth A#3 0.25
+        PLAY megalo_synth A#3 0.25
+        PLAY megalo_synth D5 0.5
+        PLAY megalo_synth A4 0.5
+        REST 0.25
+        PLAY megalo_synth G#4 0.5
+        PLAY megalo_synth G4 0.5
+        PLAY megalo_synth F4 0.5
+        PLAY megalo_synth D4 0.25
+        PLAY megalo_synth F4 0.25
+        PLAY megalo_synth G4 0.25
+
+
+    SEQUENCE full_1:
+        PLAY megalo_synth [D4 D3] 0.25
+        PLAY megalo_synth [D4 D3] 0.25
+        PLAY megalo_synth [D5 D3] 0.5
+        PLAY megalo_synth [A4 D3] 0.5
+        PLAY megalo_synth D3 0.25
+        PLAY megalo_synth [G#4 D3] 0.5
+        PLAY megalo_synth [G4 D3] 0.5
+        PLAY megalo_synth [F4 D3] 0.5
+        PLAY megalo_synth [D4 D3] 0.25
+        PLAY megalo_synth [F4 D3] 0.25
+        PLAY megalo_synth [G4 D3] 0.25
+
+    SEQUENCE full_2:
+        PLAY megalo_synth [C4 C3] 0.25
+        PLAY megalo_synth [C4 C3] 0.25
+        PLAY megalo_synth [D5 C3] 0.5
+        PLAY megalo_synth [A4 C3] 0.5
+        PLAY megalo_synth C3 0.25
+        PLAY megalo_synth [G#4 C3] 0.5
+        PLAY megalo_synth [G4 C3] 0.5
+        PLAY megalo_synth [F4 C3] 0.5
+        PLAY megalo_synth [D4 C3] 0.25
+        PLAY megalo_synth [F4 C3] 0.25
+        PLAY megalo_synth [G4 C3] 0.25
+
+    SEQUENCE full_3:
+        PLAY megalo_synth [B3 B2] 0.25
+        PLAY megalo_synth [B3 B2] 0.25
+        PLAY megalo_synth [D5 B2] 0.5
+        PLAY megalo_synth [A4 B2] 0.5
+        PLAY megalo_synth B2 0.25
+        PLAY megalo_synth [G#4 B2] 0.5
+        PLAY megalo_synth [G4 B2] 0.5
+        PLAY megalo_synth [F4 B2] 0.5
+        PLAY megalo_synth [D4 B2] 0.25
+        PLAY megalo_synth [F4 B2] 0.25
+        PLAY megalo_synth [G4 B2] 0.25
+
+    SEQUENCE full_4:
+        PLAY megalo_synth [A#3 A#2] 0.25
+        PLAY megalo_synth [A#3 A#2] 0.25
+        PLAY megalo_synth [D5 A#2] 0.5
+        PLAY megalo_synth [A4 A#2] 0.5
+        PLAY megalo_synth A#2 0.25
+        PLAY megalo_synth [G#4 A#2] 0.5
+        PLAY megalo_synth [G4 A#2] 0.5
+        PLAY megalo_synth [F4 A#2] 0.5
+        PLAY megalo_synth [D4 A#2] 0.25
+        PLAY megalo_synth [F4 A#2] 0.25
+        PLAY megalo_synth [G4 A#2] 0.25
+
+    PLAY_SEQUENCE intro_1
+    PLAY_SEQUENCE intro_2
+    PLAY_SEQUENCE intro_3
+    PLAY_SEQUENCE intro_4
+
+    LOOP 4:
+        PLAY_SEQUENCE full_1
+        PLAY_SEQUENCE full_2
+        PLAY_SEQUENCE full_3
+        PLAY_SEQUENCE full_4

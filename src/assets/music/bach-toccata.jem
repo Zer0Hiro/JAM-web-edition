@@ -1,0 +1,67 @@
+BPM 105
+
+INSTRUMENT organ_main:
+    TYPE SYNTH
+    WAVE SQUARE
+    ADSR 10 80 180 150
+    VOLUME 225
+
+INSTRUMENT organ_pedal:
+    TYPE SYNTH
+    WAVE TRIANGLE
+    ADSR 30 150 200 200
+    VOLUME 255
+
+SEQUENCE toccata_extended:
+    PLAY organ_main A5 0.3
+    PLAY organ_main G5 0.15
+    PLAY organ_main A5 1.2
+    REST 0.6
+    
+    PLAY organ_main G5 0.15
+    PLAY organ_main F5 0.15
+    PLAY organ_main E5 0.15
+    PLAY organ_main D5 0.15
+    PLAY organ_main C#5 0.3
+    PLAY organ_main D5 1.5
+    REST 0.8
+
+    PLAY organ_main D4 0.15
+    PLAY organ_main E4 0.15
+    PLAY organ_main F4 0.15
+    PLAY organ_main G4 0.15
+    PLAY organ_main A4 0.15
+    PLAY organ_main Bb4 0.15
+    PLAY organ_main C#5 0.15
+    PLAY organ_main D5 0.6
+    
+    PLAY organ_main D5 0.1
+    PLAY organ_main C5 0.1
+    PLAY organ_main Bb4 0.1
+    PLAY organ_main A4 0.1
+    PLAY organ_main G4 0.1
+    PLAY organ_main F4 0.1
+    PLAY organ_main E4 0.1
+    PLAY organ_main D4 0.4
+
+    PLAY organ_main [C#4 E4 G4 Bb4] 0.5
+    PLAY organ_main [D4 F4 A4] 1.0
+
+    PLAY organ_main D3 0.15
+    PLAY organ_main F3 0.15
+    PLAY organ_main A3 0.15
+    PLAY organ_main D4 0.15
+    PLAY organ_main F4 0.15
+    PLAY organ_main A4 0.15
+    PLAY organ_main D5 0.5
+    
+    PLAY organ_pedal D2 0.25
+    PLAY organ_pedal E2 0.25
+    PLAY organ_pedal F2 0.5
+    PLAY organ_pedal G2 0.5
+    PLAY organ_pedal A2 1.0
+
+    PLAY organ_pedal D1 3.0
+    PLAY organ_main [D3 F3 A3 D4 F4 A4] 3.0
+
+PLAY_SEQUENCE toccata_extended

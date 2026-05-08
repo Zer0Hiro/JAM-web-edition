@@ -8,6 +8,9 @@ import LessonView from "./components/LessonView";
 import Sandbox from "./components/Sandbox";
 import SoundLibrary from "./components/SoundLibrary";
 import ArduinoGuide from "./components/ArduinoGuide";
+import BuildGuides from "./components/BuildGuides";
+import VoiceSoundGuide from "./components/VoiceSoundGuide";
+import MusicLibrary from "./components/MusicLibrary";
 import Footer from "./components/Footer";
 import { getLessonById, getNextLesson, getPrevLesson } from "./lessons";
 import useProgress from "./hooks/useProgress";
@@ -18,6 +21,7 @@ export default function App() {
   const { lang } = useLanguage();
   const [currentView, setCurrentView] = useState("home");
   const [selectedLessonId, setSelectedLessonId] = useState(null);
+  const [sandboxInitialCode, setSandboxInitialCode] = useState(null);
   const { completedLessons, completeLesson } = useProgress();
   const selectedLesson = selectedLessonId ? getLessonById(selectedLessonId, lang) : null;
 
@@ -29,6 +33,11 @@ export default function App() {
   const handleNavigate = useCallback((view) => {
     setCurrentView(view);
     setSelectedLessonId(null);
+  }, []);
+
+  const handleOpenInEditor = useCallback((code) => {
+    setSandboxInitialCode(code);
+    setCurrentView("sandbox");
   }, []);
 
   const handleSelectLesson = useCallback((lesson) => {
@@ -109,6 +118,7 @@ export default function App() {
         </>
       )}
 
+
       {currentView === "lessons" && (
         <div className="pt-16">
           <LessonList
@@ -121,15 +131,30 @@ export default function App() {
 
       {currentView === "sandbox" && (
         <div className="pt-16">
-          <Sandbox />
+          <Sandbox initialCode={sandboxInitialCode} />
           <Footer />
         </div>
+      )}
+
+      {currentView === "musicLibrary" && (
+        <MusicLibrary onOpenInEditor={handleOpenInEditor} />
       )}
 
       {currentView === "library" && <SoundLibrary />}
 
       {currentView === "guide" && (
-        <ArduinoGuide onBack={() => handleNavigate("home")} />
+        <ArduinoGuide onBack={() => handleNavigate("buildGuides")} />
+      )}
+
+      {currentView === "buildGuides" && (
+        <BuildGuides
+          onOpenArduinoGuide={() => handleNavigate("guide")}
+          onOpenVoiceSoundGuide={() => handleNavigate("voiceSoundGuide")}
+        />
+      )}
+
+      {currentView === "voiceSoundGuide" && (
+        <VoiceSoundGuide onBack={() => handleNavigate("buildGuides")} />
       )}
 
       <JAMaiAssistant />

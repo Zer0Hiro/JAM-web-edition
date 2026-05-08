@@ -1,0 +1,40 @@
+BPM 125
+
+INSTRUMENT magical_celesta:
+    TYPE SYNTH
+    WAVE SIN
+    ADSR 10 120 100 150
+    VOLUME 190
+
+INSTRUMENT dark_strings:
+    TYPE SYNTH
+    WAVE TRIANGLE
+    ADSR 100 200 150 200
+    VOLUME 150
+
+SEQUENCE hedwig_theme:
+    # Главный мотив
+    PLAY magical_celesta B4 0.5
+    PLAY magical_celesta E5 0.75
+    PLAY magical_celesta G5 0.25
+    PLAY magical_celesta F#5 0.5
+    PLAY magical_celesta E5 1.0
+    PLAY magical_celesta B5 0.5
+    PLAY magical_celesta A5 1.5
+    PLAY magical_celesta F#5 1.5
+    
+    PLAY magical_celesta E5 0.75
+    PLAY magical_celesta G5 0.25
+    PLAY magical_celesta F#5 0.5
+    PLAY magical_celesta D#5 1.0
+    PLAY magical_celesta F5 0.5
+    PLAY magical_celesta B4 1.5
+    REST 0.5
+
+SEQUENCE background_hum:
+    PLAY dark_strings E3 4.0
+    PLAY dark_strings B2 4.0
+
+LOOP 4:
+    PLAY_SEQUENCE hedwig_theme
+    PLAY_SEQUENCE background_hum

@@ -46,7 +46,7 @@ LOOP 4:
     PLAY_SEQUENCE melody
     PLAY_PATTERN beat`;
 
-export default function Sandbox() {
+export default function Sandbox({ initialCode }) {
   const { t } = useLanguage();
 
   return (
@@ -61,7 +61,7 @@ export default function Sandbox() {
           </p>
         </div>
 
-        <CodeEditor initialCode={SANDBOX_CODE} />
+        <CodeEditor initialCode={initialCode ?? SANDBOX_CODE} />
 
         {/* Quick reference */}
         <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -1,0 +1,94 @@
+BPM 110
+
+INSTRUMENT nes_chip:
+    TYPE SYNTH
+    WAVE SQUARE
+    ADSR 5 100 50 20
+    VOLUME 220
+
+SEQUENCE mario_intro:
+    PLAY nes_chip [E5 D3] 0.25
+    REST 0.125
+    PLAY nes_chip [E5 D3] 0.25
+    REST 0.25
+    PLAY nes_chip [E5 D3] 0.25
+    REST 0.25
+    PLAY nes_chip [C5 D3] 0.25
+    PLAY nes_chip [E5 D3] 0.5
+    PLAY nes_chip [G5 G3] 0.5
+    REST 0.5
+    PLAY nes_chip [G4 G2] 0.5
+    REST 0.5
+
+
+SEQUENCE mario_part_1:
+    PLAY nes_chip [C5 G3] 0.5
+    REST 0.25
+    PLAY nes_chip [G4 E3] 0.5
+    REST 0.25
+    PLAY nes_chip [E4 C3] 0.5
+    REST 0.25
+    PLAY nes_chip F3 0.25
+    PLAY nes_chip [A4 G3] 0.25
+    REST 0.125
+    PLAY nes_chip [B4 C3] 0.25
+    REST 0.125
+    PLAY nes_chip [A#4 C3] 0.25
+    PLAY nes_chip [A4 C3] 0.5
+    REST 0.25
+
+# Вторая часть главной темы 
+SEQUENCE mario_part_2:
+    PLAY nes_chip [G4 C3] 0.33
+    PLAY nes_chip [E5 C3] 0.33
+    PLAY nes_chip [G5 C3] 0.33
+    PLAY nes_chip [A5 F3] 0.5
+    PLAY nes_chip [F5 F3] 0.25
+    PLAY nes_chip [G5 F3] 0.25
+    REST 0.125
+    PLAY nes_chip [E5 C3] 0.5
+    PLAY nes_chip [C5 G2] 0.25
+    PLAY nes_chip [D5 G2] 0.25
+    PLAY nes_chip [B4 G2] 0.5
+    REST 0.5
+
+
+SEQUENCE mario_bridge_1:
+    REST 0.5
+    PLAY nes_chip [G5 C3] 0.25
+    PLAY nes_chip [F#5 C3] 0.25
+    PLAY nes_chip [F5 C3] 0.25
+    PLAY nes_chip [D#5 C3] 0.5
+    PLAY nes_chip [E5 C3] 0.5
+    REST 0.5
+    PLAY nes_chip [G#4 G2] 0.25
+    PLAY nes_chip [A4 G2] 0.25
+    PLAY nes_chip [C5 G2] 0.5
+    REST 0.5
+    PLAY nes_chip [A4 G2] 0.25
+    PLAY nes_chip [C5 G2] 0.25
+    PLAY nes_chip [D5 G2] 0.5
+
+
+SEQUENCE mario_bridge_2:
+    REST 0.5
+    PLAY nes_chip [G5 C3] 0.25
+    PLAY nes_chip [F#5 C3] 0.25
+    PLAY nes_chip [F5 C3] 0.25
+    PLAY nes_chip [D#5 C3] 0.5
+    PLAY nes_chip [E5 C3] 0.5
+    REST 0.5
+
+    PLAY nes_chip [C6 G2] 0.5
+    REST 0.25
+    PLAY nes_chip [C6 G2] 0.25
+    PLAY nes_chip [C6 G2] 0.5
+    REST 1.0
+
+PLAY_SEQUENCE mario_intro
+PLAY_SEQUENCE mario_part_1
+PLAY_SEQUENCE mario_part_2
+PLAY_SEQUENCE mario_part_1
+PLAY_SEQUENCE mario_part_2
+PLAY_SEQUENCE mario_bridge_1
+PLAY_SEQUENCE mario_bridge_2

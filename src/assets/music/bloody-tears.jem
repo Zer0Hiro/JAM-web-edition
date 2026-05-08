@@ -1,0 +1,77 @@
+BPM 128
+
+INSTRUMENT lead:
+    TYPE SYNTH
+    WAVE SQUARE
+    ADSR 10 80 160 120
+    VOLUME 210
+
+INSTRUMENT bass:
+    TYPE SYNTH
+    WAVE TRIANGLE
+    ADSR 25 140 180 90
+    VOLUME 180
+
+INSTRUMENT arp:
+    TYPE SYNTH
+    WAVE SQUARE
+    ADSR 8 40 80 60
+    VOLUME 140
+
+SEQUENCE main_melody:
+    PLAY lead Bb4 0.5
+    PLAY lead F5 0.5
+    PLAY lead Eb5 0.5
+    PLAY lead Db5 0.5
+    PLAY lead C5 0.5
+    PLAY lead Db5 0.5
+    PLAY lead C5 0.5
+    PLAY lead Bb4 1.0
+
+    PLAY lead Bb4 0.5
+    PLAY lead F5 0.5
+    PLAY lead Eb5 0.5
+    PLAY lead Db5 0.5
+    PLAY lead C5 0.5
+    PLAY lead Db5 0.5
+    PLAY lead Eb5 0.5
+    PLAY lead F5 1.0
+
+    PLAY lead Ab5 0.5
+    PLAY lead G5 0.5
+    PLAY lead F5 0.5
+    PLAY lead Eb5 0.5
+    PLAY lead Db5 0.5
+    PLAY lead Eb5 0.5
+    PLAY lead F5 0.5
+    PLAY lead G5 1.0
+
+    PLAY lead F5 0.5
+    PLAY lead Eb5 0.5
+    PLAY lead Db5 0.5
+    PLAY lead C5 0.5
+    PLAY lead Bb4 2.0
+
+SEQUENCE bassline:
+    PLAY bass Bb2 2.0
+    PLAY bass F3 2.0
+    PLAY bass Gb2 2.0
+    PLAY bass Db3 2.0
+    PLAY bass Eb2 2.0
+    PLAY bass Bb2 2.0
+
+SEQUENCE arpeggio:
+    PLAY arp Bb3 0.25
+    PLAY arp Db4 0.25
+    PLAY arp F4 0.25
+    PLAY arp Bb4 0.25
+    PLAY arp Db4 0.25
+    PLAY arp F4 0.25
+    PLAY arp Bb4 0.25
+    PLAY arp Db5 0.25
+
+PLAY_SEQUENCE main_melody
+LOOP 4:
+    PLAY_SEQUENCE bassline
+    PLAY_SEQUENCE arpeggio
+    PLAY_SEQUENCE main_melody

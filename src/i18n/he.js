@@ -8,6 +8,7 @@ const he = {
     sandbox: "ארגז חול",
     sounds: "צלילים",
     guide: "מדריך בנייה",
+    musicLibrary: "ספריית מוזיקה",
   },
 
   // Hero
@@ -201,28 +202,6 @@ const he = {
         imagePlaceholder: "צילום מסך של עורך JEM עם מנגינה פשוטה",
         imageFilename: "step-5-code.png",
         content: "הוראות לכתיבת תוכנית JEM ראשונה יתווספו כאן.",
-      },
-      {
-        title: "קמפלו לקוד ESP32",
-        subtitle: ".הפכו את קוד JEM ל-C++ שה-ESP32 מבין",
-        imagePlaceholder: "צילום מסך שמראה את כפתור Compile והודעת הצלחה",
-        imageFilename: "step-6-compile.png",
-        content: "הוראות קומפילציה יתווספו כאן.",
-      },
-      {
-        title: "העלו ל-ESP32",
-        subtitle: "שלחו את הקוד המקומפל ללוח ה-ESP32.",
-        imagePlaceholder: "צילום מסך של Arduino IDE מעלה את הסקיצה",
-        imageFilename: "step-7-upload.png",
-        content: "הוראות העלאה יתווספו כאן.",
-        tip: "ודאו שבחרתם את הלוח הנכון (ESP32) ואת הפורט הנכון ב-IDE.",
-      },
-      {
-        title: "!שמעו את המוזיקה",
-        subtitle: "!ה-ESP32 שלכם עכשיו מנגן את המוזיקה שהלחנתם",
-        imagePlaceholder: "תמונה של ההתקנה המושלמת עם רמקול מנגן",
-        imageFilename: "step-8-done.png",
-        content: "פתרון בעיות וצעדים הבאים יתווספו כאן.",
       },
     ],
   },

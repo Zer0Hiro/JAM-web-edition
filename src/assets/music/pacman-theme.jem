@@ -1,0 +1,51 @@
+BPM 60
+
+INSTRUMENT pac_lead:
+    TYPE SYNTH
+    WAVE SQUARE
+    ADSR 5 100 50 20
+    VOLUME 200
+
+SEQUENCE pacman_intro:
+    PLAY pac_lead B4 0.125
+    PLAY pac_lead B5 0.125
+    PLAY pac_lead F#5 0.125
+    PLAY pac_lead D#5 0.125
+    PLAY pac_lead B5 0.0625
+    PLAY pac_lead F#5 0.125
+    PLAY pac_lead D#5 0.25
+    
+    PLAY pac_lead C5 0.125
+    PLAY pac_lead C6 0.125
+    PLAY pac_lead G5 0.125
+    PLAY pac_lead E5 0.125
+    PLAY pac_lead C6 0.0625
+    PLAY pac_lead G5 0.125
+    PLAY pac_lead E5 0.25
+    
+    # Фраза 3 (возврат к основной теме)
+    PLAY pac_lead B4 0.125
+    PLAY pac_lead B5 0.125
+    PLAY pac_lead F#5 0.125
+    PLAY pac_lead D#5 0.125
+    PLAY pac_lead B5 0.0625
+    PLAY pac_lead F#5 0.125
+    PLAY pac_lead D#5 0.25
+    
+    # Финал
+    PLAY pac_lead D#5 0.0625
+    PLAY pac_lead E5 0.0625
+    PLAY pac_lead F5 0.0625
+    PLAY pac_lead F#5 0.25
+
+SEQUENCE pacman_siren:
+    PLAY pac_lead B3 0.25
+    PLAY pac_lead A3 0.25
+    PLAY pac_lead G3 0.25
+    PLAY pac_lead F3 0.25
+
+PLAY_SEQUENCE pacman_intro
+
+
+PLAY_SEQUENCE pacman_siren
+PLAY_SEQUENCE pacman_siren

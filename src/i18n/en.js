@@ -8,6 +8,7 @@ const en = {
     sandbox: "Sandbox",
     sounds: "Sounds",
     guide: "Build Guide",
+    musicLibrary: "Music Library",
   },
 
   // Hero
@@ -211,28 +212,6 @@ const en = {
         imageFilename: "step-6-power.mp4",
         content: "Connect your ESP32 to your computer with your data cable and upload your code[cite: 30]. If everything is wired right, your buzzer will start beeping: one second of sound, then one second of silence[cite: 31].",
         tip: "If it doesn't beep, check if your computer recognized the ESP32 port first[cite: 30]!",
-      },
-      {
-        title: "Compile to ESP32 Code",
-        subtitle: "Turn your JEM code into C++ that the ESP32 understands.",
-        imagePlaceholder: "Screenshot showing the Compile button and success message",
-        imageFilename: "step-6-compile.png",
-        content: "Compilation instructions will go here.",
-      },
-      {
-        title: "Upload to ESP32",
-        subtitle: "Send the compiled code to your ESP32 board.",
-        imagePlaceholder: "Screenshot of Arduino IDE uploading the sketch",
-        imageFilename: "step-7-upload.png",
-        content: "Upload instructions will go here.",
-        tip: "Make sure you select the correct board (ESP32) and port in the IDE.",
-      },
-      {
-        title: "Hear Your Music!",
-        subtitle: "Your ESP32 is now playing the music you composed!",
-        imagePlaceholder: "Photo of the completed setup with speaker playing",
-        imageFilename: "step-8-done.png",
-        content: "Troubleshooting and next steps will go here.",
       },
     ],
   },

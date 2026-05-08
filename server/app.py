@@ -30,7 +30,11 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-from jamai_chat_routes import jamai_chat_bp
+try:
+    from server.jamai_chat_routes import jamai_chat_bp
+except ImportError:
+    from jamai_chat_routes import jamai_chat_bp
+
 app.register_blueprint(jamai_chat_bp)
 
 
@@ -116,8 +120,12 @@ def api_health():
     return jsonify({"status": "ok", "compiler": "jamDsl"})
 
 
-if __name__ == "__main__":
+def main():
     print("JAM Compile Server starting on http://localhost:5050")
     print(f"DSL path: {DSL_PATH}")
     app.run(host="0.0.0.0", port=5050, debug=True)
+
+
+if __name__ == "__main__":
+    main()
 

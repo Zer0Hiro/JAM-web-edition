@@ -1,0 +1,61 @@
+BPM 90
+
+INSTRUMENT hard_rock_guitar:
+    TYPE SYNTH
+    WAVE SAW
+    ADSR 5 60 120 20
+    VOLUME 210
+
+INSTRUMENT drum_kick:
+    TYPE DRUM
+    WAVE SIN
+    FREQ 60
+    DECAY 110
+    VOLUME 255
+
+INSTRUMENT drum_snare:
+    TYPE DRUM
+    WAVE NOISE
+    FREQ 500
+    DECAY 80
+    VOLUME 190
+
+SEQUENCE smoke_classic:
+    # Фраза 1
+    PLAY hard_rock_guitar [G3 C4] 0.4
+    REST 0.1
+    PLAY hard_rock_guitar [A#3 D#4] 0.4
+    REST 0.1
+    PLAY hard_rock_guitar [C4 F4] 0.8
+    REST 0.5
+    
+    # Фраза 2
+    PLAY hard_rock_guitar [G3 C4] 0.4
+    REST 0.1
+    PLAY hard_rock_guitar [A#3 D#4] 0.4
+    REST 0.1
+    PLAY hard_rock_guitar [C#4 F#4] 0.25
+    PLAY hard_rock_guitar [C4 F4] 0.75
+    REST 0.5
+    
+    # Фраза 3
+    PLAY hard_rock_guitar [G3 C4] 0.4
+    REST 0.1
+    PLAY hard_rock_guitar [A#3 D#4] 0.4
+    REST 0.1
+    PLAY hard_rock_guitar [C4 F4] 0.4
+    REST 0.15
+    PLAY hard_rock_guitar [A#3 D#4] 0.4
+    REST 0.15
+    PLAY hard_rock_guitar [G3 C4] 1.0
+    REST 1.0
+
+PATTERN simple_beat:
+    BEAT 1: drum_kick
+    BEAT 2: drum_snare
+    BEAT 3: drum_kick
+    BEAT 4: drum_snare
+
+LOOP 4:
+    PLAY_SEQUENCE smoke_classic
+    PLAY_PATTERN simple_beat

@@ -8,40 +8,76 @@ import {
   RotateCcw,
 } from "lucide-react";
 import Footer from "./Footer";
-import { useLanguage } from "../i18n/context";
-import step0Image from "../assets/1_0.jpeg";
-import step1Image from "../assets/1_1.jpeg";
-import step2Image from "../assets/1_2.jpeg";
-import step3Image from "../assets/1_3.jpeg";
-import step4Image from "../assets/1_4.jpeg";
-import step5Image from "../assets/1_6.jpeg";
+import voiceStep1 from "../assets/2_1.jpeg";
+import voiceStep2 from "../assets/2_2.jpeg";
+import voiceStep3 from "../assets/2_3.jpeg";
+import voiceStep4 from "../assets/2_4.jpeg";
+import voiceStep5 from "../assets/2_5.jpeg";
+import voiceStep6 from "../assets/2_6.jpeg";
 
-const STORAGE_KEY = "jam-arduino-guide-step";
-
-const STEP_IMAGES = {
-  0: step0Image,
-  1: step1Image,
-  2: step2Image,
-  3: step3Image,
-  4: step4Image,
-  5: step5Image,
-};
+const STORAGE_KEY = "jam-voice-sound-guide-progress";
 
 const STEP_COLORS = [
-  "#22d3ee",
-  "#8b5cf6",
-  "#34d399",
-  "#f97316",
   "#ff00aa",
+  "#8b5cf6",
+  "#22d3ee",
+  "#f97316",
   "#00f0ff",
   "#a78bfa",
-  "#f43f5e",
 ];
 
-export default function ArduinoGuide({ onBack }) {
-  const { t } = useLanguage();
-  const steps = t.arduinoGuide.steps;
+const steps = [
+  {
+    title: "What You Need",
+    subtitle: "Gather the parts before building the sound control circuit.",
+    image: voiceStep1,
+    content:
+      "To build this guide, you need an ESP32 controller board, a potentiometer, two push buttons, a speaker, female-to-male jumper wires, and a large breadboard.",
+    tip: "Keep the ESP32 outside the breadboard for this build. The breadboard will hold the input and output components.",
+  },
+  {
+    title: "Step 1: Placement",
+    subtitle: "Place each component in a clear area of the breadboard.",
+    image: voiceStep2,
+    content:
+      "Start by organizing the breadboard into separate areas. Insert the potentiometer on the left side of the breadboard. Insert the two push buttons in the center, with each button crossing the middle groove. Insert the two speaker wires on the right side of the breadboard, with each wire in a separate column.",
+    tip: "Separating the controls and speaker wires makes the circuit easier to debug later.",
+  },
+  {
+    title: "Step 2: Power Rails",
+    subtitle: "Connect voltage and ground rails for the whole circuit.",
+    image: voiceStep3,
+    content:
+      "Many parts need voltage and ground, so prepare the side rails first. Connect a jumper wire from a GND pin on the ESP32 to the long blue rail on the breadboard. Then connect a jumper wire from the 3.3V pin on the ESP32 to the long red rail on the breadboard.",
+    tip: "Use the blue rail for ground and the red rail for 3.3V. Keeping these colors consistent prevents wiring mistakes.",
+  },
+  {
+    title: "Step 3: Potentiometer",
+    subtitle: "Wire the variable resistor so it can control sound values.",
+    image: voiceStep4,
+    content:
+      "The potentiometer has three legs in a row. Connect the left leg to the red rail for voltage. Connect the right leg to the blue rail for ground. Connect the middle leg to GPIO 34 on the ESP32. This middle leg sends the changing control value to the board.",
+    tip: "GPIO 34 is an input-only pin on many ESP32 boards, which makes it a good choice for reading analog control values.",
+  },
+  {
+    title: "Step 4: Buttons and Speaker",
+    subtitle: "Add two command buttons and connect speaker output pins.",
+    image: voiceStep5,
+    content:
+      "For each push button, one side goes to a command pin and the other side goes to ground. Connect one side of Button A to GPIO 12. Connect one side of Button B to GPIO 14. Connect the opposite legs of both buttons to the blue ground rail. Then connect the speaker: connect one speaker wire column to GPIO 25 and the other speaker wire column to GPIO 26.",
+    tip: "The buttons act like simple digital controls. The speaker is connected to GPIO 25 and GPIO 26 for sound output.",
+  },
+  {
+    title: "Step 5: Final Check",
+    subtitle: "Check the circuit before connecting power and running code.",
+    image: voiceStep6,
+    content:
+      "Before powering the circuit, make sure every component that needs ground is connected to the blue rail. Make sure the speaker wires and button wires are not touching each other. When everything looks correct, connect the ESP32 to the computer and run the code.",
+    tip: "If something does not work, disconnect the board first, then check one section at a time: power rails, potentiometer, buttons, and speaker.",
+  },
+];
 
+export default function VoiceSoundGuide({ onBack }) {
   const [completedSteps, setCompletedSteps] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -73,7 +109,6 @@ export default function ArduinoGuide({ onBack }) {
     if (!completedSteps.includes(activeStep)) {
       setCompletedSteps((prev) => [...prev, activeStep]);
     }
-
     if (activeStep < steps.length - 1) {
       setActiveStep(activeStep + 1);
     }
@@ -87,8 +122,7 @@ export default function ArduinoGuide({ onBack }) {
 
   const allDone = completedSteps.length === steps.length;
   const progress = (completedSteps.length / steps.length) * 100;
-  const stepData = steps[activeStep];
-  const step = { ...stepData, image: STEP_IMAGES[activeStep] || stepData.image };
+  const step = steps[activeStep];
   const color = STEP_COLORS[activeStep % STEP_COLORS.length];
 
   return (
@@ -101,25 +135,25 @@ export default function ArduinoGuide({ onBack }) {
             className="flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer bg-transparent border-0"
           >
             <ArrowLeft size={16} />
-            {t.arduinoGuide.back}
+            Build Guides
           </button>
 
-          <span className="font-semibold text-sm">{t.arduinoGuide.title}</span>
+          <span className="font-semibold text-sm">Voice and Sound Control</span>
 
           <button
             onClick={resetProgress}
             className="flex items-center gap-1.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer bg-transparent border-0"
-            title={t.arduinoGuide.resetProgress}
+            title="Reset progress"
           >
             <RotateCcw size={13} />
-            {t.arduinoGuide.reset}
+            Reset
           </button>
         </div>
 
         {/* Progress bar */}
         <div className="h-1 bg-[var(--color-bg-secondary)]">
           <div
-            className="h-full bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)] transition-all duration-500"
+            className="h-full bg-gradient-to-r from-[var(--color-accent-magenta)] to-[var(--color-accent-purple)] transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -127,11 +161,12 @@ export default function ArduinoGuide({ onBack }) {
 
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-8">
-          {/* Sidebar — step list */}
+
+          {/* Sidebar */}
           <div className="lg:sticky lg:top-20 lg:self-start">
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)]">
-                {t.arduinoGuide.stepsLabel}
+                Steps
               </span>
               <span className="text-xs text-[var(--color-text-muted)]">
                 {completedSteps.length}/{steps.length}
@@ -140,53 +175,25 @@ export default function ArduinoGuide({ onBack }) {
 
             <div className="space-y-1">
               {steps.map((s, idx) => {
+                const done = completedSteps.includes(idx);
                 const current = idx === activeStep;
-
-                /*
-                  Important:
-                  The active/current step should NOT show as completed.
-                  Only non-active steps that are actually in completedSteps get the checkmark.
-                */
-                const done = completedSteps.includes(idx) && !current;
-
                 const stepColor = STEP_COLORS[idx % STEP_COLORS.length];
-
                 return (
                   <button
                     key={idx}
                     onClick={() => setActiveStep(idx)}
                     className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-start text-sm transition-all cursor-pointer border-0
-                      ${
-                        current
-                          ? "bg-[var(--color-bg-card)] border border-[var(--color-border)]"
-                          : "bg-transparent hover:bg-[var(--color-bg-secondary)]"
+                      ${current
+                        ? "bg-[var(--color-bg-card)] border border-[var(--color-border)]"
+                        : "bg-transparent hover:bg-[var(--color-bg-secondary)]"
                       }`}
                   >
                     {done ? (
-                      <CheckCircle2
-                        size={16}
-                        style={{ color: stepColor }}
-                        className="flex-shrink-0"
-                      />
+                      <CheckCircle2 size={16} style={{ color: stepColor }} className="flex-shrink-0" />
                     ) : (
-                      <Circle
-                        size={16}
-                        className="flex-shrink-0"
-                        style={{
-                          color: current
-                            ? stepColor
-                            : "var(--color-text-muted)",
-                        }}
-                      />
+                      <Circle size={16} className="flex-shrink-0" style={{ color: current ? stepColor : "var(--color-text-muted)" }} />
                     )}
-
-                    <span
-                      className={`truncate ${
-                        current
-                          ? "text-[var(--color-text-primary)] font-medium"
-                          : "text-[var(--color-text-secondary)]"
-                      }`}
-                    >
+                    <span className={`truncate ${current ? "text-[var(--color-text-primary)] font-medium" : "text-[var(--color-text-secondary)]"}`}>
                       {s.title}
                     </span>
                   </button>
@@ -206,20 +213,12 @@ export default function ArduinoGuide({ onBack }) {
                 >
                   {activeStep + 1}
                 </span>
-
-                <span
-                  className="text-xs font-semibold uppercase tracking-wider"
-                  style={{ color }}
-                >
-                  {t.arduinoGuide.stepLabel} {activeStep + 1}{" "}
-                  {t.arduinoGuide.of} {steps.length}
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color }}>
+                  Step {activeStep + 1} of {steps.length}
                 </span>
               </div>
-
               <h1 className="text-3xl font-bold mb-2">{step.title}</h1>
-              <p className="text-lg text-[var(--color-text-secondary)]">
-                {step.subtitle}
-              </p>
+              <p className="text-lg text-[var(--color-text-secondary)]">{step.subtitle}</p>
             </div>
 
             {/* Image or placeholder */}
@@ -232,27 +231,22 @@ export default function ArduinoGuide({ onBack }) {
             ) : (
               <div
                 className="mb-8 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
-                style={{
-                  borderColor: `${color}40`,
-                  backgroundColor: `${color}08`,
-                }}
+                style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
               >
                 <ImageIcon size={48} style={{ color, opacity: 0.4 }} />
-
                 <p className="mt-4 text-sm text-[var(--color-text-muted)] text-center">
-                  {step.imagePlaceholder || t.arduinoGuide.imagePlaceholder}
+                  Step image coming soon
                 </p>
-
                 <span className="mt-2 text-xs font-mono text-[var(--color-text-muted)] opacity-60">
-                  {step.imageFilename || `step-${activeStep + 1}.png`}
+                  {`step-${activeStep + 1}.png`}
                 </span>
               </div>
             )}
 
-            {/* Text content */}
+            {/* Content card */}
             <div className="mb-8 p-6 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)]">
               <p className="text-[var(--color-text-secondary)] leading-relaxed whitespace-pre-line">
-                {step.content || t.arduinoGuide.contentPlaceholder}
+                {step.content}
               </p>
             </div>
 
@@ -260,15 +254,10 @@ export default function ArduinoGuide({ onBack }) {
             {step.tip && (
               <div
                 className="mb-8 p-4 rounded-xl border text-sm"
-                style={{
-                  borderColor: `${color}30`,
-                  backgroundColor: `${color}08`,
-                }}
+                style={{ borderColor: `${color}30`, backgroundColor: `${color}08` }}
               >
-                <strong style={{ color }}>{t.arduinoGuide.tipLabel}</strong>{" "}
-                <span className="text-[var(--color-text-secondary)]">
-                  {step.tip}
-                </span>
+                <strong style={{ color }}>Tip:</strong>{" "}
+                <span className="text-[var(--color-text-secondary)]">{step.tip}</span>
               </div>
             )}
 
@@ -281,26 +270,20 @@ export default function ArduinoGuide({ onBack }) {
                   style={{ backgroundColor: color, color: "#000" }}
                 >
                   <CheckCircle2 size={16} />
-                  {activeStep < steps.length - 1
-                    ? t.arduinoGuide.doneNext
-                    : t.arduinoGuide.finish}
+                  {activeStep < steps.length - 1 ? "Done — Next Step" : "Finish"}
                 </button>
               ) : (
                 <>
-                  <span
-                    className="flex items-center gap-2 text-sm font-medium"
-                    style={{ color }}
-                  >
+                  <span className="flex items-center gap-2 text-sm font-medium" style={{ color }}>
                     <CheckCircle2 size={16} />
-                    {t.arduinoGuide.stepDone}
+                    Step done
                   </span>
-
                   {activeStep < steps.length - 1 && (
                     <button
                       onClick={() => setActiveStep(activeStep + 1)}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-[var(--color-text-primary)] border-2 border-[var(--color-border)] hover:border-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-[var(--color-text-primary)] border-2 border-[var(--color-border)] hover:border-[var(--color-accent-magenta)] transition-colors cursor-pointer bg-transparent"
                     >
-                      {t.arduinoGuide.nextStep}
+                      Next step
                       <ChevronRight size={16} />
                     </button>
                   )}
@@ -308,20 +291,15 @@ export default function ArduinoGuide({ onBack }) {
               )}
             </div>
 
-            {/* All done celebration */}
+            {/* All done */}
             {allDone && (
               <div
                 className="mt-8 p-6 rounded-2xl border-2 text-center"
-                style={{
-                  borderColor: `${color}40`,
-                  backgroundColor: `${color}08`,
-                }}
+                style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
               >
-                <p className="text-2xl font-bold mb-2">
-                  {t.arduinoGuide.allDoneTitle}
-                </p>
+                <p className="text-2xl font-bold mb-2">All set!</p>
                 <p className="text-[var(--color-text-secondary)]">
-                  {t.arduinoGuide.allDoneText}
+                  Your Voice and Sound Control circuit is ready for JEM experiments.
                 </p>
               </div>
             )}

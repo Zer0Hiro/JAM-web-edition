@@ -1,3 +1,4 @@
+// Lessons index
 import lesson01 from "./lesson01-hello-sound";
 import lesson02 from "./lesson02-note-by-note";
 import lesson03 from "./lesson03-wave-surfing";
@@ -9,6 +10,16 @@ import lesson08 from "./lesson08-multi-track";
 import lesson09 from "./lesson09-mega-riff";
 import lesson10 from "./lesson10-chords";
 import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
+
+// JAMai local knowledge index
+// Scope: music, programming, and electronics.
+// No LLM/provider material.
+import musicFundamentalsKnowledge from "./musicFundamentalsKnowledge.js";
+import synthesisKnowledge from "./synthesisKnowledge.js";
+import jamDslKnowledge from "./jamDslKnowledge.js";
+import electronicsEsp32Knowledge from "./electronicsEsp32Knowledge.js";
+import troubleshootingKnowledge from "./troubleshootingKnowledge.js";
+import studentAnswerRulesKnowledge from "./studentAnswerRulesKnowledge.js";
 
 export const lessons = [
   lesson01,
@@ -54,8 +65,15 @@ export const phases = [
   },
 ];
 
-const lessonsByLang = { en: lessons, he: lessonsHe };
-const phasesByLang = { en: phases, he: phasesHe };
+const lessonsByLang = {
+  en: lessons,
+  he: lessonsHe,
+};
+
+const phasesByLang = {
+  en: phases,
+  he: phasesHe,
+};
 
 export function getLessonsForLang(lang) {
   return lessonsByLang[lang] || lessonsByLang.en;
@@ -66,21 +84,44 @@ export function getPhasesForLang(lang) {
 }
 
 export function getLessonBySlug(slug, lang = "en") {
-  return getLessonsForLang(lang).find((l) => l.slug === slug);
+  return getLessonsForLang(lang).find((lesson) => lesson.slug === slug);
 }
 
 export function getLessonById(id, lang = "en") {
-  return getLessonsForLang(lang).find((l) => l.id === id);
+  return getLessonsForLang(lang).find((lesson) => lesson.id === id);
 }
 
 export function getNextLesson(currentId, lang = "en") {
   const list = getLessonsForLang(lang);
-  const idx = list.findIndex((l) => l.id === currentId);
-  return idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;
+  const currentIndex = list.findIndex((lesson) => lesson.id === currentId);
+
+  return currentIndex >= 0 && currentIndex < list.length - 1
+    ? list[currentIndex + 1]
+    : null;
 }
 
 export function getPrevLesson(currentId, lang = "en") {
   const list = getLessonsForLang(lang);
-  const idx = list.findIndex((l) => l.id === currentId);
-  return idx > 0 ? list[idx - 1] : null;
+  const currentIndex = list.findIndex((lesson) => lesson.id === currentId);
+
+  return currentIndex > 0 ? list[currentIndex - 1] : null;
 }
+
+export const jamaiLocalKnowledge = {
+  musicFundamentalsKnowledge,
+  synthesisKnowledge,
+  jamDslKnowledge,
+  electronicsEsp32Knowledge,
+  troubleshootingKnowledge,
+  studentAnswerRulesKnowledge,
+};
+
+export const jamaiKnowledgeChunks = [
+  ...musicFundamentalsKnowledge,
+  ...synthesisKnowledge,
+  ...jamDslKnowledge,
+  ...electronicsEsp32Knowledge,
+  ...troubleshootingKnowledge,
+];
+
+export default lessons;

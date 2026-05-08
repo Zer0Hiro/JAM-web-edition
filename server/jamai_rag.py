@@ -207,7 +207,7 @@ def _build_lesson_chunks(fname, raw):
             'section_type': section_type,
             'goal': goal,
             'concepts': concepts,
-            'snippet': snippet_text[:300],
+            'snippet': snippet_text[:500],
             'clean_blob': _clean(raw_text),
             'blob_tokens': None,
         }
@@ -272,7 +272,7 @@ def _build_md_chunks(fname, raw):
             'file': fname,
             'source_type': 'reference',
             'section_type': 'reference_section',
-            'snippet': intro[:300],
+            'snippet': intro[:500],
             'clean_blob': _clean(parts[0]),
             'blob_tokens': None,
         })
@@ -293,7 +293,7 @@ def _build_md_chunks(fname, raw):
             'file': fname,
             'source_type': 'reference',
             'section_type': 'reference_section',
-            'snippet': snippet[:300],
+            'snippet': snippet[:500],
             'clean_blob': _clean(heading_text + ' ' + content_raw),
             'blob_tokens': None,
         })

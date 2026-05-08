@@ -1,0 +1,70 @@
+BPM 117
+
+INSTRUMENT grunge_guitar:
+    TYPE SYNTH
+    WAVE SAW
+    ADSR 10 150 100 80
+    VOLUME 220
+
+INSTRUMENT scratch:
+    TYPE DRUM
+    WAVE NOISE
+    FREQ 800
+    DECAY 25
+    VOLUME 170
+
+INSTRUMENT kick:
+    TYPE DRUM
+    WAVE SIN
+    FREQ 60
+    DECAY 120
+    VOLUME 255
+
+INSTRUMENT snare:
+    TYPE DRUM
+    WAVE NOISE
+    FREQ 280
+    DECAY 90
+    VOLUME 220
+
+SEQUENCE riff_part_1:
+    PLAY grunge_guitar [F2 C3 F3] 0.5
+    PLAY grunge_guitar [F2 C3 F3] 0.5
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+    PLAY grunge_guitar [Bb2 F3 Bb3] 0.5
+    PLAY grunge_guitar [Bb2 F3 Bb3] 0.25
+    PLAY grunge_guitar [Bb2 F3 Bb3] 0.25
+    PLAY grunge_guitar [Bb2 F3 Bb3] 0.5
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+
+SEQUENCE riff_part_2:
+    PLAY grunge_guitar [Ab2 Eb3 Ab3] 0.5
+    PLAY grunge_guitar [Ab2 Eb3 Ab3] 0.5
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+    PLAY grunge_guitar [Db2 Ab2 Db3] 0.5
+    PLAY grunge_guitar [Db2 Ab2 Db3] 0.25
+    PLAY grunge_guitar [Db2 Ab2 Db3] 0.25
+    PLAY grunge_guitar [Db2 Ab2 Db3] 0.5
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+    PLAY scratch C4 0.25
+
+PATTERN heavy_beat:
+    BEAT 1: kick
+    BEAT 1.5: kick
+    BEAT 2: snare
+    BEAT 3: kick
+    BEAT 3.5: kick
+    BEAT 4: snare
+
+LOOP 2:
+    PLAY_SEQUENCE riff_part_1
+    PLAY_PATTERN heavy_beat
+    PLAY_SEQUENCE riff_part_2
+    PLAY_PATTERN heavy_beat
