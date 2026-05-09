@@ -419,6 +419,15 @@ export function flattenToEvents(parsed) {
 
       if (gi === 0 && start > 0.5) {
         events.push({ type: "rest", durationMs: start });
+      } else if (gi > 0) {
+        const prevStart = groups[gi - 1][0].t;
+        const prevGroup = groups[gi - 1];
+        const prevMaxDur = Math.max(...prevGroup.map(g => g.ev.durationMs));
+        const prevEnd = prevStart + prevMaxDur;
+        const restGap = start - prevEnd;
+        if (restGap > 0.5) {
+          events.push({ type: "rest", durationMs: restGap });
+        }
       }
 
       const nextStart = gi + 1 < groups.length
