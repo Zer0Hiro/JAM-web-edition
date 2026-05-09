@@ -24,6 +24,7 @@ export class AudioEngine {
     this._progressInterval = null;
     this._startTime = 0;
     this._totalDuration = 0;
+    this._lastFreq = {};
   }
 
   _ensureContext() {
@@ -51,48 +52,122 @@ export class AudioEngine {
     return node;
   }
 
-  /**
-   * Schedule a single note event.
-   */
   _scheduleNote(event, startTime) {
     const durationS = event.durationMs / 1000;
     const [attackMs, decayMs, sustainMs, releaseMs] = event.adsr;
     const attackS = attackMs / 1000;
     const decayS = decayMs / 1000;
     const releaseS = releaseMs / 1000;
+    const totalS = durationS + releaseS + 0.05;
 
-    // Create oscillator or noise source
     let source;
     if (event.wave === "NOISE") {
-      source = this._createNoiseNode(durationS + releaseS);
+      source = this._createNoiseNode(totalS);
     } else {
       source = this.ctx.createOscillator();
       source.type = WAVE_MAP[event.wave] || "sine";
-      source.frequency.setValueAtTime(event.freq, startTime);
+
+      const instName = event.instrument || "_default";
+      const prevFreq = this._lastFreq[instName];
+      const glideMs = event.glide || 0;
+
+      if (glideMs > 0 && prevFreq && prevFreq !== event.freq) {
+        source.frequency.setValueAtTime(prevFreq, startTime);
+        source.frequency.exponentialRampToValueAtTime(
+          event.freq, startTime + glideMs / 1000
+        );
+      } else {
+        source.frequency.setValueAtTime(event.freq, startTime);
+      }
+      this._lastFreq[instName] = event.freq;
     }
 
-    // Create gain envelope
+    // Build audio chain: source → [filter] → gain → [delay] → [pan] → destination
     const gainNode = this.ctx.createGain();
-    const masterGain = event.volume * 0.3; // Scale down to avoid clipping
+    const masterGain = event.volume * 0.3;
 
-    // ADSR envelope
     gainNode.gain.setValueAtTime(0, startTime);
-    // Attack
     gainNode.gain.linearRampToValueAtTime(masterGain, startTime + attackS);
-    // Decay to sustain level
     const sustainLevel = masterGain * 0.7;
     gainNode.gain.linearRampToValueAtTime(sustainLevel, startTime + attackS + decayS);
-    // Sustain (hold until note end)
     gainNode.gain.setValueAtTime(sustainLevel, startTime + durationS);
-    // Release
     gainNode.gain.linearRampToValueAtTime(0, startTime + durationS + releaseS);
 
-    source.connect(gainNode);
-    gainNode.connect(this.ctx.destination);
+    let lastNode = source;
+
+    if (event.cutoff) {
+      const filter = this.ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(event.cutoff, startTime);
+      filter.Q.setValueAtTime(event.resonance ? event.resonance / 25.5 : 0.7, startTime);
+      lastNode.connect(filter);
+      lastNode = filter;
+    }
+
+    lastNode.connect(gainNode);
+    lastNode = gainNode;
+
+    if (event.delayTime > 0) {
+      const dry = this.ctx.createGain();
+      dry.gain.setValueAtTime(1, startTime);
+      const wet = this.ctx.createGain();
+      wet.gain.setValueAtTime((event.delayFeedback || 0) / 255 * 0.7, startTime);
+      const delayNode = this.ctx.createDelay(2.0);
+      delayNode.delayTime.setValueAtTime(event.delayTime / 1000, startTime);
+      const feedback = this.ctx.createGain();
+      feedback.gain.setValueAtTime((event.delayFeedback || 0) / 255 * 0.6, startTime);
+
+      lastNode.connect(dry);
+      lastNode.connect(delayNode);
+      delayNode.connect(feedback);
+      feedback.connect(delayNode);
+      delayNode.connect(wet);
+
+      const merger = this.ctx.createGain();
+      dry.connect(merger);
+      wet.connect(merger);
+      lastNode = merger;
+    }
+
+    if (event.reverb > 0) {
+      const dry = this.ctx.createGain();
+      const wetGain = this.ctx.createGain();
+      const reverbMix = (event.reverb || 0) / 255;
+      dry.gain.setValueAtTime(1 - reverbMix * 0.5, startTime);
+      wetGain.gain.setValueAtTime(reverbMix * 0.5, startTime);
+
+      const d1 = this.ctx.createDelay(0.5);
+      d1.delayTime.setValueAtTime(0.03, startTime);
+      const d2 = this.ctx.createDelay(0.5);
+      d2.delayTime.setValueAtTime(0.05, startTime);
+      const d3 = this.ctx.createDelay(0.5);
+      d3.delayTime.setValueAtTime(0.08, startTime);
+
+      lastNode.connect(dry);
+      lastNode.connect(d1);
+      lastNode.connect(d2);
+      lastNode.connect(d3);
+      const merger = this.ctx.createGain();
+      dry.connect(merger);
+      d1.connect(wetGain);
+      d2.connect(wetGain);
+      d3.connect(wetGain);
+      wetGain.connect(merger);
+      lastNode = merger;
+    }
+
+    const pan = event.pan ?? 127;
+    if (pan !== 127) {
+      const panner = this.ctx.createStereoPanner();
+      panner.pan.setValueAtTime((pan - 127) / 127, startTime);
+      lastNode.connect(panner);
+      lastNode = panner;
+    }
+
+    lastNode.connect(this.ctx.destination);
 
     source.start(startTime);
-    source.stop(startTime + durationS + releaseS + 0.05);
-
+    source.stop(startTime + totalS);
     this.scheduledNodes.push(source);
   }
 
@@ -102,6 +177,7 @@ export class AudioEngine {
   play(events) {
     this.stop();
     this._ensureContext();
+    this._lastFreq = {};
 
     let currentTime = this.ctx.currentTime + 0.1; // Small buffer
     this._startTime = currentTime;

@@ -10,6 +10,12 @@ import lesson08 from "./lesson08-multi-track";
 import lesson09 from "./lesson09-mega-riff";
 import lesson10 from "./lesson10-chords";
 import lesson11 from "./lesson11-play-together";
+import lesson12 from "./lesson12-velocity-dynamics";
+import lesson13 from "./lesson13-filter-sweep";
+import lesson14 from "./lesson14-echo-and-reverb";
+import lesson15 from "./lesson15-smooth-glide";
+import lesson16 from "./lesson16-stereo-space";
+import lesson17 from "./lesson17-live-automation";
 import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
 
 // JAMai local knowledge index
@@ -34,6 +40,12 @@ export const lessons = [
   lesson09,
   lesson10,
   lesson11,
+  lesson12,
+  lesson13,
+  lesson14,
+  lesson15,
+  lesson16,
+  lesson17,
 ];
 
 export const phases = [
@@ -56,7 +68,7 @@ export const phases = [
     title: "Expression",
     description: "Shape your sounds and layer instruments",
     color: "#f97316",
-    lessons: [lesson07, lesson08, lesson10, lesson11],
+    lessons: [lesson07, lesson08, lesson10, lesson11, lesson12, lesson13],
   },
   {
     id: 4,
@@ -64,6 +76,13 @@ export const phases = [
     description: "Put it all together into complete compositions",
     color: "#a78bfa",
     lessons: [lesson09],
+  },
+  {
+    id: 5,
+    title: "Sound Design",
+    description: "Add effects, space, and movement to your music",
+    color: "#f43f5e",
+    lessons: [lesson14, lesson15, lesson16, lesson17],
   },
 ];
 

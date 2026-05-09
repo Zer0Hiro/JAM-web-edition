@@ -9,6 +9,12 @@ import lesson08 from "./lesson08";
 import lesson09 from "./lesson09";
 import lesson10 from "./lesson10";
 import lesson11 from "./lesson11";
+import lesson12 from "./lesson12";
+import lesson13 from "./lesson13";
+import lesson14 from "./lesson14";
+import lesson15 from "./lesson15";
+import lesson16 from "./lesson16";
+import lesson17 from "./lesson17";
 
 export const lessons = [
   lesson01,
@@ -22,6 +28,12 @@ export const lessons = [
   lesson09,
   lesson10,
   lesson11,
+  lesson12,
+  lesson13,
+  lesson14,
+  lesson15,
+  lesson16,
+  lesson17,
 ];
 
 export const phases = [
@@ -44,7 +56,7 @@ export const phases = [
     title: "ביטוי",
     description: "עצבו את הצלילים ושלבו כלי נגינה",
     color: "#f97316",
-    lessons: [lesson07, lesson08, lesson10, lesson11],
+    lessons: [lesson07, lesson08, lesson10, lesson11, lesson12, lesson13],
   },
   {
     id: 4,
@@ -52,5 +64,12 @@ export const phases = [
     description: "שלבו הכל יחד ליצירות מושלמות",
     color: "#a78bfa",
     lessons: [lesson09],
+  },
+  {
+    id: 5,
+    title: "עיצוב צליל",
+    description: "הוסיפו אפקטים, מרחב ותנועה למוזיקה",
+    color: "#f43f5e",
+    lessons: [lesson14, lesson15, lesson16, lesson17],
   },
 ];
