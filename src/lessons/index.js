@@ -9,6 +9,7 @@ import lesson07 from "./lesson07-envelope-shapes";
 import lesson08 from "./lesson08-multi-track";
 import lesson09 from "./lesson09-mega-riff";
 import lesson10 from "./lesson10-chords";
+import lesson11 from "./lesson11-playing-together";
 import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
 
 // JAMai local knowledge index
@@ -32,6 +33,7 @@ export const lessons = [
   lesson08,
   lesson09,
   lesson10,
+  lesson11,
 ];
 
 export const phases = [
@@ -54,7 +56,7 @@ export const phases = [
     title: "Expression",
     description: "Shape your sounds and layer instruments",
     color: "#f97316",
-    lessons: [lesson07, lesson08, lesson10],
+    lessons: [lesson07, lesson08, lesson10, lesson11],
   },
   {
     id: 4,
