@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 220" width="800" height="220">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a1a;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#12122a;stop-opacity:1"/>
+    </linearGradient>
+    <linearGradient id="wave1g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:0.1"/>
+      <stop offset="50%" style="stop-color:#00f0ff;stop-opacity:0.7"/>
+      <stop offset="100%" style="stop-color:#00f0ff;stop-opacity:0.1"/>
+    </linearGradient>
+    <linearGradient id="wave2g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff00aa;stop-opacity:0.05"/>
+      <stop offset="50%" style="stop-color:#ff00aa;stop-opacity:0.35"/>
+      <stop offset="100%" style="stop-color:#ff00aa;stop-opacity:0.05"/>
+    </linearGradient>
+    <linearGradient id="wave3g" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f0ff;stop-opacity:0.02"/>
+      <stop offset="50%" style="stop-color:#00f0ff;stop-opacity:0.15"/>
+      <stop offset="100%" style="stop-color:#00f0ff;stop-opacity:0.02"/>
+    </linearGradient>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00f0ff"/>
+      <stop offset="50%" style="stop-color:#8b5cf6"/>
+      <stop offset="100%" style="stop-color:#ff00aa"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="220" fill="url(#bg)" rx="12"/>
+
+  <!-- Grid -->
+  <g opacity="0.06" stroke="#fff" stroke-width="0.5">
+    <line x1="0" y1="55" x2="800" y2="55"/><line x1="0" y1="110" x2="800" y2="110"/>
+    <line x1="0" y1="165" x2="800" y2="165"/>
+    <line x1="200" y1="0" x2="200" y2="220"/><line x1="400" y1="0" x2="400" y2="220"/>
+    <line x1="600" y1="0" x2="600" y2="220"/>
+  </g>
+
+  <!-- Wave 1 (cyan, main) -->
+  <path fill="none" stroke="url(#wave1g)" stroke-width="2.5" filter="url(#glow)"
+    d="M0,140 C50,100 100,80 150,110 S250,170 300,140 S400,80 450,110 S550,170 600,140 S700,80 750,110 S800,140 800,140">
+    <animate attributeName="d" dur="4s" repeatCount="indefinite" values="
+      M0,140 C50,100 100,80 150,110 S250,170 300,140 S400,80 450,110 S550,170 600,140 S700,80 750,110 S800,140 800,140;
+      M0,130 C50,160 100,170 150,140 S250,80 300,110 S400,170 450,140 S550,80 600,110 S700,170 750,140 S800,130 800,130;
+      M0,140 C50,100 100,80 150,110 S250,170 300,140 S400,80 450,110 S550,170 600,140 S700,80 750,110 S800,140 800,140
+    "/>
+  </path>
+
+  <!-- Wave 2 (magenta, secondary) -->
+  <path fill="none" stroke="url(#wave2g)" stroke-width="1.5"
+    d="M0,150 C60,120 120,100 180,130 S300,180 360,150 S480,90 540,130 S660,180 720,150 S800,120 800,150">
+    <animate attributeName="d" dur="5s" repeatCount="indefinite" values="
+      M0,150 C60,120 120,100 180,130 S300,180 360,150 S480,90 540,130 S660,180 720,150 S800,120 800,150;
+      M0,120 C60,150 120,180 180,150 S300,90 360,120 S480,180 540,150 S660,90 720,120 S800,150 800,120;
+      M0,150 C60,120 120,100 180,130 S300,180 360,150 S480,90 540,130 S660,180 720,150 S800,120 800,150
+    "/>
+  </path>
+
+  <!-- Wave 3 (cyan, subtle) -->
+  <path fill="none" stroke="url(#wave3g)" stroke-width="1"
+    d="M0,135 C80,115 160,155 240,135 S400,105 480,135 S640,165 720,135 S800,115 800,135">
+    <animate attributeName="d" dur="6s" repeatCount="indefinite" values="
+      M0,135 C80,115 160,155 240,135 S400,105 480,135 S640,165 720,135 S800,115 800,135;
+      M0,145 C80,165 160,125 240,145 S400,175 480,145 S640,115 720,145 S800,165 800,145;
+      M0,135 C80,115 160,155 240,135 S400,105 480,135 S640,165 720,135 S800,115 800,135
+    "/>
+  </path>
+
+  <!-- Title text -->
+  <text x="400" y="58" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="36" font-weight="700" fill="#e2e8f0">Turn Code Into <tspan fill="url(#textGrad)">Music</tspan></text>
+
+  <!-- Subtitle -->
+  <text x="400" y="85" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#94a3b8">Write JAM code. Hear it in the browser. Upload to ESP32 hardware.</text>
+</svg>
