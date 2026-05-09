@@ -6,11 +6,13 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
+.claude
+CLAUDE.md
 node_modules
 dist
 dist-ssr
 *.local
+temp
 
 # Editor directories and files
 .vscode/*
@@ -24,5 +26,6 @@ dist-ssr
 *.sw?
 
 # Python venv
+.venv
 server/.venv/
 __pycache__/
