@@ -17,7 +17,7 @@ More about [JAM DSL compiler](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 - **JAMai chat assistant** for guided learning (RAG-based)
 - **i18n** support (English, Hebrew)
 
-For the full JAM language syntax, see the [JEM DSL Reference](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
+For the full JAM language syntax, see the [JAM Syntax](https://github.com/Zer0Hiro/JAM-DSL-Compiler/tree/main/docs).
 
 ## Architecture
 
