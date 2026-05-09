@@ -241,11 +241,10 @@ def api_health():
 
 
 def main():
-    print("JAM Compile Server starting on http://localhost:5050")
+    port = int(os.environ.get("PORT", 5050))
+    print(f"JAM Compile Server starting on port {port}")
     print(f"DSL path: {DSL_PATH}")
-    app.run(host="0.0.0.0", port=5050, debug=True)
-
+    app.run(host="0.0.0.0", port=port, debug=False)
 
 if __name__ == "__main__":
     main()
-
