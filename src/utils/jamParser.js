@@ -95,6 +95,8 @@ export function parseJam(source) {
       } else if (tokens[0] === "LOOP" && tokens[1]) {
         const count = parseInt(tokens[1].replace(":", ""), 10) || 1;
         result.arrangement.push({ type: "loop_start", count });
+      } else if (tokens[0] === "PLAY_TOGETHER") {
+        result.arrangement.push({ type: "play_together", body: [] });
       }
     } else {
       // ── Indented lines (inside a block) ──────────────
@@ -163,28 +165,40 @@ export function parseJam(source) {
         }
       }
 
-      // Handle indented PLAY_SEQUENCE / PLAY_PATTERN inside LOOP blocks
-      if (tokens[0] === "PLAY_SEQUENCE" && tokens[1]) {
-        // Check if we're inside a loop by looking at the last arrangement item
-        const last = result.arrangement[result.arrangement.length - 1];
-        if (last && last.type === "loop_start" && !last.body) {
-          last.body = [];
+      // Handle indented items inside LOOP / PLAY_TOGETHER blocks
+      const container = findDeepestContainer(result.arrangement);
+      if (tokens[0] === "PLAY_TOGETHER") {
+        if (container) {
+          container.body = container.body || [];
+          container.body.push({ type: "play_together", body: [] });
         }
-        if (last && last.type === "loop_start") {
-          last.body = last.body || [];
-          last.body.push({ type: "play_sequence", name: tokens[1] });
+      } else if (tokens[0] === "PLAY_SEQUENCE" && tokens[1]) {
+        if (container) {
+          container.body = container.body || [];
+          container.body.push({ type: "play_sequence", name: tokens[1] });
         }
       } else if (tokens[0] === "PLAY_PATTERN" && tokens[1]) {
-        const last = result.arrangement[result.arrangement.length - 1];
-        if (last && last.type === "loop_start") {
-          last.body = last.body || [];
-          last.body.push({ type: "play_pattern", name: tokens[1] });
+        if (container) {
+          container.body = container.body || [];
+          container.body.push({ type: "play_pattern", name: tokens[1] });
         }
       }
     }
   }
 
   return result;
+}
+
+function findDeepestContainer(arrangement) {
+  if (arrangement.length === 0) return null;
+  const last = arrangement[arrangement.length - 1];
+  if (!last) return null;
+  if (last.type === "loop_start" && last.body && last.body.length > 0) {
+    const inner = findDeepestContainer(last.body);
+    if (inner) return inner;
+  }
+  if (last.type === "loop_start" || last.type === "play_together") return last;
+  return null;
 }
 
 function findCommentStart(line) {
@@ -299,6 +313,66 @@ export function flattenToEvents(parsed) {
     }
   }
 
+  function flattenPlayTogether(block) {
+    const childEventLists = [];
+    for (const child of (block.body || [])) {
+      const savedLen = events.length;
+      flattenArrangement([child]);
+      childEventLists.push(events.splice(savedLen));
+    }
+
+    const absEvents = [];
+    for (const childEvents of childEventLists) {
+      let t = 0;
+      for (const ev of childEvents) {
+        if (ev.type === "rest") {
+          t += ev.durationMs;
+        } else {
+          absEvents.push({ t, ev });
+          if (!ev.simultaneous) t += ev.durationMs;
+        }
+      }
+    }
+
+    absEvents.sort((a, b) => a.t - b.t);
+    if (absEvents.length === 0) return;
+
+    const groups = [];
+    let currentGroup = [absEvents[0]];
+    for (let i = 1; i < absEvents.length; i++) {
+      if (Math.abs(absEvents[i].t - currentGroup[0].t) < 0.5) {
+        currentGroup.push(absEvents[i]);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [absEvents[i]];
+      }
+    }
+    groups.push(currentGroup);
+
+    for (let gi = 0; gi < groups.length; gi++) {
+      const group = groups[gi];
+      const start = group[0].t;
+
+      if (gi === 0 && start > 0.5) {
+        events.push({ type: "rest", durationMs: start });
+      }
+
+      const nextStart = gi + 1 < groups.length
+        ? groups[gi + 1][0].t
+        : start + Math.max(...group.map(g => g.ev.durationMs));
+      const beatGap = Math.max(1, nextStart - start);
+
+      for (let ei = 0; ei < group.length; ei++) {
+        const isLast = ei === group.length - 1;
+        events.push({
+          ...group[ei].ev,
+          durationMs: isLast ? beatGap : group[ei].ev.durationMs,
+          simultaneous: !isLast,
+        });
+      }
+    }
+  }
+
   function flattenArrangement(items) {
     for (const item of items) {
       if (item.type === "play_sequence") {
@@ -311,6 +385,8 @@ export function flattenToEvents(parsed) {
         for (let i = 0; i < count; i++) {
           flattenArrangement(body);
         }
+      } else if (item.type === "play_together") {
+        flattenPlayTogether(item);
       }
     }
   }
