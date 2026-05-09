@@ -19,6 +19,7 @@ import sys
 import shutil
 import subprocess
 import traceback
+import os
 from pathlib import Path
 
 # Add the jamDsl project to the Python path so we can import the compiler
