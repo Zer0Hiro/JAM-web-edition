@@ -124,10 +124,10 @@ const en = {
     subtitle: "No rules, no lessons -- just you and the code. Write whatever you want and hit Play to hear it. Break things. Experiment. Have fun.",
     waveforms: "Waveforms",
     notes: "Notes",
-    structure: "Structure",
+    structure: "Effects & Control",
     waveformItems: ["SIN -- smooth, pure", "SAW -- buzzy, bright", "SQUARE -- retro, hollow", "TRIANGLE -- mellow, soft", "NOISE -- random, percussive"],
-    noteItems: ["C4 = Middle C", "A4 = 440 Hz", "C#4 / Db4 = sharps/flats", "C5 = octave above C4", "Duration: 0.25 to 4 beats"],
-    structureItems: ["BPM sets tempo", "INSTRUMENT defines sounds", "SEQUENCE lists notes", "PATTERN places beats", "LOOP repeats sections"],
+    noteItems: ["C4 = Middle C (A4 = 440 Hz)", "C#4 / Db4 = sharps/flats", "Duration: 0.25 to 4 beats", "Velocity: 0-255 after duration", "Chords: [C4 E4 G4]"],
+    structureItems: ["CUTOFF / RESONANCE -- filter", "REVERB -- room ambience (0-255)", "DELAY time feedback -- echo", "GLIDE ms -- slide between notes", "PAN 0-255 (L/center/R)", "VOLUME mid-song -- automation"],
   },
 
   // Sound Library
