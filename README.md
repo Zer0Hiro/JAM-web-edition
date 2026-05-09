@@ -46,7 +46,7 @@ jamWeb/
 
 ```bash
 git clone https://github.com/Zer0Hiro/JAM-DSL-Compiler.git jamDsl
-git clone <jamWeb-repo-url> jamWeb
+git clone https://github.com/Zer0Hiro/jamWeb jamWeb
 ```
 
 The server expects `jamDsl` as a sibling directory:
