@@ -1,10 +1,11 @@
 # JAM Web
 
-Interactive web editor for the JEM music DSL. Write music code, hear it in the browser, and upload to ESP32 hardware -- all from one page.
+Interactive web editor for the JAM music DSL. Write music code, hear it in the browser, and upload to ESP32 hardware -- all from one page.
 
+More about [JAM DSL compiler](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 ## Features
 
-- **Code editor** with JEM syntax highlighting (CodeMirror + oneDark theme)
+- **Code editor** with JAM syntax highlighting (CodeMirror + oneDark theme)
 - **Browser playback** via WAV rendering (server-side) or Web Audio API (client-side fallback)
 - **ESP32 upload** with GPIO pin selector -- compile and flash directly from the browser
 - **Simultaneous multi-instrument playback** via PATTERN beat-grid notation
@@ -15,6 +16,8 @@ Interactive web editor for the JEM music DSL. Write music code, hear it in the b
 - **Sandbox mode** for free experimentation
 - **JAMai chat assistant** for guided learning (RAG-based)
 - **i18n** support (English, Hebrew)
+
+For the full JAM language syntax, see the [JEM DSL Reference](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 
 ## Architecture
 
