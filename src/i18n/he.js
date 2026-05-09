@@ -89,6 +89,7 @@ const he = {
 
   // Code Editor
   editor: {
+    more: "אפשרויות נוספות",
     reset: "איפוס",
     compile: "קמפול",
     play: "נגן",
@@ -100,6 +101,16 @@ const he = {
     genericError: (msg) => `משהו השתבש: ${msg}. בדקו שוב את הקוד לשגיאות כתיב!`,
     compileSuccess: "!הקומפילציה הצליחה! הקוד שלכם מוכן ל-ESP32",
     compileOffline: "שרת הקומפילציה לא מחובר. השתמשו בכפתור Play לתצוגה מקדימה בדפדפן!",
+    downloadWav: "WAV",
+    viewCpp: "C++",
+    generatedCpp: "קוד Mozzi C++ שנוצר — מוכן ל-ESP32",
+    copyCpp: "העתקה",
+    uploadToEsp32: "ESP32",
+    selectPin: "בחר פין פלט",
+    uploadingEsp32: "...מעלה ל-ESP32",
+    uploadSuccess: "!רץ על ESP32",
+    uploadFailed: "ההעלאה נכשלה",
+    uploadOffline: "העלאה ל-ESP32 לא זמינה",
     lexerError: "יש מילה ש-JEM לא מזהה. בדקו שגיאות כתיב במילות מפתח (BPM, INSTRUMENT, PLAY וכו׳ חייבים להיות באותיות גדולות).",
     parseError: "JEM לא הצליח להבין את מבנה הקוד. ודאו ששורות מוזחות נמצאות בתוך בלוק (INSTRUMENT, SEQUENCE, PATTERN או LOOP).",
     undefinedInstrument: "אתם מנסים להשתמש בכלי נגינה שלא קיים. ודאו שהגדרתם אותו עם בלוק INSTRUMENT ושהשם מאוית נכון!",

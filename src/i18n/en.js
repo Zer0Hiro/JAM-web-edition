@@ -89,6 +89,7 @@ const en = {
 
   // Code Editor
   editor: {
+    more: "More options",
     reset: "Reset",
     compile: "Compile",
     play: "Play",
@@ -100,6 +101,16 @@ const en = {
     genericError: (msg) => `Something went wrong: ${msg}. Double-check your code for typos!`,
     compileSuccess: "Compiled successfully! Your code is ready for ESP32.",
     compileOffline: "Compile server not connected. Use the Play button to preview your sound in the browser!",
+    downloadWav: "WAV",
+    viewCpp: "C++",
+    generatedCpp: "Generated Mozzi C++ — ready for ESP32",
+    copyCpp: "Copy",
+    uploadToEsp32: "ESP32",
+    selectPin: "Select output pin",
+    uploadingEsp32: "Uploading to ESP32...",
+    uploadSuccess: "Running on ESP32!",
+    uploadFailed: "Upload failed",
+    uploadOffline: "ESP32 upload unavailable",
     lexerError: "There's a word JEM doesn't recognize. Check for typos in your keywords (BPM, INSTRUMENT, PLAY, etc. must be UPPERCASE).",
     parseError: "JEM couldn't understand the structure of your code. Make sure indented lines are inside a block (INSTRUMENT, SEQUENCE, PATTERN, or LOOP).",
     undefinedInstrument: "You're trying to use an instrument that doesn't exist. Make sure you defined it with an INSTRUMENT block and spelled the name correctly!",
