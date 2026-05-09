@@ -1,12 +1,12 @@
+<p align="center">
+  <img src="assets/jam-banner.svg" alt="JAM — Turn Code Into Music" width="800" />
+</p>
+
 # JAM Web
 
 Interactive web editor for the JAM music DSL. Write music code, hear it in the browser, and upload to ESP32 hardware -- all from one page.
 
 More about [JAM DSL compiler](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
-
-<p align="center">
-  <img src="assets/jam-banner.svg" alt="JAM — Turn Code Into Music" width="800" />
-</p>
 
 ## Features
 
