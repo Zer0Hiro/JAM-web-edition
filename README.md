@@ -15,9 +15,15 @@ More about [JAM DSL compiler](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 - **ESP32 upload** with GPIO pin selector -- compile and flash directly from the browser
 - **Simultaneous multi-instrument playback** via PATTERN beat-grid notation
 - **Chords** with bracket notation `[C4 E4 G4]`
+- **Per-note velocity** for dynamic expression (0–255)
+- **Low-pass filter** with CUTOFF and RESONANCE per instrument
+- **Reverb & Delay** effects with configurable feedback
+- **Portamento (GLIDE)** for smooth pitch transitions
+- **Stereo panning (PAN)** to place instruments in the stereo field
+- **Dynamic BPM/VOLUME automation** for mid-song tempo and volume changes
 - **C++ viewer** to inspect generated Mozzi 2.0 code
 - **WAV download** for offline listening
-- **11 interactive lessons** teaching sound synthesis from scratch (EN + HE)
+- **17 interactive lessons** teaching sound synthesis from scratch (EN + HE)
 - **Sandbox mode** for free experimentation
 - **JAMai chat assistant** for guided learning (RAG-based)
 - **i18n** support (English, Hebrew)

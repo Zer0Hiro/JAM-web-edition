@@ -62,7 +62,11 @@ export function parseJam(source) {
       currentPattern = null;
 
       if (tokens[0] === "BPM" && tokens[1]) {
-        result.bpm = parseFloat(tokens[1]) || 120;
+        if (result.arrangement.length > 0) {
+          result.arrangement.push({ type: "bpm_change", bpm: parseFloat(tokens[1]) || 120 });
+        } else {
+          result.bpm = parseFloat(tokens[1]) || 120;
+        }
       } else if (tokens[0] === "AUDIO_RATE" || tokens[0] === "CONTROL_RATE") {
         // Ignored for browser preview
       } else if (tokens[0] === "INSTRUMENT" && tokens[1]) {
@@ -75,6 +79,13 @@ export function parseJam(source) {
           volume: 200,
           freq: null,
           decay: null,
+          cutoff: null,
+          resonance: 0,
+          reverb: 0,
+          delayTime: 0,
+          delayFeedback: 0,
+          glide: 0,
+          pan: 127,
         };
         result.instruments[name] = currentInstrument;
         currentBlock = { type: "instrument", name };
@@ -114,6 +125,15 @@ export function parseJam(source) {
             parseInt(tokens[4], 10) || 100,
           ];
         }
+        else if (tokens[0] === "CUTOFF") currentInstrument.cutoff = parseInt(tokens[1], 10) || null;
+        else if (tokens[0] === "RESONANCE") currentInstrument.resonance = parseInt(tokens[1], 10) || 0;
+        else if (tokens[0] === "REVERB") currentInstrument.reverb = parseInt(tokens[1], 10) || 0;
+        else if (tokens[0] === "DELAY" && tokens.length >= 3) {
+          currentInstrument.delayTime = parseInt(tokens[1], 10) || 0;
+          currentInstrument.delayFeedback = parseInt(tokens[2], 10) || 0;
+        }
+        else if (tokens[0] === "GLIDE") currentInstrument.glide = parseInt(tokens[1], 10) || 0;
+        else if (tokens[0] === "PAN") currentInstrument.pan = parseInt(tokens[1], 10) ?? 127;
       } else if (currentBlock?.type === "sequence" && currentSequence) {
         if (tokens[0] === "PLAY" && tokens.length >= 4) {
           const inst = tokens[1];
@@ -133,11 +153,13 @@ export function parseJam(source) {
               chordNotes.push(t);
             }
             const dur = parseFloat(tokens[durIdx]) || 1;
-            currentSequence.events.push({ type: "chord", instrument: inst, notes: chordNotes, duration: dur });
+            const chordVel = tokens[durIdx + 1] !== undefined ? parseInt(tokens[durIdx + 1], 10) : null;
+            currentSequence.events.push({ type: "chord", instrument: inst, notes: chordNotes, duration: dur, velocity: chordVel });
           } else {
             const note = tokens[2];
             const dur = parseFloat(tokens[3]) || 1;
-            currentSequence.events.push({ type: "play", instrument: inst, note, duration: dur });
+            const vel = tokens[4] !== undefined ? parseInt(tokens[4], 10) : null;
+            currentSequence.events.push({ type: "play", instrument: inst, note, duration: dur, velocity: vel });
           }
         } else if (tokens[0] === "REST" && tokens[1]) {
           currentSequence.events.push({ type: "rest", duration: parseFloat(tokens[1]) || 1 });
@@ -152,16 +174,19 @@ export function parseJam(source) {
           if (inst === ":") instName = tokens[3];
           else instName = inst.replace(":", "");
 
-          // Try to find note and duration after instrument name
           const remaining = tokens.slice(tokens.indexOf(instName) + 1);
           let note = null;
           let dur = null;
+          let vel = null;
           if (remaining.length > 0 && NOTE_RE.test(remaining[0])) {
             note = remaining[0];
             if (remaining.length > 1) dur = parseFloat(remaining[1]);
+            if (remaining.length > 2) vel = parseInt(remaining[2], 10);
+          } else if (remaining.length > 0 && !NOTE_RE.test(remaining[0])) {
+            if (remaining.length > 0 && !isNaN(remaining[0])) vel = parseInt(remaining[0], 10);
           }
 
-          currentPattern.events.push({ beatPosition: beatPos, instrument: instName, note, duration: dur });
+          currentPattern.events.push({ beatPosition: beatPos, instrument: instName, note, duration: dur, velocity: vel });
         }
       }
 
@@ -181,6 +206,16 @@ export function parseJam(source) {
         if (container) {
           container.body = container.body || [];
           container.body.push({ type: "play_pattern", name: tokens[1] });
+        }
+      } else if (tokens[0] === "BPM" && tokens[1] && indent > 0) {
+        if (container) {
+          container.body = container.body || [];
+          container.body.push({ type: "bpm_change", bpm: parseFloat(tokens[1]) || 120 });
+        }
+      } else if (tokens[0] === "VOLUME" && tokens[1] && indent > 0 && !currentInstrument) {
+        if (container) {
+          container.body = container.body || [];
+          container.body.push({ type: "volume_change", volume: parseInt(tokens[1], 10) || 200 });
         }
       }
     }
@@ -215,7 +250,9 @@ function findCommentStart(line) {
  */
 export function flattenToEvents(parsed) {
   const events = [];
-  const msPerBeat = 60000 / parsed.bpm;
+  let currentBpm = parsed.bpm;
+  let msPerBeat = 60000 / currentBpm;
+  let masterVolume = 1.0;
 
   function flattenSequence(seqName) {
     const seq = parsed.sequences[seqName];
@@ -226,6 +263,8 @@ export function flattenToEvents(parsed) {
       } else if (ev.type === "play") {
         const inst = parsed.instruments[ev.instrument];
         const freq = noteToFreq(ev.note);
+        const baseVol = (inst?.volume || 200) / 255;
+        const velScale = ev.velocity != null ? ev.velocity / 255 : 1.0;
         events.push({
           type: "note",
           instrument: ev.instrument,
@@ -233,10 +272,19 @@ export function flattenToEvents(parsed) {
           durationMs: ev.duration * msPerBeat,
           wave: inst?.wave || "SIN",
           adsr: inst?.adsr || [10, 50, 200, 100],
-          volume: (inst?.volume || 200) / 255,
+          volume: baseVol * velScale * masterVolume,
+          cutoff: inst?.cutoff || null,
+          resonance: inst?.resonance || 0,
+          reverb: inst?.reverb || 0,
+          delayTime: inst?.delayTime || 0,
+          delayFeedback: inst?.delayFeedback || 0,
+          glide: inst?.glide || 0,
+          pan: inst?.pan ?? 127,
         });
       } else if (ev.type === "chord") {
         const inst = parsed.instruments[ev.instrument];
+        const baseVol = (inst?.volume || 200) / 255;
+        const velScale = ev.velocity != null ? ev.velocity / 255 : 1.0;
         for (let ni = 0; ni < ev.notes.length; ni++) {
           const isLast = ni === ev.notes.length - 1;
           events.push({
@@ -246,8 +294,15 @@ export function flattenToEvents(parsed) {
             durationMs: ev.duration * msPerBeat,
             wave: inst?.wave || "SIN",
             adsr: inst?.adsr || [10, 50, 200, 100],
-            volume: (inst?.volume || 200) / 255,
+            volume: baseVol * velScale * masterVolume,
             simultaneous: !isLast,
+            cutoff: inst?.cutoff || null,
+            resonance: inst?.resonance || 0,
+            reverb: inst?.reverb || 0,
+            delayTime: inst?.delayTime || 0,
+            delayFeedback: inst?.delayFeedback || 0,
+            glide: inst?.glide || 0,
+            pan: inst?.pan ?? 127,
           });
         }
       }
@@ -297,6 +352,8 @@ export function flattenToEvents(parsed) {
         let dur = inst?.decay || 80;
         if (bev.duration) dur = bev.duration * msPerBeat;
 
+        const baseVol = (inst?.volume || 200) / 255;
+        const velScale = bev.velocity != null ? bev.velocity / 255 : 1.0;
         const isLast = ei === group.length - 1;
         events.push({
           type: "note",
@@ -305,8 +362,15 @@ export function flattenToEvents(parsed) {
           durationMs: isLast ? beatGapMs : dur,
           wave: inst?.wave || "SIN",
           adsr: inst?.adsr || [10, 50, 200, 100],
-          volume: (inst?.volume || 200) / 255,
+          volume: baseVol * velScale * masterVolume,
           simultaneous: !isLast,
+          cutoff: inst?.cutoff || null,
+          resonance: inst?.resonance || 0,
+          reverb: inst?.reverb || 0,
+          delayTime: inst?.delayTime || 0,
+          delayFeedback: inst?.delayFeedback || 0,
+          glide: inst?.glide || 0,
+          pan: inst?.pan ?? 127,
         });
       }
       currentBeat = nextPos;
@@ -387,6 +451,11 @@ export function flattenToEvents(parsed) {
         }
       } else if (item.type === "play_together") {
         flattenPlayTogether(item);
+      } else if (item.type === "bpm_change") {
+        currentBpm = item.bpm;
+        msPerBeat = 60000 / currentBpm;
+      } else if (item.type === "volume_change") {
+        masterVolume = item.volume / 255;
       }
     }
   }
