@@ -16,7 +16,7 @@ Interactive web editor for the JAM music DSL. Write music code, hear it in the b
 - **JAMai chat assistant** for guided learning (RAG-based)
 - **i18n** support (English, Hebrew)
 
-For the full JAM language syntax, see the [JEM DSL Reference](jamDsl/README.md).
+For the full JAM language syntax, see the [JEM DSL Reference](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 
 ## Architecture
 
