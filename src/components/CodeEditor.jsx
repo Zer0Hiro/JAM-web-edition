@@ -28,7 +28,7 @@ const jamLanguage = StreamLanguage.define({
 
     if (
       stream.match(
-        /^(BPM|AUDIO_RATE|CONTROL_RATE|INSTRUMENT|TYPE|WAVE|ADSR|VOLUME|FREQ|DECAY|SEQUENCE|PATTERN|PLAY|REST|BEAT|LOOP|PLAY_SEQUENCE|PLAY_PATTERN|SYNTH|DRUM|SIN|SAW|SQUARE|TRIANGLE|NOISE)\b/
+        /^(BPM|AUDIO_RATE|CONTROL_RATE|INSTRUMENT|TYPE|WAVE|ADSR|VOLUME|FREQ|DECAY|SEQUENCE|PATTERN|PLAY|REST|BEAT|LOOP|PLAY_TOGETHER|PLAY_SEQUENCE|PLAY_PATTERN|SYNTH|DRUM|SIN|SAW|SQUARE|TRIANGLE|NOISE)\b/
       )
     ) {
       return "keyword";
@@ -494,19 +494,21 @@ export default function CodeEditor({
       )}
 
       {/* Editor */}
-      <CodeMirror
-        value={code}
-        height="360px"
-        theme={oneDark}
-        extensions={[jamLanguage]}
-        onChange={handleChange}
-        basicSetup={{
-          lineNumbers: true,
-          foldGutter: false,
-          highlightActiveLine: true,
-          autocompletion: false,
-        }}
-      />
+      <div dir="ltr">
+        <CodeMirror
+          value={code}
+          height="360px"
+          theme={oneDark}
+          extensions={[jamLanguage]}
+          onChange={handleChange}
+          basicSetup={{
+            lineNumbers: true,
+            foldGutter: false,
+            highlightActiveLine: true,
+            autocompletion: false,
+          }}
+        />
+      </div>
 
       {/* Error / success display */}
       {error && (
@@ -544,19 +546,21 @@ export default function CodeEditor({
               {t.editor.copyCpp}
             </button>
           </div>
-          <CodeMirror
-            value={cppCode}
-            height="300px"
-            theme={oneDark}
-            extensions={[cpp()]}
-            editable={false}
-            basicSetup={{
-              lineNumbers: true,
-              foldGutter: true,
-              highlightActiveLine: false,
-              autocompletion: false,
-            }}
-          />
+          <div dir="ltr">
+            <CodeMirror
+              value={cppCode}
+              height="300px"
+              theme={oneDark}
+              extensions={[cpp()]}
+              editable={false}
+              basicSetup={{
+                lineNumbers: true,
+                foldGutter: true,
+                highlightActiveLine: false,
+                autocompletion: false,
+              }}
+            />
+          </div>
         </div>
       )}
     </div>

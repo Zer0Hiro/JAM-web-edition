@@ -46,7 +46,8 @@ export default function LessonView({
         return (
           <pre
             key={pi}
-            className="bg-[var(--color-bg-primary)] rounded-lg p-4 text-sm overflow-x-auto my-3 border border-[var(--color-border)]"
+            dir="ltr"
+            className="bg-[var(--color-bg-primary)] rounded-lg p-4 text-sm overflow-x-auto my-3 border border-[var(--color-border)] text-left"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             <code className="text-[var(--color-accent-cyan)]">{code}</code>
@@ -57,7 +58,7 @@ export default function LessonView({
       let html = paragraph
         .replace(/\*\*(.+?)\*\*/g, '<strong class="text-[var(--color-text-primary)] font-semibold">$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/`(.+?)`/g, '<code class="bg-[var(--color-bg-primary)] px-1.5 py-0.5 rounded text-sm text-[var(--color-accent-cyan)]" style="font-family: var(--font-mono)">$1</code>')
+        .replace(/`(.+?)`/g, '<code dir="ltr" class="bg-[var(--color-bg-primary)] px-1.5 py-0.5 rounded text-sm text-[var(--color-accent-cyan)] inline-block" style="font-family: var(--font-mono)">$1</code>')
         .replace(/\n- /g, '</p><p class="ms-4 before:content-[\'•_\'] text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">')
         .replace(/\n(\d+)\. /g, '</p><p class="ms-4 text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">$1. ');
 
