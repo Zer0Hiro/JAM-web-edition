@@ -4,8 +4,6 @@ import { StreamLanguage } from "@codemirror/language";
 import { cpp } from "@codemirror/lang-cpp";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { Play, Square, Download, RotateCcw, Loader2, Code, ChevronDown, ChevronUp, FileAudio, Cpu, Check, AlertTriangle, Upload, MoreVertical } from "lucide-react";
-import { parseJam, flattenToEvents } from "../utils/jamParser";
-import { getAudioEngine } from "../utils/audioEngine";
 import { useLanguage } from "../i18n/context";
 
 // ── Simple JEM syntax highlighting mode ─────────────────────────────────
@@ -138,7 +136,6 @@ export default function CodeEditor({
   const [selectedPin, setSelectedPin] = useState(25);
   const [showPinSelector, setShowPinSelector] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const engineRef = useRef(null);
   const wavPlayerRef = useRef(null);
 
   useEffect(() => {
@@ -167,25 +164,6 @@ export default function CodeEditor({
     setIsPlaying(true);
   }, []);
 
-  const fallbackBrowserPlay = useCallback(() => {
-    try {
-      const parsed = parseJam(code);
-      const instNames = Object.keys(parsed.instruments);
-      if (instNames.length === 0) { setError(t.editor.noInstrument); return; }
-      if (parsed.arrangement.length === 0) { setError(t.editor.noArrangement); return; }
-      const events = flattenToEvents(parsed);
-      if (events.length === 0) { setError(t.editor.noNotes); return; }
-
-      const engine = getAudioEngine();
-      engineRef.current = engine;
-      engine.onProgress = (p) => setProgress(p);
-      engine.onComplete = () => { setIsPlaying(false); setProgress(0); };
-      engine.play(events);
-      setIsPlaying(true);
-    } catch (e) {
-      setError(t.editor.genericError(e.message));
-    }
-  }, [code, t]);
 
   const uploadToEsp32 = useCallback(async (source, pin) => {
     setUploadStatus("uploading");
@@ -234,23 +212,19 @@ export default function CodeEditor({
         playWavFromBase64(data.wav_b64);
       } else if (data.error) {
         setError(friendlyError(data.error, t));
-      } else {
-        fallbackBrowserPlay();
       }
     } catch {
-      fallbackBrowserPlay();
+      setError(t.editor.serverUnavailable || "Server unavailable. Start the backend with: python3 server/app.py");
     } finally {
       setIsLoadingPlay(false);
     }
-  }, [code, t, playWavFromBase64, fallbackBrowserPlay]);
+  }, [code, t, playWavFromBase64]);
 
   const handleStop = useCallback(() => {
     if (wavPlayerRef.current) {
       wavPlayerRef.current.stop();
       wavPlayerRef.current = null;
     }
-    const engine = getAudioEngine();
-    engine.stop();
     setIsPlaying(false);
     setProgress(0);
   }, []);
