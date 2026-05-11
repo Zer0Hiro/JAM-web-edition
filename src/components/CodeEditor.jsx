@@ -127,6 +127,7 @@ export default function CodeEditor({
   const [isCompiling, setIsCompiling] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState(null);
+  const [warnings, setWarnings] = useState(null);
   const [compileResult, setCompileResult] = useState(null);
   const [cppCode, setCppCode] = useState(null);
   const [showCpp, setShowCpp] = useState(false);
@@ -197,6 +198,7 @@ export default function CodeEditor({
 
   const handlePlay = useCallback(async () => {
     setError(null);
+    setWarnings(null);
     setIsLoadingPlay(true);
 
     try {
@@ -210,6 +212,9 @@ export default function CodeEditor({
       if (data.success && data.wav_b64) {
         setWavData(data.wav_b64);
         playWavFromBase64(data.wav_b64);
+        if (data.warnings && data.warnings.length > 0) {
+          setWarnings(data.warnings);
+        }
       } else if (data.error) {
         setError(friendlyError(data.error, t));
       }
@@ -236,6 +241,7 @@ export default function CodeEditor({
     setCppCode(null);
     setShowCpp(false);
     setWavData(null);
+    setWarnings(null);
     setUploadStatus(null);
     setUploadMessage(null);
     setShowPinSelector(false);
@@ -246,6 +252,7 @@ export default function CodeEditor({
   const handleCompile = useCallback(async () => {
     setIsCompiling(true);
     setError(null);
+    setWarnings(null);
     setCompileResult(null);
 
     try {
@@ -265,6 +272,9 @@ export default function CodeEditor({
         if (data.wav_b64) {
           setWavData(data.wav_b64);
           playWavFromBase64(data.wav_b64);
+        }
+        if (data.warnings && data.warnings.length > 0) {
+          setWarnings(data.warnings);
         }
       } else {
         setError(friendlyError(data.error, t));
@@ -488,6 +498,11 @@ export default function CodeEditor({
       {error && (
         <div className="px-4 py-3 bg-red-950/50 border-t border-red-500/30 text-red-300 text-sm">
           <span className="font-semibold">{t.editor.oops}</span> {error}
+        </div>
+      )}
+      {warnings && warnings.length > 0 && (
+        <div className="px-4 py-3 bg-yellow-950/50 border-t border-yellow-500/30 text-yellow-300 text-sm">
+          <span className="font-semibold">⚠️</span> {warnings.join("; ")}
         </div>
       )}
 

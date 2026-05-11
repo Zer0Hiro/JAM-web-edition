@@ -23,7 +23,21 @@ function playTone(freq, waveType = "sine", durationMs = 400, volumeScale = 1) {
   const dur = durationMs / 1000;
 
   let source;
-  if (waveType === "noise") {
+  if (waveType === "pluck") {
+    const bufLen = ctx.sampleRate * (dur + 0.1);
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    const period = Math.round(ctx.sampleRate / freq);
+    const line = new Float32Array(period);
+    for (let i = 0; i < period; i++) line[i] = Math.random() * 2 - 1;
+    for (let i = 0; i < bufLen; i++) {
+      const idx = i % period;
+      data[i] = line[idx];
+      line[idx] = (line[idx] + line[(idx + 1) % period]) * 0.498;
+    }
+    source = ctx.createBufferSource();
+    source.buffer = buf;
+  } else if (waveType === "noise") {
     const bufLen = ctx.sampleRate * (dur + 0.1);
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
     const data = buf.getChannelData(0);
@@ -95,14 +109,15 @@ const OCTAVE_COLORS = [
 // Wave data
 // ---------------------------------------------------------------------------
 
-const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise"];
-const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE"];
+const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck"];
+const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK"];
 const WAVE_COLORS = [
   { color: "#00f0ff", glow: "rgba(0,240,255,0.4)", border: "rgba(0,240,255,0.5)", bg: "rgba(0,240,255,0.08)" },
   { color: "#ff00aa", glow: "rgba(255,0,170,0.4)", border: "rgba(255,0,170,0.5)", bg: "rgba(255,0,170,0.08)" },
   { color: "#f97316", glow: "rgba(249,115,22,0.4)", border: "rgba(249,115,22,0.5)", bg: "rgba(249,115,22,0.08)" },
   { color: "#8b5cf6", glow: "rgba(139,92,246,0.4)", border: "rgba(139,92,246,0.5)", bg: "rgba(139,92,246,0.08)" },
   { color: "#22d3ee", glow: "rgba(34,211,238,0.4)", border: "rgba(34,211,238,0.5)", bg: "rgba(34,211,238,0.08)" },
+  { color: "#eab308", glow: "rgba(234,179,8,0.4)", border: "rgba(234,179,8,0.5)", bg: "rgba(234,179,8,0.08)" },
 ];
 
 const WAVE_POINTS_FNS = [
@@ -167,6 +182,20 @@ const WAVE_POINTS_FNS = [
     const rand = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; };
     for (let x = 0; x <= w; x += 3) {
       const y = h * 0.15 + rand() * h * 0.7;
+      pts.push(`${x},${y}`);
+    }
+    return pts.join(" ");
+  },
+  // pluck (decaying burst — Karplus-Strong visual)
+  (w, h) => {
+    const pts = [];
+    let seed = 7;
+    const rand = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return (seed >>> 0) / 0xffffffff; };
+    for (let x = 0; x <= w; x += 2) {
+      const t = x / w;
+      const envelope = Math.exp(-t * 4);
+      const osc = Math.sin(t * Math.PI * 16) * 0.6 + (rand() - 0.5) * 0.4;
+      const y = h / 2 - osc * envelope * (h / 2.5);
       pts.push(`${x},${y}`);
     }
     return pts.join(" ");
@@ -261,7 +290,7 @@ function WaveCard({ waveIdx, t }) {
   const c = WAVE_COLORS[waveIdx];
   const id = WAVE_IDS[waveIdx];
   const label = WAVE_LABELS[waveIdx];
-  const descKey = ["sine", "sawtooth", "square", "triangle", "noise"][waveIdx];
+  const descKey = WAVE_IDS[waveIdx];
 
   const startSound = useCallback(() => {
     playTone(440, id, 800);

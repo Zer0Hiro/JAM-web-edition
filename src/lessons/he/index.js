@@ -15,6 +15,12 @@ import lesson14 from "./lesson14";
 import lesson15 from "./lesson15";
 import lesson16 from "./lesson16";
 import lesson17 from "./lesson17";
+import lesson18 from "./lesson18";
+import lesson19 from "./lesson19";
+import lesson20 from "./lesson20";
+import lesson21 from "./lesson21";
+import lesson22 from "./lesson22";
+import lesson23 from "./lesson23";
 
 export const lessons = [
   lesson01,
@@ -34,6 +40,12 @@ export const lessons = [
   lesson15,
   lesson16,
   lesson17,
+  lesson18,
+  lesson19,
+  lesson20,
+  lesson21,
+  lesson22,
+  lesson23,
 ];
 
 export const phases = [
@@ -71,5 +83,12 @@ export const phases = [
     description: "הוסיפו אפקטים, מרחב ותנועה למוזיקה",
     color: "#f43f5e",
     lessons: [lesson14, lesson15, lesson16, lesson17],
+  },
+  {
+    id: 6,
+    title: "טכניקות מתקדמות",
+    description: "שלטו בסולמות, גרוב, פיידים ומודלים פיזיקליים",
+    color: "#10b981",
+    lessons: [lesson18, lesson19, lesson20, lesson21, lesson22, lesson23],
   },
 ];

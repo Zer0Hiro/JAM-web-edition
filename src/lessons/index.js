@@ -16,6 +16,12 @@ import lesson14 from "./lesson14-echo-and-reverb";
 import lesson15 from "./lesson15-smooth-glide";
 import lesson16 from "./lesson16-stereo-space";
 import lesson17 from "./lesson17-live-automation";
+import lesson18 from "./lesson18-pluck-strings";
+import lesson19 from "./lesson19-key-scales";
+import lesson20 from "./lesson20-swing-humanize";
+import lesson21 from "./lesson21-fade-effects";
+import lesson22 from "./lesson22-lfo-modulation";
+import lesson23 from "./lesson23-unison-chorus";
 import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
 
 // JAMai local knowledge index
@@ -46,6 +52,12 @@ export const lessons = [
   lesson15,
   lesson16,
   lesson17,
+  lesson18,
+  lesson19,
+  lesson20,
+  lesson21,
+  lesson22,
+  lesson23,
 ];
 
 export const phases = [
@@ -83,6 +95,13 @@ export const phases = [
     description: "Add effects, space, and movement to your music",
     color: "#f43f5e",
     lessons: [lesson14, lesson15, lesson16, lesson17],
+  },
+  {
+    id: 6,
+    title: "Advanced Techniques",
+    description: "Master keys, grooves, fades, and physical modeling",
+    color: "#10b981",
+    lessons: [lesson18, lesson19, lesson20, lesson21, lesson22, lesson23],
   },
 ];
 

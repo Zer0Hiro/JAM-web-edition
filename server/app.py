@@ -56,7 +56,7 @@ def compile_source(source: str) -> dict:
     from dsl.codegen import generate
     from dsl.wav_backend import WavRenderer
 
-    result = {"success": False, "cpp": None, "wav_b64": None, "error": None}
+    result = {"success": False, "cpp": None, "wav_b64": None, "error": None, "warnings": None}
 
     try:
         # Parse
@@ -70,6 +70,10 @@ def compile_source(source: str) -> dict:
                 errors = [str(d) for d in validation.diagnostics]
             result["error"] = "; ".join(errors) if errors else "Validation failed"
             return result
+
+        # Pass warnings through on success
+        if validation.warnings:
+            result["warnings"] = [str(d) for d in validation.warnings]
 
         # Generate C++
         cpp_code = generate(program)
@@ -133,7 +137,7 @@ def api_preview():
     from dsl.semantic import validate
     from dsl.wav_backend import WavRenderer
 
-    result = {"success": False, "wav_b64": None, "error": None}
+    result = {"success": False, "wav_b64": None, "error": None, "warnings": None}
 
     try:
         program = parse(source)
@@ -145,6 +149,9 @@ def api_preview():
                 errors = [str(d) for d in validation.diagnostics]
             result["error"] = "; ".join(errors) if errors else "Validation failed"
             return jsonify(result)
+
+        if validation.warnings:
+            result["warnings"] = [str(d) for d in validation.warnings]
 
         renderer = WavRenderer(program)
         wav_bytes = renderer.render_bytes()

@@ -68,6 +68,8 @@ const en = {
     2: { title: "Rhythm & Timing", description: "Add beats, drums, and loops to your music" },
     3: { title: "Expression", description: "Shape your sounds and layer instruments" },
     4: { title: "Full Songs", description: "Put it all together into complete compositions" },
+    5: { title: "Sound Design", description: "Add effects, space, and movement to your music" },
+    6: { title: "Advanced Techniques", description: "Master keys, grooves, fades, and physical modeling" },
   },
 
   // Lesson View
@@ -125,9 +127,9 @@ const en = {
     waveforms: "Waveforms",
     notes: "Notes",
     structure: "Effects & Control",
-    waveformItems: ["SIN -- smooth, pure", "SAW -- buzzy, bright", "SQUARE -- retro, hollow", "TRIANGLE -- mellow, soft", "NOISE -- random, percussive"],
+    waveformItems: ["SIN -- smooth, pure", "SAW -- buzzy, bright", "SQUARE -- retro, hollow", "TRIANGLE -- mellow, soft", "NOISE -- random, percussive", "PLUCK -- string-like, decaying"],
     noteItems: ["C4 = Middle C (A4 = 440 Hz)", "C#4 / Db4 = sharps/flats", "Duration: 0.25 to 4 beats", "Velocity: 0-255 after duration", "Chords: [C4 E4 G4]"],
-    structureItems: ["CUTOFF / RESONANCE -- filter", "REVERB -- room ambience (0-255)", "DELAY time feedback -- echo", "GLIDE ms -- slide between notes", "PAN 0-255 (L/center/R)", "VOLUME mid-song -- automation"],
+    structureItems: ["CUTOFF / RESONANCE -- filter", "REVERB -- room ambience (0-255)", "DELAY time feedback -- echo", "GLIDE ms -- slide between notes", "PAN 0-255 (L/center/R)", "VOLUME mid-song -- automation", "KEY root SCALE -- lock to scale", "SWING 0-100 -- shuffle feel", "HUMANIZE 0-50 -- human timing", "FADE_IN / FADE_OUT beats -- volume ramp", "LFO rate depth VOLUME|PITCH -- modulation", "VOICES 1-4 / DETUNE 0-100 -- unison thickness", "CHORUS 0-255 -- stereo width", "REVERB:val / DELAY:t:fb -- per-note FX"],
   },
 
   // Sound Library
@@ -155,6 +157,7 @@ const en = {
       square: "Hollow and retro — this is the classic 8-bit video game sound. Super punchy!",
       triangle: "Soft but with a bit of an edge — like a mellow synth pad or an old-school bass.",
       noise: "Pure chaos — every frequency at once. Use it for drums, rain, or explosions!",
+      pluck: "A sharp attack that fades naturally — like plucking a guitar string or harp. Uses Karplus-Strong synthesis!",
     },
   },
 
