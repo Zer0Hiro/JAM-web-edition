@@ -4,6 +4,11 @@
 
 /* === Design Tokens === */
 :root {
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+:root, :root[data-theme="dark"] {
   --color-bg-primary: #0a0a0f;
   --color-bg-secondary: #12121a;
   --color-bg-card: #1a1a2e;
@@ -17,8 +22,22 @@
   --color-text-secondary: #9ca3af;
   --color-text-muted: #6b7280;
   --color-border: #2a2a45;
-  --font-display: 'Space Grotesk', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+:root[data-theme="light"] {
+  --color-bg-primary: #f5f5f7;
+  --color-bg-secondary: #eaeaef;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #f0f0f5;
+  --color-accent-cyan: #0891b2;
+  --color-accent-magenta: #c026d3;
+  --color-accent-purple: #7c3aed;
+  --color-accent-green: #0e7490;
+  --color-accent-orange: #ea580c;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #4b5563;
+  --color-text-muted: #9ca3af;
+  --color-border: #d1d5db;
 }
 
 /* === Base Styles === */
@@ -103,7 +122,7 @@ body {
   outline: none !important;
 }
 .cm-gutters {
-  background: #1e1e2e !important;
+  background: var(--color-bg-secondary) !important;
   border-right: 1px solid var(--color-border) !important;
 }
 

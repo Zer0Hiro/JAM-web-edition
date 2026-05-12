@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Menu, X, Volume2, Globe } from "lucide-react";
+import { Menu, X, Volume2, Globe, Sun, Moon } from "lucide-react";
 import { useLanguage } from "../i18n/context";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Navbar({ onNavigate, currentView }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const { t, lang, setLang, langs } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
 
   const navItems = [
     { label: t.nav.home, view: "home" },
@@ -64,8 +66,17 @@ export default function Navbar({ onNavigate, currentView }) {
             </button>
           ))}
 
+          {/* Theme toggle */}
+          <button
+            onClick={toggleTheme}
+            className="ms-2 p-2 rounded-lg text-sm transition-colors cursor-pointer bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)]"
+            aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+          </button>
+
           {/* Language switcher */}
-          <div className="relative ms-2">
+          <div className="relative">
             <button
               onClick={() => setLangOpen(!langOpen)}
               className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer bg-transparent border-0 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)]"
@@ -121,8 +132,17 @@ export default function Navbar({ onNavigate, currentView }) {
             </button>
           ))}
 
-          {/* Mobile language picker */}
+          {/* Mobile theme + language picker */}
           <div className="flex gap-2 px-4 pt-3 border-t border-[var(--color-border)] mt-2">
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm cursor-pointer border-0 transition-colors bg-transparent text-[var(--color-text-secondary)]"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
+          </div>
+          <div className="flex gap-2 px-4 pt-2">
             {langs.map((l) => (
               <button
                 key={l.code}
