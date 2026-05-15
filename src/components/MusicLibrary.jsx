@@ -16,6 +16,8 @@ import smokeCode from "../assets/music/smoke-on-the-water.jem?raw";
 import smokeCover from "../assets/music/smoke-on-the-water.jpg";
 import harryPotterCode from "../assets/music/harry-potter-theme.jem?raw";
 import harryPotterCover from "../assets/music/harry-potter-theme.jpg";
+import bellWaltzCode from "../assets/music/bell-waltz.jem?raw";
+import bellWaltzCover from "../assets/music/bell-waltz.svg";
 
 function dedent(str) {
   const lines = str.replace(/\r\n/g, "\n").split("\n");
@@ -90,6 +92,14 @@ const tracks = [
     cover: harryPotterCover,
     code: dedent(harryPotterCode),
     accent: "var(--color-accent-cyan)",
+  },
+  {
+    id: "bell-waltz",
+    title: "Bell Waltz in 3/4",
+    artist: "JAM Original",
+    cover: bellWaltzCover,
+    code: dedent(bellWaltzCode),
+    accent: "var(--color-accent-orange)",
   },
 ];
 

@@ -58,6 +58,25 @@ function playTone(freq, waveType = "sine", durationMs = 400, volumeScale = 1) {
     }
     source = ctx.createBufferSource();
     source.buffer = buf;
+  } else if (waveType === "bell") {
+    const bufLen = Math.round(ctx.sampleRate * (dur + 0.1));
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    const decayS = dur * 0.8;
+    const h2DecayS = decayS * 0.4;
+    const h3DecayS = decayS * 0.2;
+    for (let i = 0; i < bufLen; i++) {
+      const t = i / ctx.sampleRate;
+      const s1 = Math.sin(2 * Math.PI * freq * t);
+      const s2 = Math.sin(2 * Math.PI * freq * 2 * t);
+      const s3 = Math.sin(2 * Math.PI * freq * 3 * t);
+      const a1 = Math.exp(-t / decayS);
+      const a2 = t < h2DecayS ? 0.47 * (1 - t / h2DecayS) : 0;
+      const a3 = t < h3DecayS ? 0.23 * (1 - t / h3DecayS) : 0;
+      data[i] = s1 * a1 + s2 * a2 + s3 * a3;
+    }
+    source = ctx.createBufferSource();
+    source.buffer = buf;
   } else if (waveType === "noise") {
     const bufLen = ctx.sampleRate * (dur + 0.1);
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
@@ -130,8 +149,8 @@ const OCTAVE_COLORS = [
 // Wave data
 // ---------------------------------------------------------------------------
 
-const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck", "handpan"];
-const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK", "HANDPAN"];
+const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck", "handpan", "bell"];
+const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK", "HANDPAN", "BELL"];
 const WAVE_COLORS = [
   { color: "#85B7EB", glow: "rgba(133,183,235,0.4)", border: "rgba(133,183,235,0.5)", bg: "rgba(133,183,235,0.08)" },
   { color: "#AFA9EC", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
@@ -140,6 +159,7 @@ const WAVE_COLORS = [
   { color: "#22d3ee", glow: "rgba(34,211,238,0.4)", border: "rgba(34,211,238,0.5)", bg: "rgba(34,211,238,0.08)" },
   { color: "#eab308", glow: "rgba(234,179,8,0.4)", border: "rgba(234,179,8,0.5)", bg: "rgba(234,179,8,0.08)" },
   { color: "#10b981", glow: "rgba(16,185,129,0.4)", border: "rgba(16,185,129,0.5)", bg: "rgba(16,185,129,0.08)" },
+  { color: "#e2b04a", glow: "rgba(226,176,74,0.4)", border: "rgba(226,176,74,0.5)", bg: "rgba(226,176,74,0.08)" },
 ];
 
 const WAVE_POINTS_FNS = [
@@ -230,6 +250,22 @@ const WAVE_POINTS_FNS = [
       const e1 = Math.exp(-t * 2.5);
       const e2 = Math.exp(-t * 5) * 0.6;
       const e3 = Math.exp(-t * 8) * 0.3;
+      const s = Math.sin(t * Math.PI * 8) * e1
+              + Math.sin(t * Math.PI * 16) * e2
+              + Math.sin(t * Math.PI * 24) * e3;
+      const y = h / 2 - s * (h / 3);
+      pts.push(`${x},${y}`);
+    }
+    return pts.join(" ");
+  },
+  // bell (sine fundamental + fast-decaying 2nd and 3rd harmonics)
+  (w, h) => {
+    const pts = [];
+    for (let x = 0; x <= w; x += 2) {
+      const t = x / w;
+      const e1 = Math.exp(-t * 2);
+      const e2 = Math.exp(-t * 6) * 0.47;
+      const e3 = Math.exp(-t * 12) * 0.23;
       const s = Math.sin(t * Math.PI * 8) * e1
               + Math.sin(t * Math.PI * 16) * e2
               + Math.sin(t * Math.PI * 24) * e3;
@@ -750,8 +786,55 @@ export default function SoundLibrary() {
             gap: "16px",
           }}
         >
-          {WAVE_IDS.map((_, idx) => (
+          {WAVE_IDS.slice(0, 4).map((_, idx) => (
             <WaveCard key={idx} waveIdx={idx} t={t} />
+          ))}
+        </div>
+
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", marginTop: "48px", marginBottom: "28px" }}>
+          <div
+            style={{
+              width: "36px",
+              height: "36px",
+              borderRadius: "10px",
+              background: "linear-gradient(135deg, #10b981, #e2b04a)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "1.1rem",
+              flexShrink: 0,
+            }}
+            aria-hidden="true"
+          >
+            ✦
+          </div>
+          <div>
+            <h2
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "1.5rem",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                lineHeight: 1.2,
+              }}
+            >
+              {t.soundLibrary.specialWaves}
+            </h2>
+            <p style={{ fontSize: "0.82rem", color: "var(--color-text-muted)", marginTop: "2px" }}>
+              {t.soundLibrary.specialWavesSub}
+            </p>
+          </div>
+        </div>
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {WAVE_IDS.slice(4).map((_, idx) => (
+            <WaveCard key={idx + 4} waveIdx={idx + 4} t={t} />
           ))}
         </div>
 

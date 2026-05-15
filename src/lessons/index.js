@@ -21,6 +21,9 @@ import lesson19 from "./lesson19-musical-keys";
 import lesson20 from "./lesson20-get-groovy";
 import lesson21 from "./lesson21-song-craft";
 import lesson22 from "./lesson22-handpan-bells";
+import lesson23 from "./lesson23-bell-and-time";
+import lesson24 from "./lesson24-legato-and-polyphony";
+import lesson25 from "./lesson25-reverb-and-ramp";
 import { lessons as lessonsHe, phases as phasesHe } from "./he/index";
 
 // JAMai local knowledge index
@@ -56,6 +59,9 @@ export const lessons = [
   lesson20,
   lesson21,
   lesson22,
+  lesson23,
+  lesson24,
+  lesson25,
 ];
 
 export const phases = [
@@ -99,7 +105,7 @@ export const phases = [
     title: "Pro Mode",
     description: "Master advanced synthesis, scales, and groove",
     color: "#10b981",
-    lessons: [lesson17, lesson18, lesson19, lesson20, lesson22],
+    lessons: [lesson17, lesson18, lesson19, lesson20, lesson22, lesson23, lesson24, lesson25],
   },
   {
     id: 7,
