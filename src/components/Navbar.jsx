@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Menu, X, Volume2, Globe, Sun, Moon } from "lucide-react";
+import { Menu, X, Globe, Sun, Moon } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 import { useTheme } from "../context/ThemeContext";
+import logoSvg from "../assets/logo.svg";
 
 export default function Navbar({ onNavigate, currentView }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -31,9 +32,7 @@ export default function Navbar({ onNavigate, currentView }) {
             onClick={() => handleNav("home")}
             className="flex items-center gap-2 cursor-pointer bg-transparent border-0 p-0"
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)] flex items-center justify-center">
-              <Volume2 size={16} className="text-white" />
-            </div>
+            <img src={logoSvg} alt="JEM" className="w-8 h-8 rounded-lg" />
             <span className="text-lg font-bold gradient-text">JEM</span>
           </button>
 

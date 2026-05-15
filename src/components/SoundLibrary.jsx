@@ -133,10 +133,10 @@ const OCTAVE_COLORS = [
 const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck", "handpan"];
 const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK", "HANDPAN"];
 const WAVE_COLORS = [
-  { color: "#00f0ff", glow: "rgba(0,240,255,0.4)", border: "rgba(0,240,255,0.5)", bg: "rgba(0,240,255,0.08)" },
-  { color: "#ff00aa", glow: "rgba(255,0,170,0.4)", border: "rgba(255,0,170,0.5)", bg: "rgba(255,0,170,0.08)" },
+  { color: "#85B7EB", glow: "rgba(133,183,235,0.4)", border: "rgba(133,183,235,0.5)", bg: "rgba(133,183,235,0.08)" },
+  { color: "#AFA9EC", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
   { color: "#f97316", glow: "rgba(249,115,22,0.4)", border: "rgba(249,115,22,0.5)", bg: "rgba(249,115,22,0.08)" },
-  { color: "#8b5cf6", glow: "rgba(139,92,246,0.4)", border: "rgba(139,92,246,0.5)", bg: "rgba(139,92,246,0.08)" },
+  { color: "#7F77DD", glow: "rgba(127,119,221,0.4)", border: "rgba(127,119,221,0.5)", bg: "rgba(127,119,221,0.08)" },
   { color: "#22d3ee", glow: "rgba(34,211,238,0.4)", border: "rgba(34,211,238,0.5)", bg: "rgba(34,211,238,0.08)" },
   { color: "#eab308", glow: "rgba(234,179,8,0.4)", border: "rgba(234,179,8,0.5)", bg: "rgba(234,179,8,0.08)" },
   { color: "#10b981", glow: "rgba(16,185,129,0.4)", border: "rgba(16,185,129,0.5)", bg: "rgba(16,185,129,0.08)" },

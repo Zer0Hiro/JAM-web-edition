@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { useLanguage } from "../i18n/context";
+import logoSvg from "../assets/logo.svg";
 
 export default function Footer() {
   const { t } = useLanguage();
@@ -9,7 +10,8 @@ export default function Footer() {
       <div className="max-w-4xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo / brand */}
-          <div className="text-center md:text-start">
+          <div className="text-center md:text-start flex flex-col md:flex-row items-center gap-2">
+            <img src={logoSvg} alt="JEM" className="w-8 h-8 rounded-lg" />
             <span className="text-xl font-bold gradient-text">JEM</span>
             <p className="text-sm text-[var(--color-text-muted)] mt-1">
               {t.footer.tagline}

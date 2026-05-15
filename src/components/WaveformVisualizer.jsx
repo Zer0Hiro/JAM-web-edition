@@ -7,8 +7,8 @@ import { useRef, useEffect, useCallback } from "react";
 export default function WaveformVisualizer({
   width = 800,
   height = 200,
-  color = "#00f0ff",
-  secondaryColor = "#ff00aa",
+  color = "#85B7EB",
+  secondaryColor = "#AFA9EC",
   active = false,
   className = "",
 }) {

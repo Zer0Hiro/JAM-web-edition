@@ -12,9 +12,9 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
         className="absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 30%, rgba(139,92,246,0.15) 0%, transparent 60%), " +
-            "radial-gradient(ellipse at 20% 80%, rgba(0,240,255,0.08) 0%, transparent 50%), " +
-            "radial-gradient(ellipse at 80% 80%, rgba(255,0,170,0.08) 0%, transparent 50%)",
+            "radial-gradient(ellipse at 50% 30%, rgba(127,119,221,0.15) 0%, transparent 60%), " +
+            "radial-gradient(ellipse at 20% 80%, rgba(133,183,235,0.08) 0%, transparent 50%), " +
+            "radial-gradient(ellipse at 80% 80%, rgba(175,169,236,0.08) 0%, transparent 50%)",
         }}
       />
 
@@ -99,8 +99,8 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
         <WaveformVisualizer
           width={1200}
           height={180}
-          color="#00f0ff"
-          secondaryColor="#ff00aa"
+          color="#85B7EB"
+          secondaryColor="#AFA9EC"
           active={true}
         />
       </div>

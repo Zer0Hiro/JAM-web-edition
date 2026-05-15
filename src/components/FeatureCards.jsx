@@ -2,7 +2,7 @@ import { Code, Music, Cpu, Headphones, BookOpen, Gamepad2 } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 
 const ICONS = [Code, Headphones, Cpu, BookOpen, Music, Gamepad2];
-const COLORS = ["#00f0ff", "#ff00aa", "#8b5cf6", "#34d399", "#f97316", "#f43f5e"];
+const COLORS = ["#85B7EB", "#AFA9EC", "#7F77DD", "#34d399", "#f97316", "#f43f5e"];
 
 export default function FeatureCards() {
   const { t } = useLanguage();

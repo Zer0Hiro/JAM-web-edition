@@ -2,7 +2,7 @@ import { FileCode, Play, Cpu, Speaker } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 
 const ICONS = [FileCode, Play, Cpu, Speaker];
-const COLORS = ["#00f0ff", "#ff00aa", "#8b5cf6", "#34d399"];
+const COLORS = ["#85B7EB", "#AFA9EC", "#7F77DD", "#34d399"];
 const NUMBERS = ["01", "02", "03", "04"];
 
 export default function HowItWorks() {
