@@ -1,121 +1,118 @@
 const lesson08 = {
   id: 8,
-  slug: "multi-track",
-  title: "מיקס!",
-  subtitle: "שלבו בס, לידים ותופים",
+  slug: "sound-shapes",
+  title: "צורות של צלילים",
+  subtitle: "שלטו באיך צלילים נכנסים ויוצאים",
   phase: 3,
-  difficulty: 3,
-  goal: "בנו טראק עם בס, מנגינה ותופים שמנגנים ביחד!",
-  concepts: ["סידורים מרובי כלים", "קווי בס", "שכבות"],
-  estimatedMinutes: 15,
+  difficulty: 2,
+  goal: "השתמשו במעטפת ADSR כדי לעצב צלילים לקריטות, פדים וסטאבים.",
+  concepts: ["מעטפת ADSR", "התקפה", "דעיכה", "החזקה", "שחרור"],
+  estimatedMinutes: 12,
 
   steps: [
     {
-      title: "לשירים יש שכבות",
-      content: `חשבו על השיר האהוב עליכם. אפשר לשמוע דברים שונים קורים בו-זמנית:
-- **בס** -- החלק העמוק והרועד
-- **מנגינה** -- הלחן הראשי שהייתם מזמזמים
-- **תופים** -- הביט שמחזיק הכל ביחד
+      title: "לצלילים יש צורות!",
+      content: `לחצו על מקש פסנתר -- חזק מיד, ואז דועך. משכו קשת על כינור -- הצליל עולה לאט, מחזיק, ואז נעלם.
 
-ב-JEM, יוצרים כלי נגינה נפרדים לכל שכבה ומשלבים אותם!`,
+אותו תו, אבל **הצורה** של הצליל שונה לגמרי. הצורה הזו היא מה שגורם לפסנתר להישמע כמו פסנתר ולכינור להישמע כמו כינור. ב-JEM, שולטים בצורה הזו עם ארבעה מספרים שנקראים **ADSR**.`,
     },
     {
-      title: "בנו קו בס",
-      content: `בס משתמש בתווים נמוכים (C2, G2) וגל SAW לרעד עמוק:
+      title: "A-D-S-R",
+      content: `ADSR מייצג ארבעה שלבים, הכל נמדד במילישניות:
 
 \`\`\`
-INSTRUMENT bass:
-    TYPE SYNTH
-    WAVE SAW
-    VOLUME 220
+ADSR 10 80 200 100
 \`\`\`
 
-קווי בס טובים הם פשוטים וחזרתיים. הם הבסיס!`,
+1. **Attack (10 ms)** -- כמה מהר הצליל מתחיל. מספר נמוך = חד מיידי. מספר גבוה = עלייה איטית.
+2. **Decay (80 ms)** -- כמה מהר הוא יורד מעוצמה מקסימלית. כמו כדור שקופץ למטה.
+3. **Sustain (200 ms)** -- כמה זמן הצליל מחזיק יציב. ה"גוף" של התו.
+4. **Release (100 ms)** -- כמה מהר הוא דועך לשקט אחרי שהתו נגמר.
+
+חשבו על זה ככה: עולים למעלה, יורדים למטה, מחזיקים, ונעלמים.`,
     },
     {
-      title: "ערמו הכל",
-      content: `שימו הכל בתוך LOOP:
+      title: "קריטה מול פד",
+      content: `ערכי ADSR שונים = אופי שונה לגמרי:
 
+**קריטה** -- חדה, כמו לקטוף מיתר גיטרה:
 \`\`\`
-LOOP 4:
-    PLAY_SEQUENCE bassline
-    PLAY_SEQUENCE melody
-    PLAY_PATTERN beat
+ADSR 2 80 0 60
 \`\`\`
+התקפה מיידית, בלי החזקה. קופץ ונעלם.
 
-JEM מנגן בס, אחר כך מנגינה, אחר כך תופים, וחוזר. זה טראק אמיתי!
+**פד** -- חלומי, כמו מקהלה איטית:
+\`\`\`
+ADSR 300 100 400 500
+\`\`\`
+כניסה איטית, החזקה ארוכה, דעיכה עדינה. מושלם לאווירה ברקע.
 
-לחצו Play כדי לשמוע את שלוש השכבות עובדות ביחד.`,
+**סטאב** -- אגרופי, כמו מכת תופר:
+\`\`\`
+ADSR 5 100 50 30
+\`\`\`
+אגרוף מהיר, גוף קצר, נחתך מהר. מעולה למוזיקת דאנס.
+
+נסו לשנות את ה-ADSR בקוד ותשמעו את ההבדל!`,
     },
   ],
 
-  code: `# Mix It Up
-# Bass + lead + drums = a real track!
+  code: `# Sound Shapes
+# פד חלומי וקריטה חדה ביחד
 
-BPM 120
+BPM 90
 
-INSTRUMENT bass:
+INSTRUMENT pad:
+    TYPE SYNTH
+    WAVE SIN
+    ADSR 300 100 400 500
+    VOLUME 160
+
+INSTRUMENT pluck:
     TYPE SYNTH
     WAVE SAW
-    ADSR 5 40 300 120
-    VOLUME 220
+    ADSR 2 80 0 60
+    VOLUME 200
 
-INSTRUMENT lead:
-    TYPE SYNTH
-    WAVE TRIANGLE
-    ADSR 10 30 200 100
-    VOLUME 180
+SEQUENCE chords:
+    PLAY pad C4 4
+    PLAY pad E4 4
+    PLAY pad G4 4
 
-INSTRUMENT kick:
-    TYPE DRUM
-    WAVE SIN
-    FREQ 55
-    DECAY 100
-    VOLUME 255
+SEQUENCE arpeggio:
+    PLAY pluck C5 0.25
+    REST 0.25
+    PLAY pluck E5 0.25
+    REST 0.25
+    PLAY pluck G5 0.25
+    REST 0.25
+    PLAY pluck C6 0.25
+    REST 0.25
 
-SEQUENCE bassline:
-    PLAY bass C2 1
-    PLAY bass C2 1
-    PLAY bass G2 1
-    PLAY bass F2 1
-
-SEQUENCE melody:
-    PLAY lead E4 0.5
-    PLAY lead G4 0.5
-    PLAY lead A4 1
-    PLAY lead G4 0.5
-    PLAY lead E4 0.5
-    PLAY lead D4 1
-
-PATTERN beat:
-    BEAT 1: kick
-    BEAT 3: kick
-
-LOOP 2:
-    PLAY_SEQUENCE bassline
-    PLAY_SEQUENCE melody
-    PLAY_PATTERN beat`,
+PLAY_SEQUENCE chords
+LOOP 4:
+    PLAY_SEQUENCE arpeggio`,
 
   challenges: [
     {
-      id: "add-snare",
-      text: "הוסיפו סנר! צרו כלי DRUM חדש עם WAVE NOISE, FREQ 200, DECAY 60. ואז הוסיפו BEAT 2: snare ו-BEAT 4: snare לתבנית.",
-      hint: "קיק על 1 ו-3, סנר על 2 ו-4 -- זה הביט הקלאסי של רוק!",
+      id: "long-pad",
+      text: "הפכו את הפד ליותר חלומי: שנו attack ל-500 ו-release ל-800.",
+      hint: "התקפה ארוכה יותר אומרת שהצליל זוחל פנימה לאט. שחרור ארוך יותר אומר שהוא נשאר אחרי שהתו נגמר. מושלם למוזיקת אמביינט.",
     },
     {
-      id: "change-bass",
-      text: "שנו את תווי הבס ל-C2, E2, F2, G2. זה נשמע כאילו הוא 'הולך' למעלה!",
-      hint: "קו בס הולך עולה צעד אחר צעד. ג'אז ופאנק משתמשים בזה הרבה!",
+      id: "stab-sound",
+      text: "שנו את ה-ADSR של הקריטה ל-5 100 50 30. עכשיו זה סטאב חזק!",
+      hint: "מעטפות קצרות ואגרסיביות משמשות ב-EDM ומוזיקת דאנס. התו חובט חזק ונעלם מהר.",
     },
     {
-      id: "add-hat",
-      text: "הוסיפו היי-האט על כל 4 הביטים לצליל מלא יותר.",
-      hint: "TYPE DRUM, WAVE NOISE, FREQ 800, DECAY 30. ואז הוסיפו שורות BEAT 1/2/3/4 hat לתבנית!",
+      id: "zero-release",
+      text: "הגדירו את ה-release של הקריטה ל-0. התווים נחתכים מיד -- כמו מיתר גיטרה מושתק!",
+      hint: "Release 0 אומר שהצליל פשוט נעצר. בלי דעיכה בכלל. נסו ותקשיבו לחיתוך החד.",
     },
   ],
 
   funFact:
-    "מיקסינג הוא הכל על לתת לכל כלי נגינה מקום משלו. בס הולך נמוך, מנגינה באמצע, מצילות גבוהות. לכן הם לא מתמוססים לצליל בוצי אחד!",
+    "מעטפות ADSR הומצאו בשנות ה-60 לסינתיסייזרים הראשונים. לפני כן, כלים אלקטרוניים יכלו רק להוציא צליל BZZZZZ רציף אחד. ADSR הוא מה שהפך מוזיקה אלקטרונית לאקספרסיבית באמת.",
 };
 
 export default lesson08;

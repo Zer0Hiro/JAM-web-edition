@@ -180,12 +180,18 @@ def api_upload():
     if len(source) > 50000:
         return jsonify({"success": False, "stage": "input", "error": "Source too large (max 50KB)", "output": None}), 400
 
+    board = data.get("board", "esp32")
+    if board not in ("esp32", "uno"):
+        return jsonify({"success": False, "stage": "input", "error": "Invalid board. Use 'esp32' or 'uno'.", "output": None}), 400
+
     audio_pin = data.get("pin")
     if audio_pin is not None:
         try:
             audio_pin = int(audio_pin)
         except (ValueError, TypeError):
             return jsonify({"success": False, "stage": "input", "error": "Invalid pin number", "output": None}), 400
+
+    pio_env = "esp32dev" if board == "esp32" else "uno"
 
     pio_bin = shutil.which("pio") or shutil.which("platformio")
     if not pio_bin:
@@ -212,7 +218,7 @@ def api_upload():
         sketch_path.write_text(cpp_code, encoding="utf-8")
 
         proc = subprocess.run(
-            [pio_bin, "run", "--target", "upload"],
+            [pio_bin, "run", "-e", pio_env, "--target", "upload"],
             cwd=str(DSL_PATH),
             capture_output=True,
             text=True,

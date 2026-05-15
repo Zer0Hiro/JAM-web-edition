@@ -1,121 +1,140 @@
 const lesson12 = {
   id: 12,
-  slug: "velocity-dynamics",
-  title: "חזק ושקט",
-  subtitle: "שליטה בעוצמת כל תו",
-  phase: 3,
+  slug: "echo-chamber",
+  title: "חדר הדים",
+  subtitle: "הוסיפו מרחב והדים למוזיקה",
+  phase: 4,
   difficulty: 3,
-  goal: "השתמשו ב-velocity כדי להפוך תווים מסוימים לחזקים ואחרים לשקטים -- להוסיף דינמיקה למוזיקה!",
-  concepts: ["עוצמת תו", "דינמיקה", "ביטוי מוזיקלי"],
-  estimatedMinutes: 10,
+  goal: "השתמשו ב-REVERB לאווירת חדר וב-DELAY להדים קצביים, ודרסו אותם על תווים בודדים.",
+  concepts: ["ריוורב", "דיליי/הד", "פידבק", "דריסת REVERB ו-DELAY לכל תו"],
+  estimatedMinutes: 12,
 
   steps: [
     {
-      title: "מה זה velocity?",
-      content: `במוזיקה אמיתית, מקש פסנתר שנלחץ בחוזקה נשמע **חזק**, ולחיצה עדינה נשמעת **שקט**. זה נקרא **velocity** (מהירות).
+      title: "מה זה ריוורב?",
+      content: `תשירו בחדר אמבטיה -- תשמעו את הקול מקפץ מהאריחים. תשירו בארון מלא בגדים -- שקט מוחלט. צליל ההד הזה מהקירות הוא **ריוורב**.
 
-ב-JEM, אפשר להוסיף מספר velocity (0-255) אחרי משך התו:
+ב-JEM, מוסיפים REVERB לכלי:
 
 \`\`\`
-PLAY lead C4 1 200    # חזק
-PLAY lead E4 1 80     # שקט
+INSTRUMENT pad:
+    TYPE SYNTH
+    WAVE SAW
+    REVERB 180
+    VOLUME 160
 \`\`\`
 
-255 = עוצמה מקסימלית, 0 = שקט מוחלט. אם לא כותבים, הכלי מנגן בעוצמה מלאה.`,
+REVERB 0 = ארון יבש. REVERB 255 = קתדרלה ענקית. מספרים באמצע נותנים הכל, מחדר קטן עד אולם קונצרטים.`,
     },
     {
-      title: "יצירת קרשנדו",
-      content: `קרשנדו פירושו להתחזק עם הזמן. שימו לב למספרי ה-velocity שגדלים:
+      title: "DELAY זה הד",
+      content: `DELAY חוזר על הצליל אחרי זמן קבוע, כמו לצעוק לתוך קניון. שולטים בשני דברים:
 
 \`\`\`
-PLAY lead C4 0.5 60
-PLAY lead D4 0.5 100
-PLAY lead E4 0.5 160
-PLAY lead F4 0.5 220
+INSTRUMENT lead:
+    TYPE SYNTH
+    WAVE TRIANGLE
+    DELAY 300 150
+    VOLUME 180
 \`\`\`
 
-כל תו חזק יותר מהקודם -- כמו ללכת לכיוון הרמקול!`,
+**זמן** (300) = הפער בין ההדים באלפיות שנייה. ב-BPM 120, ביט אחד הוא 500 אלפיות שנייה, אז 300 זה קצת יותר מהר מחצי ביט.
+
+**פידבק** (150) = כמה פעמים ההד חוזר. 0 = הד אחד. 255 = הדים לנצח. 150 זה אמצע נחמד שבו ההדים דועכים בהדרגה.`,
     },
     {
-      title: "הדגשת ביטים",
-      content: `גם בתבניות תופים אפשר להדגיש ביטים מסוימים:
+      title: "דריסה לכל תו",
+      content: `בדיוק כמו CUTOFF, אפשר לדרוס REVERB או DELAY על תו בודד:
 
 \`\`\`
-BEAT 1: kick 220
-BEAT 2: hat 100
-BEAT 3: kick 180
-BEAT 4: hat 80
+PLAY lead E4 1 REVERB:240
+PLAY lead G4 1 200 DELAY:500:120
 \`\`\`
 
-הקיקים מכים חזק יותר מהיי-האטים, ונותנים לביט גרוב. נסו לשנות את המספרים ולשמוע את ההבדל!`,
+שימו את הדריסה אחרי ה-velocity (או אחרי משך התו אם אין velocity). הכלי חייב שהאפקט כבר מוגדר בו כדי שהדריסה תעבוד.
+
+דריסת DELAY בפורמט \`DELAY:<זמן>:<פידבק>\`.`,
+    },
+    {
+      title: "שילוב אפקטים",
+      content: `ריוורב ודיליי ביחד יוצרים צליל עצום ומרחבי. טריק טוב:
+
+- **Lead** עם DELAY -- ההדים מוסיפים קצב ותנועה
+- **Pad** עם REVERB -- יוצר שטיח של אווירה מאחורי הכל
+- **תופים** יבשים או עם ריוורב קל -- שומר על הביט הדוק
+
+לחצו Play כדי לשמוע את שלוש השכבות עובדות ביחד!`,
     },
   ],
 
-  code: `# חזק ושקט -- דינמיקת Velocity
-# הוסיפו מספר אחרי משך התו כדי לשלוט בעוצמה
+  code: `# חדר הדים
+# ריוורב לצליל חדר, דיליי להדים
 
-BPM 120
+BPM 100
 
 INSTRUMENT lead:
     TYPE SYNTH
-    WAVE SAW
+    WAVE TRIANGLE
     ADSR 10 30 200 100
-    VOLUME 200
+    DELAY 300 150
+    VOLUME 180
+
+INSTRUMENT pad:
+    TYPE SYNTH
+    WAVE SAW
+    ADSR 200 100 400 300
+    REVERB 180
+    VOLUME 140
 
 INSTRUMENT kick:
     TYPE DRUM
     WAVE SIN
     FREQ 55
     DECAY 100
-    VOLUME 255
+    VOLUME 240
 
-INSTRUMENT hat:
-    TYPE DRUM
-    WAVE NOISE
-    FREQ 800
-    DECAY 30
-    VOLUME 180
+SEQUENCE lead_melody:
+    PLAY lead E4 0.5
+    PLAY lead G4 0.5
+    REST 0.5
+    PLAY lead A4 0.5
+    PLAY lead G4 1
+    PLAY lead E4 0.5 REVERB:200
+    REST 0.5
 
-SEQUENCE melody:
-    PLAY lead C4 0.5 60
-    PLAY lead D4 0.5 100
-    PLAY lead E4 0.5 160
-    PLAY lead G4 0.5 220
-    PLAY lead E4 0.5 180
-    PLAY lead D4 0.5 120
-    PLAY lead C4 1 200
+SEQUENCE pad_chords:
+    PLAY pad [C3 E3 G3] 4
 
 PATTERN beat:
-    BEAT 1: kick 220
-    BEAT 2: hat 100
-    BEAT 3: kick 180
-    BEAT 4: hat 80
+    BEAT 1: kick
+    BEAT 3: kick
 
 LOOP 2:
     PLAY_TOGETHER:
-        PLAY_SEQUENCE melody
+        PLAY_SEQUENCE lead_melody
+        PLAY_SEQUENCE pad_chords
         PLAY_PATTERN beat`,
 
   challenges: [
     {
-      id: "decrescendo",
-      text: "הפכו את עוצמות המנגינה כדי ליצור דקרשנדו (להחליש). התחילו ב-220 וסיימו ב-60.",
-      hint: "שנו את מספרי ה-velocity כך שיקטנו: 220, 180, 160, 120, 100, 80, 60.",
+      id: "long-delay",
+      text: "שנו את הדיליי של ה-lead ל-500 אלפיות שנייה עם פידבק 220. ספרו את ההדים -- כמה אתם שומעים לפני שהם דועכים?",
+      hint: "שנו DELAY 300 150 ל-DELAY 500 220 בכלי ה-lead.",
     },
     {
-      id: "ghost-notes",
-      text: "הוסיפו 'תווי רפאים' -- יי-האט שקטים מאוד (velocity 40) בביטים 1.5, 2.5, 3.5, 4.5.",
-      hint: "הוסיפו BEAT 1.5: hat 40, BEAT 2.5: hat 40 וכו' לתבנית.",
+      id: "reverb-kick",
+      text: "הוסיפו REVERB 100 לקיק. האם זה נשמע כאילו התופים בחדר גדול עכשיו?",
+      hint: "הוסיפו שורת REVERB 100 בתוך בלוק ה-INSTRUMENT של הקיק.",
     },
     {
-      id: "velocity-chord",
-      text: "נסו להוסיף velocity לאקורד: PLAY lead [C4 E4 G4] 2 150. האם זה עובד?",
-      hint: "הוסיפו PLAY עם אקורד ו-velocity בסוף. כל האקורד מנגן באותה עוצמה.",
+      id: "dry-compare",
+      text: "הסירו את כל שורות ה-REVERB וה-DELAY מכל הכלים. השוו את הגרסה היבשה לחלוטין עם המקורית. מה עדיף?",
+      hint: "מחקו או שימו # לפני שורות ה-REVERB וה-DELAY מכלי ה-lead וה-pad.",
     },
   ],
 
   funFact:
-    "בפסנתר אמיתי, velocity פירושו כמה מהר הפטיש פוגע במיתר. מקלדות MIDI מודדות זאת כ-0-127 -- JEM משתמש ב-0-255 לשליטה מדויקת יותר!",
+    "הריוורב המלאכותי הראשון נוצר בשנות ה-40 על ידי השמעת מוזיקה דרך רמקול בחדר אמבטיה מרוצף והקלטה עם מיקרופון! מאוחר יותר, אולפנים השתמשו בלוחות מתכת וקפיצים במקום.",
 };
 
 export default lesson12;

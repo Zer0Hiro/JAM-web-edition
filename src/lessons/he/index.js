@@ -20,7 +20,6 @@ import lesson19 from "./lesson19";
 import lesson20 from "./lesson20";
 import lesson21 from "./lesson21";
 import lesson22 from "./lesson22";
-import lesson23 from "./lesson23";
 
 export const lessons = [
   lesson01,
@@ -45,50 +44,56 @@ export const lessons = [
   lesson20,
   lesson21,
   lesson22,
-  lesson23,
 ];
 
 export const phases = [
   {
     id: 1,
-    title: "יסודות",
+    title: "צלילים ראשונים",
     description: "למדו את הבסיס של צליל ושפת JEM",
     color: "#22d3ee",
-    lessons: [lesson01, lesson02, lesson03],
+    lessons: [lesson01, lesson02, lesson03, lesson04],
   },
   {
     id: 2,
-    title: "קצב ותזמון",
-    description: "הוסיפו ביטים, תופים ולולאות למוזיקה",
+    title: "ביטים ולולאות",
+    description: "הוסיפו תופים, תבניות וחזרות למוזיקה",
     color: "#34d399",
-    lessons: [lesson04, lesson05, lesson06],
+    lessons: [lesson05, lesson06, lesson07],
   },
   {
     id: 3,
     title: "ביטוי",
-    description: "עצבו את הצלילים ושלבו כלי נגינה",
+    description: "עצבו צלילים עם מעטפות, אקורדים ודינמיקה",
     color: "#f97316",
-    lessons: [lesson07, lesson08, lesson10, lesson11, lesson12, lesson13],
+    lessons: [lesson08, lesson09, lesson10],
   },
   {
     id: 4,
-    title: "שירים שלמים",
-    description: "שלבו הכל יחד ליצירות מושלמות",
+    title: "אפקטים ומרחב",
+    description: "הוסיפו פילטרים, הדים, גלישה וסטריאו",
     color: "#a78bfa",
-    lessons: [lesson09],
+    lessons: [lesson11, lesson12, lesson13, lesson14],
   },
   {
     id: 5,
-    title: "עיצוב צליל",
-    description: "הוסיפו אפקטים, מרחב ותנועה למוזיקה",
+    title: "רעד ותנועה",
+    description: "הפעילו אוטומציה עם מודולציית LFO",
     color: "#f43f5e",
-    lessons: [lesson14, lesson15, lesson16, lesson17],
+    lessons: [lesson15, lesson16],
   },
   {
     id: 6,
-    title: "טכניקות מתקדמות",
-    description: "שלטו בסולמות, גרוב, פיידים ומודלים פיזיקליים",
+    title: "מצב מקצועי",
+    description: "שלטו בסינתזה מתקדמת, סולמות וגרוב",
     color: "#10b981",
-    lessons: [lesson18, lesson19, lesson20, lesson21, lesson22, lesson23],
+    lessons: [lesson17, lesson18, lesson19, lesson20, lesson22],
+  },
+  {
+    id: 7,
+    title: "שלב הבוס",
+    description: "בנו שיר שלם עם כל מה שלמדתם",
+    color: "#8b5cf6",
+    lessons: [lesson21],
   },
 ];

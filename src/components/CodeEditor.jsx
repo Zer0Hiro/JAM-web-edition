@@ -134,8 +134,9 @@ export default function CodeEditor({
   const [wavData, setWavData] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadMessage, setUploadMessage] = useState(null);
+  const [selectedBoard, setSelectedBoard] = useState("esp32");
+  const [showBoardSelector, setShowBoardSelector] = useState(false);
   const [selectedPin, setSelectedPin] = useState(25);
-  const [showPinSelector, setShowPinSelector] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const wavPlayerRef = useRef(null);
 
@@ -166,19 +167,23 @@ export default function CodeEditor({
   }, []);
 
 
-  const uploadToEsp32 = useCallback(async (source, pin) => {
+  const boardLabel = selectedBoard === "esp32" ? t.editor.boardEsp32 : t.editor.boardArduino;
+
+  const uploadToBoard = useCallback(async (source, board, pin) => {
     setUploadStatus("uploading");
-    setUploadMessage(t.editor.uploadingEsp32);
+    setUploadMessage(t.editor.uploadingBoard.replace("{board}", board === "esp32" ? "ESP32" : "Arduino Uno"));
     try {
+      const body = { source, board };
+      if (board === "esp32" && pin != null) body.pin = pin;
       const response = await fetch("/api/upload", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source, pin }),
+        body: JSON.stringify(body),
       });
       const data = await response.json();
       if (data.success) {
         setUploadStatus("success");
-        setUploadMessage(t.editor.uploadSuccess);
+        setUploadMessage(t.editor.uploadSuccess.replace("{board}", board === "esp32" ? "ESP32" : "Arduino Uno"));
         setTimeout(() => setUploadStatus(null), 5000);
       } else {
         setUploadStatus("error");
@@ -192,9 +197,9 @@ export default function CodeEditor({
     }
   }, [t]);
 
-  const handleUploadEsp32 = useCallback(() => {
-    uploadToEsp32(code, selectedPin);
-  }, [code, selectedPin, uploadToEsp32]);
+  const handleUpload = useCallback(() => {
+    uploadToBoard(code, selectedBoard, selectedBoard === "esp32" ? selectedPin : null);
+  }, [code, selectedBoard, selectedPin, uploadToBoard]);
 
   const handlePlay = useCallback(async () => {
     setError(null);
@@ -384,52 +389,77 @@ export default function CodeEditor({
             )}
           </div>
 
-          {/* ESP32 Upload with Pin Selector */}
+          {/* Upload — board selector + pin (ESP32 only) */}
           <div className="relative flex items-center h-8">
             <button
-              onClick={handleUploadEsp32}
+              onClick={handleUpload}
               disabled={uploadStatus === "uploading"}
               className="flex items-center gap-1.5 px-3 h-8 text-sm rounded-s-lg
                          bg-[var(--color-accent-magenta)] text-white font-medium
                          hover:opacity-90 transition-opacity cursor-pointer
                          disabled:opacity-50 border-0"
-              title={t.editor.uploadToEsp32}
+              title={t.editor.uploadBoard}
             >
               {uploadStatus === "uploading" ? (
                 <Loader2 size={14} className="animate-spin" />
               ) : (
                 <Upload size={14} />
               )}
-              {t.editor.uploadToEsp32}
+              {boardLabel}
             </button>
             <div className="relative">
               <button
-                onClick={() => { setShowPinSelector(!showPinSelector); setShowMenu(false); }}
-                className="flex items-center gap-1 px-2 h-8 text-sm rounded-e-lg
+                onClick={() => { setShowBoardSelector(!showBoardSelector); setShowPinSelector(false); setShowMenu(false); }}
+                className="flex items-center gap-1 px-1.5 h-8 text-sm rounded-e-lg
                            bg-[var(--color-accent-magenta)] text-white font-medium
-                           hover:opacity-90 transition-opacity cursor-pointer border-0"
-                title={t.editor.selectPin}
+                           hover:opacity-90 transition-opacity cursor-pointer border-0
+                           border-l border-l-white/20"
+                title={t.editor.selectBoard}
               >
-                <span className="text-xs opacity-80 min-w-[48px] text-center">GPIO {selectedPin}</span>
                 <ChevronDown size={12} />
               </button>
-              {showPinSelector && (
+              {showBoardSelector && (
                 <div className="absolute top-full right-0 mt-1 bg-[var(--color-bg-elevated)] border border-[var(--color-border)]
-                                rounded-lg shadow-xl z-50 py-1 min-w-[140px] max-h-[200px] overflow-y-auto">
-                  {[2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25, 27, 32, 33].map((pin) => (
+                                rounded-lg shadow-xl z-50 py-1 min-w-[140px]">
+                  {[
+                    { id: "esp32", label: t.editor.boardEsp32 },
+                    { id: "uno", label: t.editor.boardArduino },
+                  ].map((b) => (
                     <button
-                      key={pin}
-                      onClick={() => { setSelectedPin(pin); setShowPinSelector(false); }}
+                      key={b.id}
+                      onClick={() => { setSelectedBoard(b.id); setShowBoardSelector(false); }}
                       className={`w-full text-left px-3 py-1.5 text-sm cursor-pointer border-0
                                   hover:bg-[var(--color-bg-secondary)] transition-colors
-                                  ${selectedPin === pin
+                                  ${selectedBoard === b.id
                                     ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
                                     : "text-[var(--color-text-secondary)]"
                                   }`}
                     >
-                      GPIO {pin}
+                      {b.label}
                     </button>
                   ))}
+                  {selectedBoard === "esp32" && (
+                    <>
+                      <div className="border-t border-[var(--color-border)] my-1" />
+                      <div className="px-3 py-1 text-xs text-[var(--color-text-tertiary)]">{t.editor.selectPin}</div>
+                      <div className="max-h-[150px] overflow-y-auto">
+                        {[2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25, 27, 32, 33].map((pin) => (
+                          <button
+                            key={pin}
+                            onClick={() => { setSelectedPin(pin); setShowBoardSelector(false); }}
+                            className={`w-full text-left px-3 py-1 text-sm cursor-pointer border-0
+                                        hover:bg-[var(--color-bg-secondary)] transition-colors
+                                        ${selectedPin === pin
+                                          ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
+                                          : "text-[var(--color-text-secondary)]"
+                                        }`}
+                          >
+                            GPIO {pin}
+                          </button>
+                        ))}
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>

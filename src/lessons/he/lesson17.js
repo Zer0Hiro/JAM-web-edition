@@ -1,75 +1,78 @@
-const lesson17 = {
+const lesson17He = {
   id: 17,
-  slug: "live-automation",
-  title: "שליטה חיה",
-  subtitle: "שנו BPM ועוצמה באמצע השיר",
-  phase: 5,
-  difficulty: 4,
-  goal: "השתמשו בשינויי BPM ו-VOLUME בתוך הסידור כדי ליצור האצות, האטות ושינויי דינמיקה.",
-  concepts: ["אוטומציית BPM", "אוטומציית עוצמה", "דינמיקת שיר"],
-  estimatedMinutes: 12,
+  slug: "pluck-it",
+  title: "!פרטו את זה",
+  subtitle: "צלילי גיטרה ונבל עם סינתזת Karplus-Strong",
+  phase: 6,
+  difficulty: 3,
+  goal: "השתמשו בגל PLUCK וב-DECAY כדי ליצור צלילי מיתר פרוטים ריאליסטיים כמו גיטרה, נבל ובנג'ו.",
+  concepts: ["גל PLUCK", "סינתזת Karplus-Strong", "צלילי מיתר", "DECAY עם PLUCK"],
+  estimatedMinutes: 10,
 
   steps: [
     {
-      title: "שינוי מהירות באמצע השיר",
-      content: `עד עכשיו, BPM נקבע פעם אחת בהתחלה. אבל מה אם השיר מואץ לפזמון?
-
-ב-JEM, אפשר לשים **BPM** בתוך בלוק LOOP או סידור:
+      title: "מה זה PLUCK?",
+      content: `**WAVE PLUCK** יוצר צלילי גיטרה ונבל. הוא משתמש בטריק חכם בשם **סינתזת Karplus-Strong**: מתחילים עם פרץ קטנטן של רעש אקראי, ואז מחליקים אותו ממש מהר. התוצאה נשמעת כמו מיתר שנפרט!
 
 \`\`\`
-LOOP 2:
-    PLAY_SEQUENCE verse
-BPM 160
-LOOP 2:
-    PLAY_SEQUENCE chorus
+INSTRUMENT guitar:
+    TYPE SYNTH
+    WAVE PLUCK
+    DECAY 150
+    VOLUME 200
 \`\`\`
 
-הבית מנגן בטמפו המקורי, ואז **BPM 160** נכנס והפזמון מהיר יותר!`,
+בניגוד לגלים אחרים (SIN, SAW, SQUARE), PLUCK יוצר צלילים שדועכים באופן טבעי -- בדיוק כמו מיתר גיטרה אמיתי שרוטט ולאט נעצר.`,
     },
     {
-      title: "אוטומציית עוצמה",
-      content: `אפשר גם לשנות את **VOLUME** הראשי באמצע השיר:
+      title: "DECAY שולט בזמן הצלצול",
+      content: `עם PLUCK, **DECAY** שולט כמה זמן המיתר מצלצל:
 
-\`\`\`
-VOLUME 100
-PLAY_SEQUENCE intro
-VOLUME 200
-PLAY_SEQUENCE main_part
-VOLUME 255
-PLAY_SEQUENCE climax
-\`\`\`
+- **DECAY 30** = מושתק, פריטה קצרה (כמו גיטרה עם השתקת כף יד)
+- **DECAY 150** = פריטת גיטרה רגילה
+- **DECAY 300** = צלצול ארוך, כמו נבל או פעמון
+- **DECAY 500** = סאסטיין ארוך מאוד, כמעט כמו פעמון
 
-זה יוצר אפקט בנייה -- השיר נהיה חזק יותר ככל שמתקדם. מעולה ליצירת מתח ושחרור!
-
-VOLUME כאן הוא 0-255 ומשפיע על הכל אחריו.`,
+בניגוד ל-ADSR, ב-PLUCK משתמשים ב-DECAY לכל צורת הצליל. DECAY קצר = הדוק ומרוכז. DECAY ארוך = פתוח ומצלצל.`,
     },
     {
-      title: "שילוב שניהם",
-      content: `השתמשו בשינויי BPM ו-VOLUME גם יחד כדי ליצור סידור אמיתי:
+      title: "פריטה ואקורדים",
+      content: `תווים קצרים ומהירים נשמעים כמו **פינגרפיקינג**:
 
-- התחילו איטי ושקט (אינטרו)
-- האיצו והגבירו (בנייה)
-- מהירות מלאה, עוצמה מלאה (דרופ)
+\`\`\`
+PLAY guitar C4 0.5
+PLAY guitar E4 0.5
+PLAY guitar G4 0.5
+PLAY guitar C5 0.5
+\`\`\`
 
-הקוד למטה עושה בדיוק את זה. לחצו Play ותרגישו את האנרגיה נבנית!`,
+השתמשו בסוגריים מרובעים ל**סטראמינג** (פריטת אקורד):
+
+\`\`\`
+PLAY guitar [C4 E4 G4] 2
+PLAY guitar [A3 C4 E4] 2
+\`\`\`
+
+הוסיפו **REVERB** לצליל חדר ריאליסטי -- כמו לנגן גיטרה באולפן נעים במקום בארון מרופד.`,
     },
   ],
 
-  code: `# שליטה חיה -- אוטומציית BPM ו-VOLUME
-# שנו מהירות ועוצמה באמצע השיר!
+  code: `# !פרטו את זה -- צלילי מיתר Karplus-Strong
+# פריטת גיטרה עם בס פרוט
 
-BPM 90
+BPM 120
 
-INSTRUMENT lead:
+INSTRUMENT guitar:
     TYPE SYNTH
-    WAVE SAW
-    ADSR 10 30 200 100
+    WAVE PLUCK
+    DECAY 150
+    REVERB 80
     VOLUME 200
 
-INSTRUMENT bass:
+INSTRUMENT bass_pluck:
     TYPE SYNTH
-    WAVE TRIANGLE
-    ADSR 5 40 300 120
+    WAVE PLUCK
+    DECAY 200
     VOLUME 220
 
 INSTRUMENT kick:
@@ -79,62 +82,66 @@ INSTRUMENT kick:
     DECAY 100
     VOLUME 255
 
-SEQUENCE intro:
-    PLAY lead C4 1
-    PLAY lead E4 1
-    PLAY lead G4 2
+INSTRUMENT hat:
+    TYPE DRUM
+    WAVE NOISE
+    FREQ 800
+    DECAY 25
+    VOLUME 140
 
-SEQUENCE verse:
-    PLAY lead C4 0.5
-    PLAY lead D4 0.5
-    PLAY lead E4 0.5
-    PLAY lead G4 0.5
-    PLAY lead E4 1
+SEQUENCE picking:
+    PLAY guitar C4 0.5
+    PLAY guitar E4 0.5
+    PLAY guitar G4 0.5
+    PLAY guitar C5 0.5
+    PLAY guitar G4 0.5
+    PLAY guitar E4 0.5
+    PLAY guitar C4 0.5
+    REST 0.5
 
-SEQUENCE chorus:
-    PLAY lead G4 0.5
-    PLAY lead A4 0.5
-    PLAY lead C5 1
+SEQUENCE bass:
+    PLAY bass_pluck C2 1
+    PLAY bass_pluck G2 1
+    PLAY bass_pluck A2 1
+    PLAY bass_pluck E2 1
 
 PATTERN beat:
     BEAT 1: kick
+    BEAT 2: hat
     BEAT 3: kick
+    BEAT 4: hat
 
-# אינטרו איטי
-PLAY_SEQUENCE intro
-# האצה לבית
-BPM 120
 LOOP 2:
     PLAY_TOGETHER:
-        PLAY_SEQUENCE verse
-        PLAY_PATTERN beat
-# פזמון מהיר וחזק!
-BPM 150
-LOOP 2:
-    PLAY_TOGETHER:
-        PLAY_SEQUENCE chorus
+        PLAY_SEQUENCE picking
+        PLAY_SEQUENCE bass
         PLAY_PATTERN beat`,
 
   challenges: [
     {
-      id: "slowdown",
-      text: "הוסיפו האטה בסוף: אחרי הפזמון, הגדירו BPM בחזרה ל-80 ונגנו את האינטרו שוב כאאוטרו.",
-      hint: "הוסיפו BPM 80 אחרי לולאות הפזמון, ואז PLAY_SEQUENCE intro בסוף.",
+      id: "muted-pluck",
+      text: "שנו את DECAY של הגיטרה ל-30. זה אמור להישמע מושתק והדוק, כמו מיתר גיטרה עם השתקת כף יד.",
+      hint: "שנו DECAY 150 ל-DECAY 30 בכלי guitar.",
     },
     {
-      id: "fade-out",
-      text: "צרו פייד-אאוט על ידי ניגון הפזמון עוד 3 פעמים, כל פעם בהפחתת מהירות: BPM 130, אחר כך 110, אחר כך 90.",
-      hint: "הוסיפו שלושה בלוקים נוספים: BPM 130 + PLAY_SEQUENCE chorus, BPM 110 + PLAY_SEQUENCE, BPM 90 + PLAY_SEQUENCE.",
+      id: "chord-strum",
+      text: "החליפו את הארפג'יו בפריטת אקורדים: [C4 E4 G4] ל-2 ביטים, ואז [A3 C4 E4] ל-2 ביטים.",
+      hint: "החליפו את כל שורות ה-PLAY בסיקוונס picking בשתי שורות אקורדים עם סוגריים מרובעים.",
     },
     {
-      id: "dramatic-drop",
-      text: "צרו דרופ דרמטי: נגנו את הבית ב-BPM 80, ואז קפצו פתאום ל-BPM 180 לפזמון. תרגישו את האנרגיה!",
-      hint: "שנו את ה-BPM של הבית ל-80 ואת ה-BPM של הפזמון ל-180.",
+      id: "add-reverb",
+      text: "העלו את REVERB של הגיטרה ל-180. זה נשמע כמו לנגן באולם גדול?",
+      hint: "שנו REVERB 80 ל-REVERB 180 בכלי guitar.",
+    },
+    {
+      id: "harp-sound",
+      text: "הגדירו DECAY ל-400 והאטו את ה-BPM ל-80. עכשיו זה נשמע יותר כמו נבל עדין מאשר גיטרה!",
+      hint: "שנו DECAY 150 ל-DECAY 400 בגיטרה, ושנו BPM 120 ל-BPM 80.",
     },
   ],
 
   funFact:
-    "במוזיקה קלאסית, המנצח שולט בשינויי טמפו בזמן אמת על ידי הנפת השרביט מהר או לאט יותר. המונחים האיטלקיים 'אצ'לרנדו' (להאיץ) ו'ריטרדנדו' (להאט) כתובים ישר בתווים!",
+    "סינתזת Karplus-Strong הומצאה ב-1983 על ידי קווין קרפלוס ואלכס סטרונג. היא יוצרת צלילי מיתר פרוטים ריאליסטיים מלולאה קטנטנה של רעש אקראי שנהיית חלקה יותר בכל חזרה -- המחשב ממש 'פורט' מיתר וירטואלי!",
 };
 
-export default lesson17;
+export default lesson17He;

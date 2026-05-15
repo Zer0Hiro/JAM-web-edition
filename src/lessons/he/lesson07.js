@@ -1,112 +1,142 @@
-const lesson07 = {
+const lesson07He = {
   id: 7,
-  slug: "envelope-shapes",
-  title: "צורות מעטפה",
-  subtitle: "שלטו באיך צלילים נכנסים ויוצאים",
-  phase: 3,
-  difficulty: 3,
-  goal: "השתמשו ב-ADSR כדי ליצור צלילים שנקרטים, מתנפחים או חובטים!",
-  concepts: ["מעטפת ADSR", "Attack/Decay/Sustain/Release", "עיצוב צליל"],
+  slug: "band-mode",
+  title: "מצב להקה",
+  subtitle: "נגנו כמה כלים באותו זמן",
+  phase: 2,
+  difficulty: 2,
+  goal: "השתמשו ב-PLAY_TOGETHER כדי לשכב כלים ולגרום להם לנגן בו-זמנית.",
+  concepts: [
+    "PLAY_TOGETHER",
+    "נגינה בו-זמנית",
+    "עיבודים מרובי כלים",
+  ],
   estimatedMinutes: 12,
 
   steps: [
     {
-      title: "לצלילים יש צורות!",
-      content: `קטפו מיתר גיטרה -- הוא חזק בהתחלה, ואז נעלם. לחצו על מקש פסנתר והחזיקו -- התו נשאר עד שתשחררו.
+      title: "הבעיה",
+      content: `עד עכשיו, הכל מתנגן אחד אחרי השני. אם תכתבו:
 
-ה"צורה" הזו של חזק-לשקט לאורך זמן נקראת **מעטפה**. ב-JEM, שולטים בה עם ארבעה מספרים: **ADSR**.`,
+\`\`\`
+PLAY_SEQUENCE bassline
+PLAY_SEQUENCE melody
+\`\`\`
+
+הבס מסיים לגמרי, ורק אז המנגינה מתחילה. ככה להקה לא עובדת! בלהקה אמיתית, כולם מנגנים ביחד.`,
     },
     {
-      title: "מה ADSR אומר",
-      content: `\`\`\`
-ADSR 10 50 200 100
+      title: "PLAY_TOGETHER",
+      content: `PLAY_TOGETHER גורם לכל מה שבתוכו להתחיל באותו זמן:
+
+\`\`\`
+PLAY_TOGETHER:
+    PLAY_SEQUENCE bassline
+    PLAY_SEQUENCE melody
+    PLAY_PATTERN drums
 \`\`\`
 
-ארבעה מספרים, ארבעה שלבים (הכל במילישניות):
-
-1. **Attack (10)** -- כמה מהר הצליל נדלק. קטן = חד!
-2. **Decay (50)** -- כמה מהר הוא יורד מעוצמה מקסימלית.
-3. **Sustain (200)** -- כמה זמן הוא מחזיק יציב.
-4. **Release (100)** -- כמה מהר הוא נעלם בסוף.
-
-חשבו על זה ככה: הגבירו למעלה, תנו לזה לרדת קצת, החזיקו, ואז דעכו החוצה.`,
+בס, מנגינה ותופים כולם נכנסים ביחד. כמו מנצח שאומר "1, 2, 3, יאללה!" הכל בתוך הבלוק נגמר כשהחלק הארוך ביותר נגמר.`,
     },
     {
-      title: "קריטה לעומת פד",
-      content: `ADSR שונה = צליל שונה לגמרי:
+      title: "בתוך LOOP",
+      content: `שימו PLAY_TOGETHER בתוך LOOP ויש לכם טראק אמיתי:
 
-**קריטה** (כמו מפרט גיטרה):
 \`\`\`
-ADSR 2 80 0 60
+LOOP 4:
+    PLAY_TOGETHER:
+        PLAY_SEQUENCE bassline
+        PLAY_SEQUENCE melody
+        PLAY_PATTERN drums
 \`\`\`
-סופר מהיר, קופץ ונעלם.
 
-**פד** (כמו מקהלה חלומית):
-\`\`\`
-ADSR 300 100 400 500
-\`\`\`
-כניסה איטית, החזקה ארוכה, דעיכה עדינה.
+כל החלקים מתנגנים ביחד, ואז הכל חוזר 4 פעמים. ככה בונים שיר אמיתי -- שכבות של כלים שמנגנים ביחד, חוזרים כדי לבנות חלקים.
 
-נסו את שניהם בקוד! שנו את ה-ADSR של הפד ושמעו מה קורה.`,
+לחצו Play כדי לשמוע איך הקוד נשמע עם בס, לידים, kick ו-hat כולם ביחד!`,
     },
   ],
 
-  code: `# Envelope Shapes
-# A dreamy pad and a snappy pluck!
+  code: `# Band Mode
+# בס, ליד ותופים מנגנים ביחד
 
-BPM 90
+BPM 120
 
-INSTRUMENT pad:
-    TYPE SYNTH
-    WAVE SIN
-    ADSR 300 100 400 500
-    VOLUME 160
-
-INSTRUMENT pluck:
+INSTRUMENT bass:
     TYPE SYNTH
     WAVE SAW
-    ADSR 2 80 0 60
+    ADSR 5 50 200 80
     VOLUME 200
 
-SEQUENCE chords:
-    PLAY pad C4 4
-    PLAY pad E4 4
-    PLAY pad G4 4
+INSTRUMENT lead:
+    TYPE SYNTH
+    WAVE TRIANGLE
+    ADSR 10 40 150 100
+    VOLUME 170
 
-SEQUENCE arpegg:
-    PLAY pluck C5 0.25
-    REST 0.25
-    PLAY pluck E5 0.25
-    REST 0.25
-    PLAY pluck G5 0.25
-    REST 0.25
-    PLAY pluck C6 0.25
-    REST 0.25
+INSTRUMENT kick:
+    TYPE DRUM
+    WAVE SIN
+    FREQ 55
+    DECAY 90
+    VOLUME 255
 
-PLAY_SEQUENCE chords
-LOOP 4:
-    PLAY_SEQUENCE arpegg`,
+INSTRUMENT hat:
+    TYPE DRUM
+    WAVE NOISE
+    FREQ 800
+    DECAY 25
+    VOLUME 120
+
+SEQUENCE bassline:
+    PLAY bass C3 1
+    PLAY bass C3 0.5
+    REST 0.5
+    PLAY bass G2 1
+    PLAY bass G2 0.5
+    REST 0.5
+
+SEQUENCE melody:
+    PLAY lead E4 0.5
+    PLAY lead G4 0.5
+    PLAY lead A4 1
+    PLAY lead G4 0.5
+    PLAY lead E4 0.5
+    PLAY lead D4 1
+
+PATTERN groove:
+    BEAT 1: kick
+    BEAT 1: hat
+    BEAT 2: hat
+    BEAT 3: kick
+    BEAT 3: hat
+    BEAT 4: hat
+
+LOOP 2:
+    PLAY_TOGETHER:
+        PLAY_SEQUENCE bassline
+        PLAY_SEQUENCE melody
+        PLAY_PATTERN groove`,
 
   challenges: [
     {
-      id: "long-pad",
-      text: "שנו את ה-attack של הפד ל-500 וה-release ל-800. עוד יותר חלומי!",
-      hint: "מעטפות ארוכות ואיטיות הן מה שגורם למוזיקה אמביינטית וצ'יל להרגיש כל כך מרחפת.",
+      id: "add-snare",
+      text: "הוסיפו כלי סנר ושימו אותו על ביטים 2 ו-4 בתבנית.",
+      hint: "צרו DRUM עם WAVE NOISE, FREQ 200, DECAY 60. ואז הוסיפו BEAT 2: snare ו-BEAT 4: snare לתבנית.",
     },
     {
-      id: "stab",
-      text: "שנו את ה-ADSR של הקריטה ל-5 100 50 30. עכשיו זה סטאב חזק!",
-      hint: "מעטפות קצרות ואגרסיביות משמשות ב-EDM ומוזיקת דאנס כל הזמן.",
+      id: "add-harmony",
+      text: "צרו SEQUENCE שלישי בשם harmony עם תווים גבוהים יותר (כמו G4, B4, C5). הוסיפו אותו בתוך PLAY_TOGETHER.",
+      hint: "כתבו בלוק SEQUENCE חדש, ואז הוסיפו PLAY_SEQUENCE harmony בתוך בלוק ה-PLAY_TOGETHER.",
     },
     {
-      id: "zero-release",
-      text: "הגדירו את ה-release של הקריטה ל-0. התווים נחתכים מיד -- כמו גיטרה מושתקת!",
-      hint: "Release של 0 אומר שהצליל פשוט נעצר. נסו!",
+      id: "remove-together",
+      text: "הסירו את בלוק ה-PLAY_TOGETHER (השאירו את שורות ה-PLAY_SEQUENCE וה-PLAY_PATTERN). תשמעו את ההבדל!",
+      hint: "בלי PLAY_TOGETHER, כל חלק מתנגן אחד אחרי השני במקום באותו זמן. הבדל ענק!",
     },
   ],
 
   funFact:
-    "מעטפות ADSR הומצאו בשנות ה-60 לסינתיסייזרים הראשונים. לפני כן, סינתיסייזרים יכלו רק להוציא צליל BZZZZZ רציף אחד. ADSR הפך מוזיקה אלקטרונית לאקספרסיבית באמת!",
+    "בלהקה חיה, מוזיקאים מקשיבים אחד לשני ונשארים מסונכרנים בצורה טבעית. PLAY_TOGETHER הוא כמו מנצח דיגיטלי -- הוא אומר לכל כלי בדיוק מתי להתחיל כדי שכולם ינגנו בתזמון מושלם.",
 };
 
-export default lesson07;
+export default lesson07He;

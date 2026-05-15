@@ -1,140 +1,106 @@
 const lesson09 = {
   id: 9,
-  slug: "mega-riff",
-  title: "מגה ריף",
-  subtitle: "!בנו שיר אפי שלם",
-  phase: 4,
-  difficulty: 4,
-  goal: "צרו קומפוזיציה שלמה עם אינטרו, חלק ראשי וסיום!",
-  concepts: ["סידור שיר", "מבנה מוזיקלי", "שילוב כל הקונספטים"],
-  estimatedMinutes: 15,
+  slug: "power-chords",
+  title: "אקורדים חזקים",
+  subtitle: "נגנו כמה תווים בו-זמנית",
+  phase: 3,
+  difficulty: 2,
+  goal: "השתמשו בתחביר סוגריים כדי לנגן אקורדים ולבנות מהלכי אקורדים.",
+  concepts: ["אקורדים (תחביר סוגריים)", "שלישיות מז'ור ומינור", "מהלכי אקורדים"],
+  estimatedMinutes: 12,
 
   steps: [
     {
-      title: "חשבו כמו כותבי שירים",
-      content: `לכל שיר גדול יש מבנה:
+      title: "תו אחד זה בודד",
+      content: `עד עכשיו, כל פקודת PLAY מנגנת תו בודד. מנגינות זה מעולה, אבל מוזיקה אמיתית כוללת **הרמוניה** -- כמה תווים שמצלצלים באותו הזמן.
 
-1. **אינטרו** -- התחילו פשוט, קבעו אווירה
-2. **בנייה** -- הוסיפו עוד שכבות
-3. **חלק ראשי** -- הכל בעוצמה מלאה!
-4. **סיום** -- סגרו את העניין
-
-אתם כבר מכירים את כל הכלים. עכשיו בואו נשתמש בכולם ביחד!`,
+כשפורטים על גיטרה או לוחצים על כמה מקשי פסנתר ביחד, זה **אקורד**. אקורדים מוסיפים עושר ורגש מיידי. תו אחד מספר סיפור. שלושה תווים קובעים את כל האווירה.`,
     },
     {
-      title: "צליל משחק רטרו",
-      content: `נשתמש בגל SQUARE לוייב הקלאסי של משחקי וידאו 8-ביט, בתוספת תופים חזקים.
+      title: "תחביר הסוגריים",
+      content: `ב-JEM, יוצרים אקורד על ידי עטיפת תווים בסוגריים מרובעים:
 
-הסוד הוא ADSR קצר:
 \`\`\`
-ADSR 2 60 0 40
+PLAY pad [C4 E4 G4] 2
 \`\`\`
-כל תו קופץ ונעלם מיד. חד!`,
+
+כמו PLAY רגיל, אבל במקום תו אחד שמים **שניים או יותר** בתוך \`[ ]\`. כל התווים מתנגנים באותו הזמן לאותו אורך.
+
+אפשר לשים כמה תווים שרוצים, אבל 3-4 תווים בדרך כלל נשמע הכי טוב. יותר מזה יכול להפוך לבלגן.`,
     },
     {
-      title: "סדרו את הכל",
-      content: `הנה המבנה:
+      title: "מז'ור מול מינור",
+      content: `שני סוגי אקורדים שתשמעו בכל מקום:
 
+**דו מז'ור** (שמח, בהיר):
 \`\`\`
-# Intro -- רק מנגינה
-LOOP 2:
-    PLAY_SEQUENCE main_riff
-
-# Full section -- מנגינה + תופים
-LOOP 4:
-    PLAY_SEQUENCE main_riff
-    PLAY_PATTERN drums
-
-# Ending
-PLAY_SEQUENCE ending
+PLAY pad [C4 E4 G4] 2
 \`\`\`
 
-אינטרו נותן לכם לשמוע את המנגינה קודם. אחר כך תופים נכנסים. סיום עוטף הכל. לחצו Play ותהנו מהיצירה!`,
+**דו מינור** (עצוב, כהה):
+\`\`\`
+PLAY pad [C4 Eb4 G4] 2
+\`\`\`
+
+ההבדל היחיד? התו האמצעי ירד בחצי טון (E הפך ל-Eb). השינוי הזעיר הזה הופך את כל התחושה. מז'ור = שמש. מינור = גשם.`,
+    },
+    {
+      title: "מהלכי אקורדים",
+      content: `**מהלך אקורדים** הוא רצף של אקורדים שמתנגנים אחד אחרי השני. זה השלד הרגשי של השיר.
+
+המהלך הקלאסי **I-V-vi-IV** (דו, סול, לה מינור, פה) מופיע באלפי שירי פופ:
+
+\`\`\`
+PLAY pad [C4 E4 G4] 2
+PLAY pad [G3 B3 D4] 2
+PLAY pad [A3 C4 E4] 2
+PLAY pad [F3 A3 C4] 2
+\`\`\`
+
+לחצו Play כדי לשמוע את המהלך הזה. כנראה תזהו את הצליל -- הוא בכל מקום במוזיקת פופ!`,
     },
   ],
 
-  code: `# Mega Riff
-# An epic retro game-style song!
+  code: `# Power Chords
+# מהלך אקורדים קלאסי עם תחביר סוגריים
 
-BPM 120
-AUDIO_RATE 16384
+BPM 100
 
-INSTRUMENT lead:
+INSTRUMENT pad:
     TYPE SYNTH
-    WAVE SQUARE
-    ADSR 2 60 0 40
+    WAVE SAW
+    ADSR 50 100 300 200
     VOLUME 180
 
-INSTRUMENT kick:
-    TYPE DRUM
-    WAVE SIN
-    FREQ 55
-    DECAY 100
-    VOLUME 255
+SEQUENCE progression:
+    PLAY pad [C4 E4 G4] 2
+    PLAY pad [A3 C4 E4] 2
+    PLAY pad [F3 A3 C4] 2
+    PLAY pad [G3 B3 D4] 2
 
-INSTRUMENT snare:
-    TYPE DRUM
-    WAVE NOISE
-    FREQ 900
-    DECAY 50
-    VOLUME 170
-
-SEQUENCE main_riff:
-    PLAY lead D4 0.25
-    PLAY lead D4 0.25
-    REST 0.25
-    PLAY lead D5 0.25
-    REST 0.25
-    PLAY lead A4 0.5
-    PLAY lead G#4 0.25
-    PLAY lead G4 0.5
-    PLAY lead F4 0.25
-    REST 0.25
-
-SEQUENCE ending:
-    PLAY lead D4 0.5
-    PLAY lead F4 0.25
-    PLAY lead G4 0.75
-
-PATTERN drums:
-    BEAT 1: kick
-    BEAT 2: snare
-    BEAT 3: kick
-    BEAT 4: snare
-
-# Intro -- lead alone
 LOOP 2:
-    PLAY_SEQUENCE main_riff
-
-# Full section -- lead + drums
-LOOP 4:
-    PLAY_SEQUENCE main_riff
-    PLAY_PATTERN drums
-    PLAY_SEQUENCE ending
-
-# Final hit
-PLAY_SEQUENCE ending`,
+    PLAY_SEQUENCE progression`,
 
   challenges: [
     {
-      id: "add-bass",
-      text: "הוסיפו כלי בס (גל SAW, תווים כמו D2 ו-A2) שמנגן מתחת לריף הראשי!",
-      hint: "שמרו על הבס פשוט -- רק 2-3 תווים ארוכים ונמוכים. הוא הבסיס, לא הכוכב!",
+      id: "all-minor",
+      text: "שנו את כל ארבעת האקורדים למינור: [C4 Eb4 G4], [A3 C4 E4], [F3 Ab3 C4], [G3 Bb3 D4]. איך מצב הרוח משתנה?",
+      hint: "אקורדי מינור מורידים את התו האמצעי בחצי טון. Eb זה מי-במול, Ab זה לה-במול, Bb זה סי-במול. הכל יישמע כהה ומהורהר יותר.",
     },
     {
-      id: "vary-ending",
-      text: "הפכו את הסיום ליותר דרמטי! נסו תו גבוה כמו D6 מוחזק ל-2 פעימות.",
-      hint: "לסיים על תו גבוה וארוך מרגיש כמו mic drop!",
+      id: "slow-pad",
+      text: "שנו את ה-ADSR ל-300 100 400 500 ואת ה-WAVE ל-SIN לצליל חלומי וחללי.",
+      hint: "התקפה ארוכה אומרת שהאקורדים נכנסים לאט. שחרור ארוך אומר שהם נשארים. גל SIN הוא הכי חלק וטהור.",
     },
     {
-      id: "longer-form",
-      text: "הוסיפו 'גשר' בין החלק הראשי לסיום עם תווים שונים לגמרי.",
-      hint: "גשר הוא חלק מפתיע ששומר על השיר ממשעמם!",
+      id: "add-melody",
+      text: "הוסיפו כלי נגינה שני (WAVE TRIANGLE) וכתבו מנגינה של תווים בודדים שמתנגנת מעל האקורדים.",
+      hint: "צרו INSTRUMENT ו-SEQUENCE חדשים עם תווים בודדים כמו E4, G4, A4. שימו את שני ה-PLAY_SEQUENCE בתוך ה-LOOP. מנגינה + אקורדים = שיר אמיתי!",
     },
   ],
 
   funFact:
-    "המנגינה הזו בהשראת Megalovania מ-Undertale! טובי פוקס הוכיח שגלי SQUARE פשוטים והלחנה חכמה יכולים ליצור משהו אגדי. אתם משתמשים בדיוק באותם כלים!",
+    "מהלך האקורדים I-vi-IV-V שימש במאות שירי פופ, מ-\"Stand By Me\" של בן אי. קינג ועד להיטים מודרניים. כותבי שירים קוראים לזה \"שיר ארבעת האקורדים\" כי אותם ארבעה אקורדים פשוט ממשיכים לעבוד.",
 };
 
 export default lesson09;

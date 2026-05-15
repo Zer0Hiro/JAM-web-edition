@@ -23,7 +23,28 @@ function playTone(freq, waveType = "sine", durationMs = 400, volumeScale = 1) {
   const dur = durationMs / 1000;
 
   let source;
-  if (waveType === "pluck") {
+  if (waveType === "handpan") {
+    const bufLen = Math.round(ctx.sampleRate * (dur + 0.1));
+    const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+    const data = buf.getChannelData(0);
+    const decayS = dur * 0.8;
+    const octDecayS = decayS * 0.6;
+    const fifDecayS = decayS * 0.35;
+    const noiseDurS = 0.012;
+    for (let i = 0; i < bufLen; i++) {
+      const t = i / ctx.sampleRate;
+      const s1 = Math.sin(2 * Math.PI * freq * t);
+      const s2 = Math.sin(2 * Math.PI * freq * 2 * t);
+      const s3 = Math.sin(2 * Math.PI * freq * 3 * t);
+      const a1 = Math.exp(-t / decayS);
+      const a2 = t < octDecayS ? 0.6 * (1 - t / octDecayS) : 0;
+      const a3 = t < fifDecayS ? 0.3 * (1 - t / fifDecayS) : 0;
+      const a4 = t < noiseDurS ? 0.15 * (Math.random() * 2 - 1) : 0;
+      data[i] = s1 * a1 + s2 * a2 + s3 * a3 + a4;
+    }
+    source = ctx.createBufferSource();
+    source.buffer = buf;
+  } else if (waveType === "pluck") {
     const bufLen = ctx.sampleRate * (dur + 0.1);
     const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
     const data = buf.getChannelData(0);
@@ -109,8 +130,8 @@ const OCTAVE_COLORS = [
 // Wave data
 // ---------------------------------------------------------------------------
 
-const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck"];
-const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK"];
+const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck", "handpan"];
+const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK", "HANDPAN"];
 const WAVE_COLORS = [
   { color: "#00f0ff", glow: "rgba(0,240,255,0.4)", border: "rgba(0,240,255,0.5)", bg: "rgba(0,240,255,0.08)" },
   { color: "#ff00aa", glow: "rgba(255,0,170,0.4)", border: "rgba(255,0,170,0.5)", bg: "rgba(255,0,170,0.08)" },
@@ -118,6 +139,7 @@ const WAVE_COLORS = [
   { color: "#8b5cf6", glow: "rgba(139,92,246,0.4)", border: "rgba(139,92,246,0.5)", bg: "rgba(139,92,246,0.08)" },
   { color: "#22d3ee", glow: "rgba(34,211,238,0.4)", border: "rgba(34,211,238,0.5)", bg: "rgba(34,211,238,0.08)" },
   { color: "#eab308", glow: "rgba(234,179,8,0.4)", border: "rgba(234,179,8,0.5)", bg: "rgba(234,179,8,0.08)" },
+  { color: "#10b981", glow: "rgba(16,185,129,0.4)", border: "rgba(16,185,129,0.5)", bg: "rgba(16,185,129,0.08)" },
 ];
 
 const WAVE_POINTS_FNS = [
@@ -196,6 +218,22 @@ const WAVE_POINTS_FNS = [
       const envelope = Math.exp(-t * 4);
       const osc = Math.sin(t * Math.PI * 16) * 0.6 + (rand() - 0.5) * 0.4;
       const y = h / 2 - osc * envelope * (h / 2.5);
+      pts.push(`${x},${y}`);
+    }
+    return pts.join(" ");
+  },
+  // handpan (fundamental + octave + fifth, all decaying)
+  (w, h) => {
+    const pts = [];
+    for (let x = 0; x <= w; x += 2) {
+      const t = x / w;
+      const e1 = Math.exp(-t * 2.5);
+      const e2 = Math.exp(-t * 5) * 0.6;
+      const e3 = Math.exp(-t * 8) * 0.3;
+      const s = Math.sin(t * Math.PI * 8) * e1
+              + Math.sin(t * Math.PI * 16) * e2
+              + Math.sin(t * Math.PI * 24) * e3;
+      const y = h / 2 - s * (h / 3);
       pts.push(`${x},${y}`);
     }
     return pts.join(" ");

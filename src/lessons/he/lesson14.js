@@ -1,81 +1,85 @@
 const lesson14 = {
   id: 14,
-  slug: "echo-and-reverb",
-  title: "חדר הדים",
-  subtitle: "הוסיפו עומק עם ריוורב ודיליי",
-  phase: 5,
-  difficulty: 4,
-  goal: "השתמשו ב-REVERB וב-DELAY כדי להוסיף מרחב והדים לכלים שלכם.",
-  concepts: ["ריוורב", "דיליי/הד", "פידבק", "יבש/רטוב"],
-  estimatedMinutes: 12,
+  slug: "stereo-space",
+  title: "מרחב סטריאו",
+  subtitle: "מקמו כלים משמאל, מימין ובמרכז",
+  phase: 4,
+  difficulty: 3,
+  goal: "השתמשו ב-PAN כדי למקם כל כלי בשדה הסטריאו, ולפרוס את הלהקה בין הרמקולים.",
+  concepts: ["פאנינג סטריאו", "PAN", "שמאל/מרכז/ימין"],
+  estimatedMinutes: 10,
 
   steps: [
     {
-      title: "מה זה ריוורב?",
-      content: `**ריוורב** מדמה צליל שקופץ מהקירות בחדר. חדר קטן יוצר ריוורב קצר, קתדרלה יוצרת ריוורב ארוך.
+      title: "מה זה פאנינג?",
+      content: `שימו אוזניות. חלק מהצלילים מגיעים מהאוזן השמאלית, חלק מהימנית, וחלק יושבים בדיוק באמצע. המיקום הזה נקרא **פאנינג**.
 
-ב-JEM, הוסיפו REVERB (0-255) לכלי:
-
-\`\`\`
-INSTRUMENT pad:
-    TYPE SYNTH
-    WAVE SAW
-    REVERB 180
-    VOLUME 200
-\`\`\`
-
-0 = יבש לגמרי (ללא ריוורב), 255 = ריוורב מקסימלי (מערה ענקית).`,
+זה כמו לסדר להקה על הבמה. המתופף יושב במרכז, הגיטריסט עומד משמאל, הקלידן מימין. לכל נגן יש מקום משלו כדי שהצליל לא ייערם במקום אחד.`,
     },
     {
-      title: "DELAY יוצר הדים",
-      content: `**DELAY** חוזר על הצליל אחרי זמן מוגדר. שולטים בשני דברים:
-- **זמן** באלפיות שנייה (כמה זמן עד ההד)
-- **פידבק** 0-255 (כמה פעמים חוזר)
+      title: "ערכי PAN",
+      content: `הוסיפו PAN לכלי כדי למקם אותו בשדה הסטריאו:
 
 \`\`\`
 INSTRUMENT lead:
     TYPE SYNTH
-    WAVE TRIANGLE
-    DELAY 300 150
+    WAVE SAW
+    PAN 200
     VOLUME 180
 \`\`\`
 
-הד כל 300ms עם פידבק בינוני. פידבק גבוה = יותר חזרות!`,
+המספר הולך מ-0 עד 255:
+- **PAN 0** = שמאל קיצוני (רק אוזן שמאלית)
+- **PAN 127** = מרכז (שתי האוזניים שווה) -- זו ברירת המחדל
+- **PAN 255** = ימין קיצוני (רק אוזן ימנית)
+
+כל מספר ביניהם שם את הצליל איפשהו בין שמאל לימין.`,
     },
     {
-      title: "שילוב ריוורב ודיליי",
-      content: `אפשר להשתמש בשניהם על אותו כלי לצליל עשיר ומרווח:
+      title: "פרשו את הלהקה",
+      content: `מיקס טוב נותן לכל כלי מקום משלו:
 
-\`\`\`
-INSTRUMENT pad:
-    TYPE SYNTH
-    WAVE SAW
-    REVERB 120
-    DELAY 400 100
-    VOLUME 160
-\`\`\`
+- **באס וקיק**: PAN 127 (מרכז) -- צלילים נמוכים עובדים הכי טוב באמצע
+- **מנגינה ראשית**: PAN 180 (קצת ימינה) -- בולט בלי להיות קיצוני
+- **קצב/אקורדים**: PAN 70 (קצת שמאלה) -- מאזן את המנגינה
+- **היי-האט**: PAN 160 (קצת ימינה) -- מוסיף רוחב לתופים
 
-הריוורב מוסיף אווירת חדר בעוד שהדיליי יוצר הדים קצביים. נסו את הקוד ושמעו את ההבדל בין הלידה היבשה לפאד הרטוב!`,
+כשלכל כלי יש מקום משלו, כל המיקס נשמע רחב ונקי יותר.`,
+    },
+    {
+      title: "שימו אוזניות!",
+      content: `PAN עובד רק עם אוזניות או רמקולים סטריאו (שני רמקולים נפרדים, שמאל וימין).
+
+אם אתם מקשיבים דרך רמקול יחיד של טלפון או רמקול מונו, לא תשמעו שום הבדל. הצליל פשוט יוצא מנקודה אחת.
+
+לשיעור הזה, אוזניות זה הדרך. תשמעו את הכלים מתפרסים מסביב לראש!`,
     },
   ],
 
-  code: `# חדר הדים -- אפקטי ריוורב ודיליי
-# הוסיפו מרחב והדים לצליל
+  code: `# מרחב סטריאו
+# מיקום כלים בין שמאל לימין עם PAN
 
-BPM 100
+BPM 120
+
+INSTRUMENT bass:
+    TYPE SYNTH
+    WAVE SAW
+    PAN 127
+    ADSR 5 40 300 120
+    VOLUME 220
 
 INSTRUMENT lead:
     TYPE SYNTH
     WAVE TRIANGLE
+    PAN 200
     ADSR 10 30 200 100
-    DELAY 300 150
     VOLUME 180
 
-INSTRUMENT pad:
+INSTRUMENT rhythm:
     TYPE SYNTH
-    WAVE SAW
-    ADSR 200 100 400 300
-    REVERB 180
+    WAVE SQUARE
+    PAN 60
+    ADSR 5 60 150 80
     VOLUME 140
 
 INSTRUMENT kick:
@@ -83,48 +87,61 @@ INSTRUMENT kick:
     WAVE SIN
     FREQ 55
     DECAY 100
-    VOLUME 240
+    PAN 127
+    VOLUME 255
 
-SEQUENCE lead_melody:
+SEQUENCE bassline:
+    PLAY bass C2 1
+    PLAY bass C2 0.5
+    PLAY bass G2 0.5
+    PLAY bass F2 1
+    PLAY bass F2 1
+
+SEQUENCE melody:
     PLAY lead E4 0.5
     PLAY lead G4 0.5
-    REST 0.5
-    PLAY lead A4 0.5
-    PLAY lead G4 1
+    PLAY lead A4 1
+    PLAY lead G4 0.5
+    PLAY lead E4 0.5
+    PLAY lead D4 1
 
-SEQUENCE pad_chords:
-    PLAY pad [C3 E3 G3] 4
+SEQUENCE chords:
+    PLAY rhythm [C4 E4 G4] 2
+    PLAY rhythm [F3 A3 C4] 2
 
 PATTERN beat:
     BEAT 1: kick
+    BEAT 2.5: kick
     BEAT 3: kick
+    BEAT 4: kick
 
 LOOP 2:
     PLAY_TOGETHER:
-        PLAY_SEQUENCE lead_melody
-        PLAY_SEQUENCE pad_chords
+        PLAY_SEQUENCE bassline
+        PLAY_SEQUENCE melody
+        PLAY_SEQUENCE chords
         PLAY_PATTERN beat`,
 
   challenges: [
     {
-      id: "long-delay",
-      text: "שנו את הדיליי ל-500ms עם פידבק גבוה (220). ספרו את ההדים -- כמה שומעים?",
-      hint: "שנו DELAY 300 150 ל-DELAY 500 220 בכלי הלידה.",
+      id: "swap-sides",
+      text: "החליפו את ערכי ה-PAN של lead ו-rhythm. עכשיו המנגינה מגיעה משמאל והאקורדים מימין. מרגיש שונה?",
+      hint: "שנו PAN 200 של lead ל-PAN 60, ו-PAN 60 של rhythm ל-PAN 200.",
     },
     {
-      id: "reverb-kick",
-      text: "הוסיפו REVERB 100 לקיק. האם תוף עם ריוורב נשמע כאילו הוא בחדר גדול?",
-      hint: "הוסיפו שורת REVERB 100 בתוך בלוק ה-INSTRUMENT של הקיק.",
+      id: "extreme-pan",
+      text: "הגדירו את ה-lead ל-PAN 0 (שמאל קיצוני) ואת rhythm ל-PAN 255 (ימין קיצוני). דרמטי -- כאילו הכלים בחדרים נפרדים!",
+      hint: "שנו PAN של lead ל-0 ו-PAN של rhythm ל-255.",
     },
     {
-      id: "dry-vs-wet",
-      text: "הסירו את כל אפקטי REVERB ו-DELAY. השוו את הגרסה היבשה למקורית -- מה נשמע יותר טוב?",
-      hint: "מחקו או סמנו כהערה את שורות REVERB ו-DELAY מכל הכלים.",
+      id: "mono-compare",
+      text: "הגדירו את כל הכלים ל-PAN 127 (מרכז). עכשיו הכל מונו. השוו עם הגרסה הסטריאו -- שמעו כמה יותר רחב המיקס עם פאנינג?",
+      hint: "שנו את כל ערכי ה-PAN ל-127 בכל הכלים.",
     },
   ],
 
   funFact:
-    "הריוורב המלאכותי הראשון נוצר בשנות ה-40 על ידי השמעת מוזיקה דרך רמקול בחדר אמבטיה מרוצף והקלטתה עם מיקרופון! מאוחר יותר, אולפנים השתמשו בלוחות מתכת וקפיצים ליצירת ריוורב.",
+    "המיקסים הסטריאו המוקדמים של הביטלס השתמשו ב'פאנינג קיצוני' -- כל השירה ברמקול אחד, כל הכלים בשני. זה נשמע פרוע באוזניות! מיקסים מודרניים הרבה יותר עדינים, עם פיזור שווה.",
 };
 
 export default lesson14;

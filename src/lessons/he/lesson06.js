@@ -1,31 +1,31 @@
-const lesson06 = {
+const lesson06He = {
   id: 6,
-  slug: "loop-it",
-  title: "!לולאה",
-  subtitle: "חזרו ובנו את השיר",
+  slug: "loop-machine",
+  title: "מכונת לולאות",
+  subtitle: "חזרו, שכבו ובנו מבנה שיר",
   phase: 2,
   difficulty: 2,
-  goal: "השתמשו ב-LOOP כדי לחזור על מוזיקה ולבנות שיר עם חלקים שונים.",
-  concepts: ["חזרת LOOP", "מבנה שיר", "שכבות SEQUENCE ו-PATTERN"],
+  goal: "השתמשו ב-LOOP כדי לחזור על חלקים ולבנות מיני-שיר עם מבנה.",
+  concepts: ["חזרת LOOP", "לולאות מקוננות", "מבנה שיר"],
   estimatedMinutes: 12,
 
   steps: [
     {
       title: "למה לחזור?",
-      content: `כל שיר שאתם מכירים בנוי מחלקים שחוזרים. הפזמון חוזר, הביט ממשיך.
+      content: `כל המוזיקה חוזרת. פזמון, בית, פזמון. הביט ממשיך. זה מה שעושה שירים קליטים.
 
-LOOP גורם לדברים לחזור:
+LOOP גורם לדברים לחזור בלי copy-paste:
 
 \`\`\`
 LOOP 4:
     PLAY_SEQUENCE melody
 \`\`\`
 
-זה מנגן "melody" ארבע פעמים. בלי LOOP, הייתם צריכים להעתיק-להדביק הכל. בלאגן!`,
+זה מנגן את "melody" ארבע פעמים ברצף. המספר אחרי LOOP הוא כמה פעמים. כל מה שמוזח מתחת חוזר.`,
     },
     {
       title: "לולאה על כמה דברים",
-      content: `שימו כמה דברים בתוך LOOP אחד:
+      content: `אפשר לשים סיקוונסים ותבניות בתוך LOOP אחד. הם מתנגנים אחד אחרי השני, ואז כל הבלוק חוזר:
 
 \`\`\`
 LOOP 4:
@@ -33,32 +33,45 @@ LOOP 4:
     PLAY_PATTERN drums
 \`\`\`
 
-כל פעם: melody מתנגן, אחר כך drums. ככה בונים חלק בשיר!`,
+כל פעם: melody מתנגן, אחר כך drums מתנגן, ואז חוזרים להתחלה. ככה בונים חלק בשיר!`,
+    },
+    {
+      title: "לולאות מקוננות",
+      content: `אפשר לשים LOOP בתוך LOOP. כמו בובת מטריושקה.
+
+\`\`\`
+LOOP 2:
+    LOOP 4:
+        PLAY_SEQUENCE riff
+    PLAY_PATTERN drums
+\`\`\`
+
+הלולאה הפנימית רצה 4 פעמים כל פעם שהלולאה החיצונית מתקתקת פעם אחת. אז "riff" מתנגן 4 פעמים, אחר כך "drums" פעם אחת, ואז הכל חוזר. סך הכל: riff מתנגן 8 פעמים, drums מתנגן פעמיים.`,
     },
     {
       title: "בנו מיני-שיר",
-      content: `השתמשו ב-LOOP שונים לחלקים שונים:
+      content: `לשירים אמיתיים יש חלקים -- אינטרו, בית, פזמון, סיום. השתמשו ב-LOOP שונים לכל חלק:
 
 \`\`\`
 # Intro -- רק מנגינה
 LOOP 2:
     PLAY_SEQUENCE melody
 
-# Main part -- מנגינה + תופים
+# Main -- מנגינה + תופים
 LOOP 4:
     PLAY_SEQUENCE melody
-    PLAY_PATTERN drums
+    PLAY_PATTERN beat
 
-# Ending
+# Ending -- מנגינה פעם אחת
 PLAY_SEQUENCE melody
 \`\`\`
 
-עכשיו לשיר שלכם יש התחלה, אמצע וסוף!`,
+עכשיו למוזיקה שלכם יש התחלה, אמצע וסוף. לחצו Play כדי לשמוע את המבנה המלא!`,
     },
   ],
 
-  code: `# Loop It!
-# A melody that builds up when drums join in.
+  code: `# Loop Machine
+# מנגינה שמתעצמת כשתופים מצטרפים
 
 BPM 120
 
@@ -92,15 +105,15 @@ SEQUENCE melody:
 
 PATTERN beat:
     BEAT 1: kick
-    BEAT 3: kick
     BEAT 2: snare
+    BEAT 3: kick
     BEAT 4: snare
 
-# Intro -- melody alone
+# Intro -- מנגינה לבד
 LOOP 2:
     PLAY_SEQUENCE melody
 
-# Main section -- melody + drums
+# Main -- מנגינה + תופים
 LOOP 4:
     PLAY_SEQUENCE melody
     PLAY_PATTERN beat
@@ -111,23 +124,23 @@ PLAY_SEQUENCE melody`,
   challenges: [
     {
       id: "more-loops",
-      text: "שנו את החלק הראשי ל-LOOP 8. זה נהיה היפנוטי!",
-      hint: "מוזיקה אלקטרונית חוזרת לעתים על אותו דבר 8 או 16 פעמים. זה שם אתכם בגרוב!",
+      text: "שנו את החלק הראשי ל-LOOP 8. מרגיש יותר היפנוטי?",
+      hint: "מוזיקה אלקטרונית חוזרת לפעמים על אותו דבר 8 או 16 פעמים. חזרה שמה אתכם בגרוב!",
     },
     {
       id: "add-hat",
-      text: "הוסיפו כלי היי-האט ושימו אותו על כל 4 הביטים ב-PATTERN.",
-      hint: "השתמשו ב-TYPE DRUM, WAVE NOISE, FREQ 800, DECAY 30. ואז הוסיפו שורות BEAT 1/2/3/4 hat!",
+      text: "הוסיפו כלי היי-האט (TYPE DRUM, WAVE NOISE, FREQ 800, DECAY 30) ושימו אותו על כל 4 הביטים בתבנית.",
+      hint: "הוסיפו BEAT 1: hat, BEAT 2: hat, BEAT 3: hat, BEAT 4: hat לתבנית. אנרגיה מיידית!",
     },
     {
       id: "second-melody",
-      text: "צרו SEQUENCE שני בשם melody2 עם תווים שונים. נגנו אותו אחרי החלק הראשי!",
-      hint: "צרו בלוק SEQUENCE חדש, ואז הוסיפו PLAY_SEQUENCE melody2 איפשהו בסידור.",
+      text: "צרו SEQUENCE שני בשם melody2 עם תווים אחרים. נגנו אותו אחרי החלק הראשי בתור אאוטרו!",
+      hint: "צרו בלוק SEQUENCE חדש עם תווים חדשים, ואז הוסיפו PLAY_SEQUENCE melody2 בסוף הסידור.",
     },
   ],
 
   funFact:
-    "הרעיון של לולאות במוזיקה הומצא ב-1948 על ידי בחור שממש חתך סרט מגנטי לעיגולים שניגנו לנצח. היום, לולאות הן אבני הבניין של כמעט כל המוזיקה האלקטרונית!",
+    "הרעיון של לולאות במוזיקה הומצא ב-1948 כשבחור פשוט חתך סרט מגנטי לעיגולים שניגנו לנצח. היום, לולאות הן אבני הבניין של כמעט כל המוזיקה האלקטרונית.",
 };
 
-export default lesson06;
+export default lesson06He;
