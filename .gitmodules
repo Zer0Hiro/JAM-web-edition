@@ -1,0 +1,3 @@
+[submodule "jamDsl"]
+	path = jamDsl
+	url = https://github.com/Zer0Hiro/JAM-DSL-Compiler
