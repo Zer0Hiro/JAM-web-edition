@@ -104,7 +104,7 @@ class WavPlayer {
   stop() {
     this._stopTracking();
     if (this.source) {
-      try { this.source.stop(); } catch {}
+      try { this.source.stop(); } catch { }
       this.source = null;
     }
     if (this.ctx && this.ctx.state !== "closed") {
@@ -223,8 +223,8 @@ export default function CodeEditor({
       } else if (data.error) {
         setError(friendlyError(data.error, t));
       }
-    } catch {
-      setError(t.editor.serverUnavailable || "Server unavailable. Start the backend with: python3 server/app.py");
+    } catch (err) {
+      setError("Backend unreachable: " + err.message);
     } finally {
       setIsLoadingPlay(false);
     }
@@ -285,7 +285,7 @@ export default function CodeEditor({
         setError(friendlyError(data.error, t));
       }
     } catch {
-      setCompileResult({ type: "info", message: t.editor.compileOffline });
+      setCompileResult({ type: "info", message: "Backend unreachable: " + err.message });
     } finally {
       setIsCompiling(false);
     }
@@ -317,14 +317,13 @@ export default function CodeEditor({
             sketch.jam
           </span>
           {uploadStatus && (
-            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${
-              uploadStatus === "uploading" ? "bg-yellow-500/20 text-yellow-300" :
+            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${uploadStatus === "uploading" ? "bg-yellow-500/20 text-yellow-300" :
               uploadStatus === "success" ? "bg-green-500/20 text-green-300" :
-              "bg-red-500/20 text-red-300"
-            }`}>
+                "bg-red-500/20 text-red-300"
+              }`}>
               {uploadStatus === "uploading" ? <Loader2 size={10} className="animate-spin" /> :
-               uploadStatus === "success" ? <Check size={10} /> :
-               <AlertTriangle size={10} />}
+                uploadStatus === "success" ? <Check size={10} /> :
+                  <AlertTriangle size={10} />}
               <Cpu size={10} />
               <span>{uploadMessage}</span>
             </div>
@@ -431,9 +430,9 @@ export default function CodeEditor({
                       className={`w-full text-left px-3 py-1.5 text-sm cursor-pointer border-0
                                   hover:bg-[var(--color-bg-secondary)] transition-colors
                                   ${selectedBoard === b.id
-                                    ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
-                                    : "text-[var(--color-text-secondary)]"
-                                  }`}
+                          ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
+                          : "text-[var(--color-text-secondary)]"
+                        }`}
                     >
                       {b.label}
                     </button>
@@ -450,9 +449,9 @@ export default function CodeEditor({
                             className={`w-full text-left px-3 py-1 text-sm cursor-pointer border-0
                                         hover:bg-[var(--color-bg-secondary)] transition-colors
                                         ${selectedPin === pin
-                                          ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
-                                          : "text-[var(--color-text-secondary)]"
-                                        }`}
+                                ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
+                                : "text-[var(--color-text-secondary)]"
+                              }`}
                           >
                             GPIO {pin}
                           </button>
@@ -472,9 +471,9 @@ export default function CodeEditor({
             className={`flex items-center gap-1.5 px-4 h-8 text-sm rounded-lg font-semibold
                        transition-all cursor-pointer border-0 disabled:opacity-50
                        ${isPlaying
-                         ? "bg-red-500 text-white hover:bg-red-600"
-                         : "bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)] hover:opacity-90"
-                       }`}
+                ? "bg-red-500 text-white hover:bg-red-600"
+                : "bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)] hover:opacity-90"
+              }`}
           >
             {isLoadingPlay && !isPlaying ? (
               <>
@@ -497,11 +496,10 @@ export default function CodeEditor({
       {(isPlaying || isLoadingPlay) && (
         <div className="h-1 bg-[var(--color-bg-secondary)]">
           <div
-            className={`h-full transition-all duration-100 ${
-              isLoadingPlay && !isPlaying
-                ? "bg-[var(--color-accent-cyan)] animate-pulse w-full"
-                : "bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)]"
-            }`}
+            className={`h-full transition-all duration-100 ${isLoadingPlay && !isPlaying
+              ? "bg-[var(--color-accent-cyan)] animate-pulse w-full"
+              : "bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)]"
+              }`}
             style={isPlaying ? { width: `${progress * 100}%` } : undefined}
           />
         </div>
@@ -538,11 +536,10 @@ export default function CodeEditor({
 
       {compileResult && (
         <div
-          className={`px-4 py-3 border-t text-sm ${
-            compileResult.type === "success"
-              ? "bg-green-950/50 border-green-500/30 text-green-300"
-              : "bg-blue-950/50 border-blue-500/30 text-blue-300"
-          }`}
+          className={`px-4 py-3 border-t text-sm ${compileResult.type === "success"
+            ? "bg-green-950/50 border-green-500/30 text-green-300"
+            : "bg-blue-950/50 border-blue-500/30 text-blue-300"
+            }`}
         >
           {compileResult.message}
         </div>
