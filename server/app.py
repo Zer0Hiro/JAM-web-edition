@@ -31,8 +31,10 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
-
+CORS(app, origins=[
+    "https://jam-web-edition.vercel.app/",
+    "http://localhost:5173"
+])
 try:
     from server.jamai_chat_routes import jamai_chat_bp
 except ImportError:
