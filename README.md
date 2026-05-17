@@ -23,7 +23,7 @@ More about [JAM DSL compiler](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 - **Dynamic BPM/VOLUME automation** for mid-song tempo and volume changes
 - **C++ viewer** to inspect generated Mozzi 2.0 code
 - **WAV download** for offline listening
-- **17 interactive lessons** teaching sound synthesis from scratch (EN + HE)
+- **Interactive lessons** teaching sound synthesis from scratch (EN + HE)
 - **Sandbox mode** for free experimentation
 - **JAMai chat assistant** for guided learning (RAG-based)
 - **i18n** support (English, Hebrew)
