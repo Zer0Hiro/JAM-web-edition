@@ -223,27 +223,8 @@ export default function CodeEditor({
       } else if (data.error) {
         setError(friendlyError(data.error, t));
       }
-    } catch (pyErr) {
-      try {
-        const response = await fetch("/api/preview", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ source: code }),
-        });
-        const data = await response.json();
-
-        if (data.success && data.wav_b64) {
-          setWavData(data.wav_b64);
-          playWavFromBase64(data.wav_b64);
-          if (data.warnings && data.warnings.length > 0) {
-            setWarnings(data.warnings);
-          }
-        } else if (data.error) {
-          setError(friendlyError(data.error, t));
-        }
-      } catch (fetchErr) {
-        setError("Compiler unavailable: " + pyErr.message);
-      }
+    } catch (err) {
+      setError("Compiler unavailable: " + err.message);
     } finally {
       setIsLoadingPlay(false);
     }
@@ -298,34 +279,8 @@ export default function CodeEditor({
       } else {
         setError(friendlyError(data.error, t));
       }
-    } catch (pyErr) {
-      try {
-        const response = await fetch("/api/compile", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ source: code }),
-        });
-        const data = await response.json();
-
-        if (data.success) {
-          setCompileResult({ type: "success", message: t.editor.compileSuccess });
-          if (data.cpp) {
-            setCppCode(data.cpp);
-            setShowCpp(true);
-          }
-          if (data.wav_b64) {
-            setWavData(data.wav_b64);
-            playWavFromBase64(data.wav_b64);
-          }
-          if (data.warnings && data.warnings.length > 0) {
-            setWarnings(data.warnings);
-          }
-        } else {
-          setError(friendlyError(data.error, t));
-        }
-      } catch (fetchErr) {
-        setCompileResult({ type: "info", message: "Compiler unavailable: " + pyErr.message });
-      }
+    } catch (err) {
+      setCompileResult({ type: "info", message: "Compiler unavailable: " + err.message });
     } finally {
       setIsCompiling(false);
     }

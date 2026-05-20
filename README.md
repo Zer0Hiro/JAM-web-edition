@@ -11,7 +11,7 @@ More about [JAM DSL compiler](https://github.com/Zer0Hiro/JAM-DSL-Compiler).
 ## Features
 
 - **Code editor** with JAM syntax highlighting (CodeMirror + oneDark theme)
-- **Browser playback** via WAV rendering (server-side) or Web Audio API (client-side fallback)
+- **Browser playback** via in-browser Python compiler (Pyodide/WASM) with server fallback
 - **ESP32 upload** with GPIO pin selector -- compile and flash directly from the browser
 - **Simultaneous multi-instrument playback** via PATTERN beat-grid notation
 - **Chords** with bracket notation `[C4 E4 G4]`
@@ -34,19 +34,21 @@ For the full JAM language syntax, see the [JAM Documentation](https://zer0hiro.g
 
 ```
 jamWeb/
+    public/
+        dsl/                  Python compiler modules (served to Pyodide)
     src/
         App.jsx               Main app with lesson navigation
         components/
             CodeEditor.jsx    Editor + toolbar (play, upload, compile)
             LessonView.jsx    Lesson renderer with steps and challenges
+            JAMai/            Chat assistant (local RAG)
         lessons/              Lesson content (EN)
         lessons/he/           Lesson content (HE)
         i18n/                 Translation strings
         utils/
-            jamParser.js      Client-side JEM parser
-            audioEngine.js    Web Audio API playback engine
+            pyodideCompiler.js  In-browser Python compiler via Pyodide/WASM
     server/
-        app.py                Flask backend (compile, preview, upload APIs)
+        app.py                Flask backend (upload + fallback APIs)
         jamDsl/               JAM DSL Compiler (git submodule)
         jamai_chat_routes.py  JAMai chat API endpoints
         jamai_rag.py          RAG knowledge retrieval
@@ -76,7 +78,11 @@ npm run dev
 
 Runs on `http://localhost:5173` with Vite HMR.
 
-### 3. Backend
+Play and Compile run entirely in the browser via Pyodide (Python-in-WASM). No backend needed for core features.
+
+### 3. Backend (optional)
+
+Only needed for ESP32 upload and JAMai chat assistant.
 
 ```bash
 pip install flask flask-cors
@@ -88,17 +94,21 @@ Runs on `http://localhost:5050`. Vite proxies `/api/*` to backend.
 ### ESP32 Upload
 
 Requires:
+- Backend server running
 - PlatformIO installed (`pip install platformio`)
 - ESP32 connected via USB
 - On WSL2: `usbipd-win` for USB passthrough, user in `dialout` group
 
-## API Endpoints
+## How It Works
+
+Compilation and WAV preview run client-side using [Pyodide](https://pyodide.org/) (Python compiled to WASM). On first use, the browser downloads the Pyodide runtime (~3.2MB, cached) and fetches the JAM compiler modules from `public/dsl/`. Subsequent compilations are instant with no network calls.
+
+## API Endpoints (server, optional)
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/compile` | POST | Compile JEM to C++ and WAV |
-| `/api/preview` | POST | Render JEM to WAV only |
 | `/api/upload` | POST | Compile + upload to ESP32 (accepts `pin` for GPIO selection) |
+| `/api/jamai/chat` | POST | RAG chat assistant |
 | `/api/health` | GET | Health check |
 
 ## Tech Stack
@@ -106,7 +116,8 @@ Requires:
 - React 18 + Vite
 - Tailwind CSS
 - CodeMirror 6
+- Pyodide (Python-in-WASM for client-side compilation)
 - Lucide icons
-- Flask (backend)
+- Flask (backend, optional for core features)
 - jamDsl compiler (Python)
 - Mozzi 2.0 (audio synthesis on hardware)
