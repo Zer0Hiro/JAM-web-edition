@@ -5,6 +5,7 @@ import { cpp } from "@codemirror/lang-cpp";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { Play, Square, Download, RotateCcw, Loader2, Code, ChevronDown, ChevronUp, FileAudio, Cpu, Check, AlertTriangle, Upload, MoreVertical } from "lucide-react";
 import { useLanguage } from "../i18n/context";
+import { previewJam, compileJam, initPyodide } from "../utils/pyodideCompiler";
 
 // ── Simple JEM syntax highlighting mode ─────────────────────────────────
 const jamLanguage = StreamLanguage.define({
@@ -144,6 +145,10 @@ export default function CodeEditor({
     setCode(initialCode);
   }, [initialCode]);
 
+  useEffect(() => {
+    initPyodide().catch(() => {});
+  }, []);
+
   const handleChange = useCallback(
     (val) => {
       setCode(val);
@@ -207,12 +212,7 @@ export default function CodeEditor({
     setIsLoadingPlay(true);
 
     try {
-      const response = await fetch("/api/preview", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source: code }),
-      });
-      const data = await response.json();
+      const data = await previewJam(code);
 
       if (data.success && data.wav_b64) {
         setWavData(data.wav_b64);
@@ -223,8 +223,27 @@ export default function CodeEditor({
       } else if (data.error) {
         setError(friendlyError(data.error, t));
       }
-    } catch (err) {
-      setError("Backend unreachable: " + err.message);
+    } catch (pyErr) {
+      try {
+        const response = await fetch("/api/preview", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ source: code }),
+        });
+        const data = await response.json();
+
+        if (data.success && data.wav_b64) {
+          setWavData(data.wav_b64);
+          playWavFromBase64(data.wav_b64);
+          if (data.warnings && data.warnings.length > 0) {
+            setWarnings(data.warnings);
+          }
+        } else if (data.error) {
+          setError(friendlyError(data.error, t));
+        }
+      } catch (fetchErr) {
+        setError("Compiler unavailable: " + pyErr.message);
+      }
     } finally {
       setIsLoadingPlay(false);
     }
@@ -261,12 +280,7 @@ export default function CodeEditor({
     setCompileResult(null);
 
     try {
-      const response = await fetch("/api/compile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ source: code }),
-      });
-      const data = await response.json();
+      const data = await compileJam(code);
 
       if (data.success) {
         setCompileResult({ type: "success", message: t.editor.compileSuccess });
@@ -284,8 +298,34 @@ export default function CodeEditor({
       } else {
         setError(friendlyError(data.error, t));
       }
-    } catch {
-      setCompileResult({ type: "info", message: "Backend unreachable: " + err.message });
+    } catch (pyErr) {
+      try {
+        const response = await fetch("/api/compile", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ source: code }),
+        });
+        const data = await response.json();
+
+        if (data.success) {
+          setCompileResult({ type: "success", message: t.editor.compileSuccess });
+          if (data.cpp) {
+            setCppCode(data.cpp);
+            setShowCpp(true);
+          }
+          if (data.wav_b64) {
+            setWavData(data.wav_b64);
+            playWavFromBase64(data.wav_b64);
+          }
+          if (data.warnings && data.warnings.length > 0) {
+            setWarnings(data.warnings);
+          }
+        } else {
+          setError(friendlyError(data.error, t));
+        }
+      } catch (fetchErr) {
+        setCompileResult({ type: "info", message: "Compiler unavailable: " + pyErr.message });
+      }
     } finally {
       setIsCompiling(false);
     }
