@@ -47,25 +47,23 @@ jamWeb/
             audioEngine.js    Web Audio API playback engine
     server/
         app.py                Flask backend (compile, preview, upload APIs)
+        jamDsl/               JAM DSL Compiler (git submodule)
         jamai_chat_routes.py  JAMai chat API endpoints
         jamai_rag.py          RAG knowledge retrieval
 ```
 
 ## Setup
 
-### 1. Clone both repos side by side
+### 1. Clone with submodules
 
 ```bash
-git clone https://github.com/Zer0Hiro/JAM-DSL-Compiler.git jamDsl
-git clone https://github.com/Zer0Hiro/JAM-web-edition jamWeb
+git clone --recursive https://github.com/Zer0Hiro/JAM-web-edition jamWeb
 ```
 
-The server expects `jamDsl` as a sibling directory:
+If already cloned without `--recursive`:
 
-```
-parent/
-    jamDsl/     <-- JAM DSL Compiler
-    jamWeb/     <-- this repo
+```bash
+git submodule update --init --recursive
 ```
 
 ### 2. Frontend
