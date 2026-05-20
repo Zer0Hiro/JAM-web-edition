@@ -23,7 +23,7 @@ import os
 from pathlib import Path
 
 # Add the jamDsl project to the Python path so we can import the compiler
-DSL_PATH = Path(__file__).resolve().parent.parent.parent / "jamDsl"
+DSL_PATH = Path(__file__).resolve().parent.parent / "jamDsl"
 if str(DSL_PATH) not in sys.path:
     sys.path.insert(0, str(DSL_PATH))
 
