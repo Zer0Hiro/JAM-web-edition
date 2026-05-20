@@ -95,6 +95,7 @@ const en = {
     reset: "Reset",
     compile: "Compile",
     play: "Play",
+    compiling: "Compiling...",
     stop: "Stop",
     oops: "Oops!",
     noInstrument: "You need at least one INSTRUMENT block. Check the lesson for an example!",

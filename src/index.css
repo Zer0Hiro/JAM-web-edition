@@ -141,6 +141,27 @@ body {
   animation: pulse-glow 2s ease-in-out infinite;
 }
 
+/* === Compiling button animation === */
+@keyframes compile-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+.btn-compiling {
+  background: linear-gradient(
+    135deg,
+    var(--color-accent-purple) 25%,
+    var(--color-accent-magenta) 25%,
+    var(--color-accent-magenta) 50%,
+    var(--color-accent-purple) 50%,
+    var(--color-accent-purple) 75%,
+    var(--color-accent-magenta) 75%
+  );
+  background-size: 40px 40px;
+  animation: compile-stripes 0.8s linear infinite;
+  color: white;
+  opacity: 1 !important;
+}
+
 /* === Fade-in animation === */
 @keyframes fade-in-up {
   from {

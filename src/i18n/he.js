@@ -95,6 +95,7 @@ const he = {
     reset: "איפוס",
     compile: "קמפול",
     play: "נגן",
+    compiling: "...מקמפל",
     stop: "עצור",
     oops: "!אופס",
     noInstrument: "צריך לפחות בלוק INSTRUMENT אחד. בדקו את השיעור לדוגמה!",

@@ -146,7 +146,7 @@ export default function CodeEditor({
   }, [initialCode]);
 
   useEffect(() => {
-    initPyodide().catch(() => {});
+    try { initPyodide(); } catch { /* worker init is best-effort */ }
   }, []);
 
   const handleChange = useCallback(
@@ -462,17 +462,19 @@ export default function CodeEditor({
           {/* Play / Stop */}
           <button
             onClick={isPlaying ? handleStop : handlePlay}
-            disabled={isLoadingPlay && !isPlaying}
+            disabled={isLoadingPlay}
             className={`flex items-center gap-1.5 px-4 h-8 text-sm rounded-lg font-semibold
-                       transition-all cursor-pointer border-0 disabled:opacity-50
-                       ${isPlaying
-                ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)] hover:opacity-90"
+                       transition-all cursor-pointer border-0 disabled:cursor-not-allowed
+                       ${isLoadingPlay
+                ? "btn-compiling"
+                : isPlaying
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)] hover:opacity-90"
               }`}
           >
-            {isLoadingPlay && !isPlaying ? (
+            {isLoadingPlay ? (
               <>
-                <Loader2 size={14} className="animate-spin" /> {t.editor.play}
+                <Loader2 size={14} className="animate-spin" /> {t.editor.compiling}
               </>
             ) : isPlaying ? (
               <>
