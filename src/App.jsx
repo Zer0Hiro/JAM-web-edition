@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { initPyodide } from "./utils/pyodideCompiler";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import FeatureCards from "./components/FeatureCards";
@@ -24,6 +25,10 @@ export default function App() {
   const [sandboxInitialCode, setSandboxInitialCode] = useState(null);
   const { completedLessons, completeLesson } = useProgress();
   const selectedLesson = selectedLessonId ? getLessonById(selectedLessonId, lang) : null;
+
+  useEffect(() => {
+    try { initPyodide(); } catch {}
+  }, []);
 
   // Scroll to top on view change
   useEffect(() => {

@@ -114,7 +114,18 @@ if '/home/pyodide' not in sys.path:
 `);
 
   pyodide.runPython(COMPILER_FUNCTIONS);
+
+  // Pre-warm: run a tiny compile so all imports are fully cached
+  pyodide.globals.set("_source", "BPM 120\nINSTRUMENT s:\n  TYPE SYNTH\n  WAVE SIN\n  VOLUME 100\nSEQUENCE q:\n  PLAY C4 0.25\nPLAY_SEQUENCE q s");
+  pyodide.runPython(`_preview(_source)`);
+
+  self.postMessage({ id: 0, ready: true });
 }
+
+// Start init immediately when worker loads
+initPyodide().catch((err) => {
+  self.postMessage({ id: 0, error: "Init failed: " + err.message });
+});
 
 self.onmessage = async (e) => {
   const { id, action, source } = e.data;

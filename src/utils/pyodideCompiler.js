@@ -1,12 +1,23 @@
 let worker = null;
 let msgId = 0;
+let ready = false;
+let readyPromise = null;
+let readyResolve = null;
 const pending = new Map();
 
 function getWorker() {
   if (!worker) {
+    readyPromise = new Promise((resolve) => { readyResolve = resolve; });
     worker = new Worker("/pyodideWorker.js");
     worker.onmessage = (e) => {
-      const { id, result, error } = e.data;
+      const { id, result, error, ready: isReady } = e.data;
+
+      if (isReady) {
+        ready = true;
+        if (readyResolve) readyResolve();
+        return;
+      }
+
       const handler = pending.get(id);
       if (!handler) return;
       pending.delete(id);
@@ -26,11 +37,13 @@ function getWorker() {
   return worker;
 }
 
-function callWorker(action, source) {
+async function callWorker(action, source) {
+  getWorker();
+  if (!ready) await readyPromise;
   return new Promise((resolve, reject) => {
     const id = ++msgId;
     pending.set(id, { resolve, reject });
-    getWorker().postMessage({ id, action, source });
+    worker.postMessage({ id, action, source });
   });
 }
 
@@ -46,6 +59,6 @@ export function initPyodide() {
   getWorker();
 }
 
-export function isLoaded() {
-  return worker !== null;
+export function isReady() {
+  return ready;
 }

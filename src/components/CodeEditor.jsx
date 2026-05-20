@@ -5,7 +5,7 @@ import { cpp } from "@codemirror/lang-cpp";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { Play, Square, Download, RotateCcw, Loader2, Code, ChevronDown, ChevronUp, FileAudio, Cpu, Check, AlertTriangle, Upload, MoreVertical } from "lucide-react";
 import { useLanguage } from "../i18n/context";
-import { previewJam, compileJam, initPyodide } from "../utils/pyodideCompiler";
+import { previewJam, compileJam } from "../utils/pyodideCompiler";
 
 // ── Simple JEM syntax highlighting mode ─────────────────────────────────
 const jamLanguage = StreamLanguage.define({
@@ -144,10 +144,6 @@ export default function CodeEditor({
   useEffect(() => {
     setCode(initialCode);
   }, [initialCode]);
-
-  useEffect(() => {
-    try { initPyodide(); } catch { /* worker init is best-effort */ }
-  }, []);
 
   const handleChange = useCallback(
     (val) => {
