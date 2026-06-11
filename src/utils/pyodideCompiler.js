@@ -53,12 +53,14 @@ async function callWorker(action, source, onProgress) {
   });
 }
 
-export function compileJam(source) {
-  return callWorker("compile", source);
+/** Compile to C++ (+ preview WAV). onProgress receives a fraction in [0, 1]. */
+export function compileJam(source, onProgress) {
+  return callWorker("compile", source, onProgress);
 }
 
-export function previewJam(source) {
-  return callWorker("preview", source);
+/** Low-rate preview render. onProgress receives a fraction in [0, 1]. */
+export function previewJam(source, onProgress) {
+  return callWorker("preview", source, onProgress);
 }
 
 /** Full-quality 44.1kHz render. onProgress receives a fraction in [0, 1]. */

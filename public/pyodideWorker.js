@@ -17,6 +17,9 @@ from dsl.semantic import validate
 from dsl.codegen import generate
 from dsl.wav_backend import WavRenderer
 
+# Overridden from JS per request with a callback posting progress messages
+_js_progress = lambda frac: None
+
 def _compile(source):
     result = {"success": False, "cpp": None, "wav_b64": None, "error": None, "warnings": None}
     try:
@@ -37,8 +40,8 @@ def _compile(source):
         result["success"] = True
 
         try:
-            renderer = WavRenderer(program)
-            wav_bytes = renderer.render_bytes()
+            renderer = WavRenderer(program, sample_rate=PREVIEW_SAMPLE_RATE)
+            wav_bytes = renderer.render_bytes(progress_cb=_js_progress)
             result["wav_b64"] = base64.b64encode(wav_bytes).decode("ascii")
         except Exception:
             pass
@@ -70,7 +73,7 @@ def _preview(source):
             result["warnings"] = [str(d) for d in validation.warnings]
 
         renderer = WavRenderer(program, sample_rate=PREVIEW_SAMPLE_RATE)
-        wav_bytes = renderer.render_bytes()
+        wav_bytes = renderer.render_bytes(progress_cb=_js_progress)
         result["wav_b64"] = base64.b64encode(wav_bytes).decode("ascii")
         result["success"] = True
         return json.dumps(result)
@@ -186,8 +189,8 @@ self.onmessage = async (e) => {
     await initPyodide();
     pyodide.globals.set("_source", source);
 
-    if (action === "renderFull") {
-      // Stream progress back to the main thread (throttled to ~1% steps)
+    // Stream render progress back to the main thread (throttled to ~1% steps)
+    if (action === "renderFull" || action === "preview" || action === "compile") {
       let lastSent = -1;
       pyodide.globals.set("_js_progress", (frac) => {
         const pct = Math.floor(frac * 100);
@@ -196,6 +199,8 @@ self.onmessage = async (e) => {
           self.postMessage({ id, progress: frac });
         }
       });
+    } else {
+      pyodide.globals.set("_js_progress", () => {});
     }
 
     const fn = ACTION_FNS[action] || "_preview";

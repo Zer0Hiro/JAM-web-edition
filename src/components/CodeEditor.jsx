@@ -141,6 +141,7 @@ export default function CodeEditor({
   const [isRenderingWav, setIsRenderingWav] = useState(false);
   const [renderProgress, setRenderProgress] = useState(0);
   const [renderEta, setRenderEta] = useState(null);
+  const [compileProgress, setCompileProgress] = useState(0);
   const renderStartRef = useRef(0);
   const wavPlayerRef = useRef(null);
 
@@ -209,9 +210,10 @@ export default function CodeEditor({
     setError(null);
     setWarnings(null);
     setIsLoadingPlay(true);
+    setCompileProgress(0);
 
     try {
-      const data = await previewJam(code);
+      const data = await previewJam(code, (p) => setCompileProgress(p));
 
       if (data.success && data.wav_b64) {
         playWavFromBase64(data.wav_b64);
@@ -225,6 +227,7 @@ export default function CodeEditor({
       setError("Compiler unavailable: " + err.message);
     } finally {
       setIsLoadingPlay(false);
+      setCompileProgress(0);
     }
   }, [code, t, playWavFromBase64]);
 
@@ -255,9 +258,10 @@ export default function CodeEditor({
     setError(null);
     setWarnings(null);
     setCompileResult(null);
+    setCompileProgress(0);
 
     try {
-      const data = await compileJam(code);
+      const data = await compileJam(code, (p) => setCompileProgress(p));
 
       if (data.success) {
         setCompileResult({ type: "success", message: t.editor.compileSuccess });
@@ -278,6 +282,7 @@ export default function CodeEditor({
       setCompileResult({ type: "info", message: "Compiler unavailable: " + err.message });
     } finally {
       setIsCompiling(false);
+      setCompileProgress(0);
     }
   }, [code, t, playWavFromBase64]);
 
@@ -507,6 +512,7 @@ export default function CodeEditor({
             {isLoadingPlay ? (
               <>
                 <Loader2 size={14} className="animate-spin" /> {t.editor.compiling}
+                {compileProgress > 0 && ` ${Math.round(compileProgress * 100)}%`}
               </>
             ) : isPlaying ? (
               <>
@@ -521,16 +527,23 @@ export default function CodeEditor({
         </div>
       </div>
 
-      {/* Progress bar */}
-      {(isPlaying || isLoadingPlay) && (
+      {/* Progress bar: real compile progress while rendering, playhead while playing */}
+      {(isPlaying || isLoadingPlay || isCompiling) && (
         <div className="h-1 bg-[var(--color-bg-secondary)]">
-          <div
-            className={`h-full transition-all duration-100 ${isLoadingPlay && !isPlaying
-              ? "bg-[var(--color-accent-cyan)] animate-pulse w-full"
-              : "bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)]"
-              }`}
-            style={isPlaying ? { width: `${progress * 100}%` } : undefined}
-          />
+          {isPlaying ? (
+            <div
+              className="h-full transition-all duration-100 bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)]"
+              style={{ width: `${progress * 100}%` }}
+            />
+          ) : compileProgress > 0 ? (
+            <div
+              className="h-full transition-all duration-150 bg-[var(--color-accent-cyan)]"
+              style={{ width: `${compileProgress * 100}%` }}
+            />
+          ) : (
+            // Worker still initializing / parsing — no progress signal yet
+            <div className="h-full w-full bg-[var(--color-accent-cyan)] animate-pulse" />
+          )}
         </div>
       )}
 
