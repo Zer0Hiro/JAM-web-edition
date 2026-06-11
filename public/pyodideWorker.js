@@ -52,6 +52,8 @@ def _compile(source):
         result["error"] = f"Unexpected error: {e}"
     return json.dumps(result)
 
+PREVIEW_SAMPLE_RATE = 22050  # half rate: ~2x faster render for in-editor playback
+
 def _preview(source):
     result = {"success": False, "wav_b64": None, "error": None, "warnings": None}
     try:
@@ -67,8 +69,52 @@ def _preview(source):
         if validation.warnings:
             result["warnings"] = [str(d) for d in validation.warnings]
 
-        renderer = WavRenderer(program)
+        renderer = WavRenderer(program, sample_rate=PREVIEW_SAMPLE_RATE)
         wav_bytes = renderer.render_bytes()
+        result["wav_b64"] = base64.b64encode(wav_bytes).decode("ascii")
+        result["success"] = True
+        return json.dumps(result)
+    except LexerError as e:
+        result["error"] = f"Lexer error: {e}"
+    except ParseError as e:
+        result["error"] = f"Parse error: {e}"
+    except Exception as e:
+        result["error"] = f"Unexpected error: {e}"
+    return json.dumps(result)
+
+def _estimate_duration(source):
+    """Return the composition duration in seconds (for render-time estimates)."""
+    result = {"success": False, "duration_s": 0.0, "error": None}
+    try:
+        program = parse(source)
+        validation = validate(program)
+        if not validation.ok:
+            result["error"] = "Validation failed"
+            return json.dumps(result)
+        result["duration_s"] = WavRenderer(program).total_duration_s()
+        result["success"] = True
+    except Exception as e:
+        result["error"] = str(e)
+    return json.dumps(result)
+
+def _render_full(source):
+    """Full-quality 44.1kHz render with progress reported via _js_progress."""
+    result = {"success": False, "wav_b64": None, "error": None, "warnings": None}
+    try:
+        program = parse(source)
+        validation = validate(program)
+        if not validation.ok:
+            errors = [str(d) for d in validation.diagnostics if "ERROR" in str(d).upper() or "error" in str(d).lower()]
+            if not errors:
+                errors = [str(d) for d in validation.diagnostics]
+            result["error"] = "; ".join(errors) if errors else "Validation failed"
+            return json.dumps(result)
+
+        if validation.warnings:
+            result["warnings"] = [str(d) for d in validation.warnings]
+
+        renderer = WavRenderer(program)  # full 44100 Hz
+        wav_bytes = renderer.render_bytes(progress_cb=_js_progress)
         result["wav_b64"] = base64.b64encode(wav_bytes).decode("ascii")
         result["success"] = True
         return json.dumps(result)
@@ -127,12 +173,32 @@ initPyodide().catch((err) => {
   self.postMessage({ id: 0, error: "Init failed: " + err.message });
 });
 
+const ACTION_FNS = {
+  compile: "_compile",
+  preview: "_preview",
+  renderFull: "_render_full",
+  estimate: "_estimate_duration",
+};
+
 self.onmessage = async (e) => {
   const { id, action, source } = e.data;
   try {
     await initPyodide();
     pyodide.globals.set("_source", source);
-    const fn = action === "compile" ? "_compile" : "_preview";
+
+    if (action === "renderFull") {
+      // Stream progress back to the main thread (throttled to ~1% steps)
+      let lastSent = -1;
+      pyodide.globals.set("_js_progress", (frac) => {
+        const pct = Math.floor(frac * 100);
+        if (pct !== lastSent) {
+          lastSent = pct;
+          self.postMessage({ id, progress: frac });
+        }
+      });
+    }
+
+    const fn = ACTION_FNS[action] || "_preview";
     const result = pyodide.runPython(`${fn}(_source)`);
     self.postMessage({ id, result: JSON.parse(result) });
   } catch (err) {

@@ -5,7 +5,7 @@ import { cpp } from "@codemirror/lang-cpp";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { Play, Square, Download, RotateCcw, Loader2, Code, ChevronDown, ChevronUp, FileAudio, Cpu, Check, AlertTriangle, Upload, MoreVertical } from "lucide-react";
 import { useLanguage } from "../i18n/context";
-import { previewJam, compileJam } from "../utils/pyodideCompiler";
+import { previewJam, compileJam, renderFullJam, cancelAll } from "../utils/pyodideCompiler";
 
 // ── Simple JEM syntax highlighting mode ─────────────────────────────────
 const jamLanguage = StreamLanguage.define({
@@ -132,13 +132,16 @@ export default function CodeEditor({
   const [compileResult, setCompileResult] = useState(null);
   const [cppCode, setCppCode] = useState(null);
   const [showCpp, setShowCpp] = useState(false);
-  const [wavData, setWavData] = useState(null);
   const [uploadStatus, setUploadStatus] = useState(null);
   const [uploadMessage, setUploadMessage] = useState(null);
   const [selectedBoard, setSelectedBoard] = useState("esp32");
   const [showBoardSelector, setShowBoardSelector] = useState(false);
   const [selectedPin, setSelectedPin] = useState(25);
   const [showMenu, setShowMenu] = useState(false);
+  const [isRenderingWav, setIsRenderingWav] = useState(false);
+  const [renderProgress, setRenderProgress] = useState(0);
+  const [renderEta, setRenderEta] = useState(null);
+  const renderStartRef = useRef(0);
   const wavPlayerRef = useRef(null);
 
   useEffect(() => {
@@ -211,7 +214,6 @@ export default function CodeEditor({
       const data = await previewJam(code);
 
       if (data.success && data.wav_b64) {
-        setWavData(data.wav_b64);
         playWavFromBase64(data.wav_b64);
         if (data.warnings && data.warnings.length > 0) {
           setWarnings(data.warnings);
@@ -241,11 +243,9 @@ export default function CodeEditor({
     setCompileResult(null);
     setCppCode(null);
     setShowCpp(false);
-    setWavData(null);
     setWarnings(null);
     setUploadStatus(null);
     setUploadMessage(null);
-    setShowPinSelector(false);
     setShowMenu(false);
     handleStop();
   }, [initialCode, handleStop]);
@@ -266,7 +266,6 @@ export default function CodeEditor({
           setShowCpp(true);
         }
         if (data.wav_b64) {
-          setWavData(data.wav_b64);
           playWavFromBase64(data.wav_b64);
         }
         if (data.warnings && data.warnings.length > 0) {
@@ -282,17 +281,54 @@ export default function CodeEditor({
     }
   }, [code, t, playWavFromBase64]);
 
-  const handleDownloadWav = useCallback(() => {
-    if (!wavData) return;
-    const bytes = base64ToArrayBuffer(wavData);
-    const blob = new Blob([bytes], { type: "audio/wav" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "sketch.wav";
-    a.click();
-    URL.revokeObjectURL(url);
-  }, [wavData]);
+  // Download = fresh full-quality (44.1kHz) render with live progress.
+  // The in-editor preview uses a lower sample rate for speed.
+  const handleDownloadWav = useCallback(async () => {
+    if (isRenderingWav) return;
+    setError(null);
+    setIsRenderingWav(true);
+    setRenderProgress(0);
+    setRenderEta(null);
+    renderStartRef.current = performance.now();
+
+    try {
+      const data = await renderFullJam(code, (p) => {
+        setRenderProgress(p);
+        if (p > 0.02) {
+          const elapsed = (performance.now() - renderStartRef.current) / 1000;
+          setRenderEta(Math.max(0, Math.round(elapsed / p - elapsed)));
+        }
+      });
+
+      if (data.success && data.wav_b64) {
+        const bytes = base64ToArrayBuffer(data.wav_b64);
+        const blob = new Blob([bytes], { type: "audio/wav" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "sketch.wav";
+        a.click();
+        URL.revokeObjectURL(url);
+      } else {
+        setError(data.error ? friendlyError(data.error, t) : t.editor.renderFailed);
+      }
+    } catch (err) {
+      if (err.message !== "cancelled") {
+        setError(t.editor.renderFailed + ": " + err.message);
+      }
+    } finally {
+      setIsRenderingWav(false);
+      setRenderProgress(0);
+      setRenderEta(null);
+    }
+  }, [code, t, isRenderingWav]);
+
+  const handleCancelRender = useCallback(() => {
+    cancelAll();
+    setIsRenderingWav(false);
+    setRenderProgress(0);
+    setRenderEta(null);
+  }, []);
 
   return (
     <div className={`rounded-xl overflow-hidden border border-[var(--color-border)] bg-[var(--color-bg-card)] ${className}`}>
@@ -325,7 +361,7 @@ export default function CodeEditor({
           {/* More menu (Reset, Compile, WAV, C++) */}
           <div className="relative">
             <button
-              onClick={() => { setShowMenu(!showMenu); setShowPinSelector(false); }}
+              onClick={() => setShowMenu(!showMenu)}
               className="flex items-center justify-center w-8 h-8 rounded-lg
                          bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]
                          hover:bg-[var(--color-bg-card)] hover:text-[var(--color-text-primary)]
@@ -355,16 +391,16 @@ export default function CodeEditor({
                   {isCompiling ? <Loader2 size={14} className="animate-spin" /> : <Download size={14} />}
                   {t.editor.compile}
                 </button>
-                {wavData && (
-                  <button
-                    onClick={() => { handleDownloadWav(); setShowMenu(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-accent-magenta)]
-                               hover:bg-[var(--color-bg-secondary)] transition-colors cursor-pointer border-0 text-left"
-                  >
-                    <FileAudio size={14} />
-                    {t.editor.downloadWav}
-                  </button>
-                )}
+                <button
+                  onClick={() => { handleDownloadWav(); setShowMenu(false); }}
+                  disabled={isRenderingWav}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-accent-magenta)]
+                             hover:bg-[var(--color-bg-secondary)] transition-colors cursor-pointer border-0 text-left
+                             disabled:opacity-50"
+                >
+                  {isRenderingWav ? <Loader2 size={14} className="animate-spin" /> : <FileAudio size={14} />}
+                  {t.editor.downloadWav}
+                </button>
                 {cppCode && (
                   <button
                     onClick={() => { setShowCpp(!showCpp); setShowMenu(false); }}
@@ -399,7 +435,7 @@ export default function CodeEditor({
             </button>
             <div className="relative">
               <button
-                onClick={() => { setShowBoardSelector(!showBoardSelector); setShowPinSelector(false); setShowMenu(false); }}
+                onClick={() => { setShowBoardSelector(!showBoardSelector); setShowMenu(false); }}
                 className="flex items-center gap-1 px-1.5 h-8 text-sm rounded-e-lg
                            bg-[var(--color-accent-magenta)] text-white font-medium
                            hover:opacity-90 transition-opacity cursor-pointer border-0
@@ -495,6 +531,33 @@ export default function CodeEditor({
               }`}
             style={isPlaying ? { width: `${progress * 100}%` } : undefined}
           />
+        </div>
+      )}
+
+      {/* Full-quality WAV render progress */}
+      {isRenderingWav && (
+        <div className="flex items-center gap-3 px-4 py-2 bg-[var(--color-bg-elevated)] border-b border-[var(--color-border)]">
+          <Loader2 size={14} className="animate-spin text-[var(--color-accent-magenta)] shrink-0" />
+          <span className="text-xs text-[var(--color-text-secondary)] whitespace-nowrap">
+            {t.editor.renderingWav} {Math.round(renderProgress * 100)}%
+            {" · "}
+            {renderEta != null
+              ? t.editor.renderEta.replace("{s}", renderEta)
+              : t.editor.renderEstimating}
+          </span>
+          <div className="flex-1 h-1.5 rounded-full bg-[var(--color-bg-secondary)] overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-[var(--color-accent-magenta)] to-[var(--color-accent-purple)] transition-all duration-200"
+              style={{ width: `${renderProgress * 100}%` }}
+            />
+          </div>
+          <button
+            onClick={handleCancelRender}
+            className="text-xs px-2 py-1 rounded bg-[var(--color-bg-secondary)] text-[var(--color-text-secondary)]
+                       hover:text-[var(--color-text-primary)] transition-colors cursor-pointer border-0 shrink-0"
+          >
+            {t.editor.renderCancel}
+          </button>
         </div>
       )}
 
