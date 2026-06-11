@@ -9,6 +9,7 @@ const he = {
     sounds: "צלילים",
     guide: "מדריך בנייה",
     musicLibrary: "ספריית מוזיקה",
+    backToTop: "חזרה למעלה",
   },
 
   // Hero

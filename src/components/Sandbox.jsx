@@ -106,18 +106,32 @@ export default function Sandbox({ initialCode, immersive = false }) {
     <section ref={rootRef} id="sandbox" className={immersive ? "pb-20 px-4" : "py-20 px-4"}>
       {immersive ? (
         /* Audio-reactive hero header */
-        <div className="relative h-[300px] md:h-[360px] -mx-4 mb-2 flex items-center justify-center overflow-hidden">
-          <Suspense fallback={null}>
-            <SandboxScene />
-          </Suspense>
-          <div className="text-center relative pointer-events-none">
+        <div className="relative h-[320px] md:h-[400px] -mx-4 mb-2 flex items-center justify-center overflow-hidden">
+          {/* Visualizer anchored low so the ring sits beneath the copy */}
+          <div className="absolute inset-x-0 top-24 -bottom-24">
+            <Suspense fallback={null}>
+              <SandboxScene />
+            </Suspense>
+          </div>
+          {/* Readability scrim between the ring and the text */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse 55% 50% at 50% 38%, var(--color-bg-primary) 0%, color-mix(in srgb, var(--color-bg-primary) 70%, transparent) 50%, transparent 78%)",
+            }}
+          />
+          <div className="text-center relative pointer-events-none -translate-y-6">
             <h2
               className="sandbox-headline text-4xl md:text-6xl font-bold tracking-tight mb-4"
               style={{ perspective: "600px" }}
             >
               <span className="gradient-text">{t.sandbox.title}</span>
             </h2>
-            <p className="sandbox-sub text-[var(--color-text-secondary)] max-w-lg mx-auto">
+            <p
+              className="sandbox-sub text-[var(--color-text-secondary)] max-w-lg mx-auto"
+              style={{ textShadow: "0 1px 12px var(--color-bg-primary), 0 0 4px var(--color-bg-primary)" }}
+            >
               {t.sandbox.subtitle}
             </p>
           </div>

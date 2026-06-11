@@ -1,5 +1,5 @@
 import { useRef, useCallback } from "react";
-import { ChevronRight, Clock, Check } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 import { gsap, prefersReducedMotion } from "../utils/gsap";
 
@@ -11,13 +11,23 @@ const PHASE_COLORS = {
   5: { bg: "rgba(244,63,94,0.1)", border: "rgba(244,63,94,0.3)", text: "#f43f5e" },
 };
 
-function DifficultyStars({ level, maxLevel = 5 }) {
+/** Difficulty as a tiny equalizer: rising bars, filled up to the level. */
+function DifficultyMeter({ level, color, maxLevel = 5 }) {
   return (
-    <span className="inline-flex gap-0.5 text-sm" title={`${level}/${maxLevel}`}>
+    <span
+      className="inline-flex items-end gap-[3px] h-3.5"
+      title={`${level}/${maxLevel}`}
+      aria-label={`difficulty ${level}/${maxLevel}`}
+    >
       {Array.from({ length: maxLevel }, (_, i) => (
-        <span key={i} style={{ opacity: i < level ? 1 : 0.2 }}>
-          {"⭐"}
-        </span>
+        <span
+          key={i}
+          className="w-[3px] rounded-full transition-colors"
+          style={{
+            height: `${34 + i * 16.5}%`,
+            backgroundColor: i < level ? color : "var(--color-border)",
+          }}
+        />
       ))}
     </span>
   );
@@ -46,10 +56,8 @@ export default function LessonCard({ lesson, onClick, completed = false }) {
     const rect = el.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-    // Cursor spotlight position
     el.style.setProperty("--mx", `${px * 100}%`);
     el.style.setProperty("--my", `${py * 100}%`);
-    // Subtle 3D tilt toward the cursor
     const tw = getTweens();
     if (tw) {
       tw.ry((px - 0.5) * 8);
@@ -67,77 +75,116 @@ export default function LessonCard({ lesson, onClick, completed = false }) {
     }
   }, [getTweens]);
 
+  const lessonNo = String(lesson.id).padStart(2, "0");
+
   return (
-    <div style={{ perspective: "900px" }}>
+    <div className="h-full" style={{ perspective: "900px" }}>
       <button
         ref={cardRef}
         onClick={() => onClick(lesson)}
         onPointerMove={handleMove}
         onPointerLeave={handleLeave}
-        className="lesson-card card-spotlight group w-full text-start p-5 rounded-xl border transition-colors cursor-pointer relative overflow-hidden"
+        className="lesson-card card-spotlight group w-full h-full text-start rounded-2xl border cursor-pointer
+                   relative overflow-hidden flex flex-col"
         style={{
-          backgroundColor: "var(--color-bg-card)",
-          borderColor: completed ? colors.text : "var(--color-border)",
-          boxShadow: completed ? `0 0 20px ${colors.bg}` : "none",
+          background:
+            "linear-gradient(160deg, color-mix(in srgb, var(--color-bg-elevated) 55%, transparent), transparent 55%), var(--color-bg-card)",
+          borderColor: completed ? `${colors.text}66` : "var(--color-border)",
+          boxShadow: completed ? `inset 0 0 30px ${colors.bg}, 0 0 18px ${colors.bg}` : "none",
           "--spot-color": colors.bg,
           transformStyle: "preserve-3d",
           willChange: "transform",
         }}
       >
-        <div className="flex items-start justify-between gap-3 relative">
-          <div className="flex-1 min-w-0">
-            {/* Lesson number and difficulty */}
-            <div className="flex items-center gap-3 mb-2">
-              <span
-                className="inline-flex items-center justify-center w-8 h-8 rounded-lg text-sm font-bold transition-transform group-hover:scale-110"
-                style={{ backgroundColor: colors.bg, color: colors.text }}
-              >
-                {completed ? <Check size={16} strokeWidth={3} /> : lesson.id}
-              </span>
-              <DifficultyStars level={lesson.difficulty} />
-              {completed && (
-                <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 font-medium">
-                  {t.lessonList.done}
+        {/* Giant ghost lesson number — editorial watermark */}
+        <span
+          className="absolute -top-5 end-1 text-[88px] font-black leading-none select-none
+                     pointer-events-none tracking-tighter transition-opacity duration-300
+                     opacity-[0.07] group-hover:opacity-[0.13]"
+          style={{ color: colors.text, fontFamily: "var(--font-mono)" }}
+          aria-hidden="true"
+        >
+          {lessonNo}
+        </span>
+
+        {/* Phase accent: hairline along the top edge */}
+        <span
+          className="absolute top-0 inset-x-0 h-px pointer-events-none"
+          style={{
+            background: `linear-gradient(90deg, transparent, ${colors.text}55, transparent)`,
+          }}
+          aria-hidden="true"
+        />
+
+        <div className="relative flex flex-col flex-1 p-5">
+          {/* Eyebrow: lesson label + difficulty meter */}
+          <div className="flex items-center gap-3 mb-3">
+            <span
+              className="text-[11px] font-semibold tracking-[0.18em] uppercase"
+              style={{ color: colors.text, fontFamily: "var(--font-mono)" }}
+            >
+              {completed ? (
+                <span className="inline-flex items-center gap-1">
+                  <Check size={11} strokeWidth={3} /> {t.lessonList.done}
                 </span>
+              ) : (
+                `· ${lessonNo}`
               )}
-            </div>
-
-            {/* Title */}
-            <h3 className="text-lg font-semibold text-[var(--color-text-primary)] mb-1">
-              {lesson.title}
-            </h3>
-
-            {/* Subtitle */}
-            <p className="text-sm text-[var(--color-text-secondary)] mb-3">
-              {lesson.subtitle}
-            </p>
-
-            {/* Concepts */}
-            <div className="flex flex-wrap gap-2 mb-2">
-              {lesson.concepts.map((concept) => (
-                <span
-                  key={concept}
-                  className="text-xs px-2 py-1 rounded-md font-medium transition-transform group-hover:-translate-y-0.5"
-                  style={{ backgroundColor: colors.bg, color: colors.text }}
-                >
-                  {concept}
-                </span>
-              ))}
-            </div>
-
-            {/* Time estimate */}
-            <div className="flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
-              <Clock size={12} />
-              ~{lesson.estimatedMinutes} {t.lessonList.min}
-            </div>
+            </span>
+            <DifficultyMeter level={lesson.difficulty} color={colors.text} />
           </div>
 
-          {/* Arrow nudges toward the click on hover */}
-          <ChevronRight
-            size={20}
-            className="mt-2 text-[var(--color-text-muted)] flex-shrink-0 transition-all duration-300
-                       group-hover:translate-x-1 rtl:group-hover:-translate-x-1 group-hover:text-[var(--color-text-primary)]"
-          />
+          {/* Title */}
+          <h3 className="text-lg font-bold text-[var(--color-text-primary)] mb-1 tracking-tight">
+            {lesson.title}
+          </h3>
+
+          {/* Subtitle */}
+          <p className="text-sm text-[var(--color-text-secondary)] mb-4">
+            {lesson.subtitle}
+          </p>
+
+          {/* Concept tags: quiet mono ghosts */}
+          <div className="flex flex-wrap gap-1.5 mb-4">
+            {lesson.concepts.map((concept) => (
+              <span
+                key={concept}
+                className="text-[11px] px-2 py-0.5 rounded-md border transition-all duration-300
+                           group-hover:-translate-y-0.5"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--color-text-secondary)",
+                  borderColor: `${colors.text}2a`,
+                  backgroundColor: `${colors.text}0a`,
+                }}
+              >
+                {concept}
+              </span>
+            ))}
+          </div>
+
+          {/* Footer: duration + action */}
+          <div
+            className="mt-auto flex items-center justify-between pt-3 border-t"
+            style={{ borderColor: "color-mix(in srgb, var(--color-border) 60%, transparent)" }}
+          >
+            <span
+              className="text-[11px] text-[var(--color-text-muted)]"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              ~{lesson.estimatedMinutes} {t.lessonList.min}
+            </span>
+            <span
+              className="card-action inline-flex items-center justify-center w-7 h-7 rounded-full border
+                         transition-all duration-300 group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
+              style={{
+                borderColor: `${colors.text}40`,
+                color: colors.text,
+              }}
+            >
+              <ArrowRight size={13} className="rtl:rotate-180 transition-transform duration-300 group-hover:scale-110" />
+            </span>
+          </div>
         </div>
       </button>
     </div>

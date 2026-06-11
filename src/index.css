@@ -203,6 +203,30 @@ body {
   opacity: 1;
 }
 
+/* Footer action chip fills with the phase tint on card hover */
+.lesson-card .card-action {
+  background: transparent;
+}
+.lesson-card:hover .card-action {
+  background: var(--spot-color, rgba(133, 183, 235, 0.12));
+}
+
+/* === Home portal equalizer === */
+@keyframes eq-bounce {
+  0%, 100% { transform: scaleY(0.25); }
+  50% { transform: scaleY(1); }
+}
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-bounce 1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .eq-bar {
+    animation: none;
+    transform: scaleY(0.6);
+  }
+}
+
 /* === Selection === */
 ::selection {
   background: var(--color-accent-purple);

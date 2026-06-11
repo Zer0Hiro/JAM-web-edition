@@ -9,6 +9,7 @@ const en = {
     sounds: "Sounds",
     guide: "Build Guide",
     musicLibrary: "Music Library",
+    backToTop: "Back to top",
   },
 
   // Hero
@@ -16,7 +17,7 @@ const en = {
     badge: "Just ESP Music",
     titleBefore: "Turn Code Into ",
     titleHighlight: "Music",
-    subtitle: "Learn to create sounds, beats, and songs with the JEM language. Write code, hear it play, and upload it to an ESP32 -- no experience needed.",
+    subtitle: "Learn to create sounds, beats, and songs with the JEM language. Write code, hear it play, and upload it to an ESP32 - no experience needed.",
     startLearning: "Start Learning",
     tryEditor: "Try the Editor",
     buildYourOwn: "Build Your Own JEM",
@@ -132,7 +133,7 @@ const en = {
   // Sandbox
   sandbox: {
     title: "Sandbox",
-    subtitle: "No rules, no lessons -- just you and the code. Write whatever you want and hit Play to hear it. Break things. Experiment. Have fun.",
+    subtitle: "No rules, no lessons - just you and the code. Write whatever you want and hit Play to hear it. Break things. Experiment. Have fun.",
     waveforms: "Waveforms",
     notes: "Notes",
     structure: "Effects & Control",

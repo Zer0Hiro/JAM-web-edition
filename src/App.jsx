@@ -7,6 +7,8 @@ import HowItWorks from "./components/HowItWorks";
 import LessonList from "./components/LessonList";
 import LessonView from "./components/LessonView";
 import Sandbox from "./components/Sandbox";
+import HomePortals from "./components/HomePortals";
+import BackToTop from "./components/BackToTop";
 import SoundLibrary from "./components/SoundLibrary";
 import ArduinoGuide from "./components/ArduinoGuide";
 import BuildGuides from "./components/BuildGuides";
@@ -114,12 +116,13 @@ export default function App() {
           />
           <FeatureCards />
           <HowItWorks />
-          <LessonList
-            onSelectLesson={handleSelectLesson}
+          <HomePortals
+            onOpenLessons={handleStartLearning}
+            onOpenSandbox={handleTryEditor}
             completedLessons={completedLessons}
           />
-          <Sandbox />
           <Footer />
+          <BackToTop />
         </>
       )}
 

@@ -279,10 +279,12 @@ export default function LessonList({
                   <div
                     className="phase-node w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold relative z-10"
                     style={{
-                      backgroundColor: `${phase.color}22`,
+                      // Solid base under the tint so the timeline spine can't
+                      // show through; the 4px ring masks the line around the node
+                      background: `linear-gradient(0deg, ${phase.color}22, ${phase.color}22), var(--color-bg-primary)`,
                       color: phase.color,
                       boxShadow: phaseDone
-                        ? `0 0 18px ${phase.color}66`
+                        ? `0 0 0 4px var(--color-bg-primary), 0 0 18px ${phase.color}66`
                         : `0 0 0 4px var(--color-bg-primary)`,
                     }}
                   >
