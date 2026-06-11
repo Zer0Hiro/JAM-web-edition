@@ -6,38 +6,78 @@
 :root {
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Shape system: buttons/inputs 8px, cards/panels 12px, pills full */
+  --radius-sm: 8px;
+  --radius-md: 12px;
 }
 
 :root, :root[data-theme="dark"] {
-  --color-bg-primary: #0a0a0f;
-  --color-bg-secondary: #12121a;
-  --color-bg-card: #1a1a2e;
-  --color-bg-elevated: #222240;
-  --color-accent-cyan: #85B7EB;
-  --color-accent-magenta: #AFA9EC;
-  --color-accent-purple: #7F77DD;
-  --color-accent-green: #22d3ee;
-  --color-accent-orange: #f97316;
-  --color-text-primary: #f0f0f5;
-  --color-text-secondary: #9ca3af;
-  --color-text-muted: #6b7280;
-  --color-border: #2a2a45;
+  /* Surface ramp — purple-navy tint, even lightness steps */
+  --color-bg-primary: #0b0b12;
+  --color-bg-secondary: #11111b;
+  --color-bg-card: #161626;
+  --color-bg-elevated: #1c1c30;
+  --color-border: #272740;
+  --color-border-strong: #34344f;
+
+  /* Accents — purple primary, dusty blue support */
+  --color-accent: #afa9ec;
+  --color-accent-deep: #7f77dd;
+  --color-accent-support: #85b7eb;
+
+  /* Status — semantic only */
+  --color-success: #4cc38a;
+  --color-warning: #f0b429;
+  --color-danger: #e5666c;
+
+  /* Text */
+  --color-text-primary: #f2f1f8;
+  --color-text-secondary: #a3a1b5;
+  --color-text-muted: #6e6c80;
+
+  /* Elevation — soft studio shadows, no glow */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.4), 0 16px 48px rgba(0, 0, 0, 0.35);
+
+  /* Legacy aliases — remapped to new palette; removed in component sweep */
+  --color-accent-cyan: var(--color-accent-support);
+  --color-accent-magenta: var(--color-accent);
+  --color-accent-purple: var(--color-accent-deep);
+  --color-accent-green: var(--color-success);
+  --color-accent-orange: var(--color-warning);
 }
 
 :root[data-theme="light"] {
-  --color-bg-primary: #f5f5f7;
-  --color-bg-secondary: #eaeaef;
+  --color-bg-primary: #f6f5fa;
+  --color-bg-secondary: #ecebf3;
   --color-bg-card: #ffffff;
-  --color-bg-elevated: #f0f0f5;
-  --color-accent-cyan: #5A8BC2;
-  --color-accent-magenta: #8078C8;
-  --color-accent-purple: #6C63D6;
-  --color-accent-green: #0e7490;
-  --color-accent-orange: #ea580c;
-  --color-text-primary: #1a1a2e;
-  --color-text-secondary: #4b5563;
-  --color-text-muted: #9ca3af;
-  --color-border: #d1d5db;
+  --color-bg-elevated: #f1f0f7;
+  --color-border: #dddce8;
+  --color-border-strong: #c5c4d6;
+
+  --color-accent: #6c63d6;
+  --color-accent-deep: #554bc4;
+  --color-accent-support: #4a7db5;
+
+  --color-success: #18794e;
+  --color-warning: #946800;
+  --color-danger: #cd2b31;
+
+  --color-text-primary: #1b1a2e;
+  --color-text-secondary: #4d4b63;
+  --color-text-muted: #8a88a0;
+
+  --shadow-sm: 0 1px 2px rgba(27, 26, 46, 0.08);
+  --shadow-md: 0 2px 8px rgba(27, 26, 46, 0.08), 0 8px 24px rgba(27, 26, 46, 0.06);
+  --shadow-lg: 0 4px 12px rgba(27, 26, 46, 0.1), 0 16px 48px rgba(27, 26, 46, 0.08);
+
+  --color-accent-cyan: var(--color-accent-support);
+  --color-accent-magenta: var(--color-accent);
+  --color-accent-purple: var(--color-accent-deep);
+  --color-accent-green: var(--color-success);
+  --color-accent-orange: var(--color-warning);
 }
 
 /* === Base Styles === */
@@ -77,31 +117,27 @@ body {
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-accent-purple);
+  background: var(--color-accent-deep);
 }
 
-/* === Glow effects === */
-.glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3),
-              0 0 60px rgba(0, 240, 255, 0.1);
+/* === Elevation (legacy glow class names kept until component sweep) === */
+.shadow-soft {
+  box-shadow: var(--shadow-md);
 }
-.glow-magenta {
-  box-shadow: 0 0 20px rgba(255, 0, 170, 0.3),
-              0 0 60px rgba(255, 0, 170, 0.1);
-}
+.glow-cyan,
+.glow-magenta,
 .glow-purple {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3),
-              0 0 60px rgba(139, 92, 246, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
-/* === Animated gradient text === */
+/* === Gradient text — hero only; subtle purple → blue === */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-accent-cyan), var(--color-accent-magenta), var(--color-accent-purple));
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-deep), var(--color-accent-support));
   background-size: 200% 200%;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradient-shift 4s ease infinite;
+  animation: gradient-shift 8s ease infinite;
 }
 
 @keyframes gradient-shift {
@@ -113,7 +149,7 @@ body {
 .cm-editor {
   font-family: var(--font-mono) !important;
   font-size: 14px !important;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 .cm-editor .cm-scroller {
   font-family: var(--font-mono) !important;
@@ -126,19 +162,17 @@ body {
   border-right: 1px solid var(--color-border) !important;
 }
 
-/* === Pulse animation for CTA === */
+/* === Primary CTA pulse — soft accent breathing, no neon === */
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4),
-                0 0 40px rgba(0, 240, 255, 0.1);
+    box-shadow: var(--shadow-md);
   }
   50% {
-    box-shadow: 0 0 30px rgba(0, 240, 255, 0.6),
-                0 0 60px rgba(0, 240, 255, 0.2);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent-deep) 18%, transparent), var(--shadow-md);
   }
 }
 .pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  animation: pulse-glow 2.4s ease-in-out infinite;
 }
 
 /* === Compiling button animation === */
@@ -149,12 +183,12 @@ body {
 .btn-compiling {
   background: linear-gradient(
     135deg,
-    var(--color-accent-purple) 25%,
-    var(--color-accent-magenta) 25%,
-    var(--color-accent-magenta) 50%,
-    var(--color-accent-purple) 50%,
-    var(--color-accent-purple) 75%,
-    var(--color-accent-magenta) 75%
+    var(--color-accent-deep) 25%,
+    var(--color-accent) 25%,
+    var(--color-accent) 50%,
+    var(--color-accent-deep) 50%,
+    var(--color-accent-deep) 75%,
+    var(--color-accent) 75%
   );
   background-size: 40px 40px;
   animation: compile-stripes 0.8s linear infinite;
@@ -183,11 +217,12 @@ body {
 }
 .lesson-card:hover {
   transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 /* === Selection === */
 ::selection {
-  background: var(--color-accent-purple);
+  background: var(--color-accent-deep);
   color: #fff;
 }
 
