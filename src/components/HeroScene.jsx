@@ -69,8 +69,8 @@ const FRAGMENT = /* glsl */ `
 
 function readThemeColors() {
   const css = getComputedStyle(document.documentElement);
-  const a = css.getPropertyValue("--color-accent-cyan").trim() || "#85B7EB";
-  const b = css.getPropertyValue("--color-accent-purple").trim() || "#7F77DD";
+  const a = css.getPropertyValue("--color-accent-support").trim() || "#85B7EB";
+  const b = css.getPropertyValue("--color-accent-deep").trim() || "#7F77DD";
   const isLight = document.documentElement.dataset.theme === "light";
   return { a: new THREE.Color(a), b: new THREE.Color(b), isLight };
 }
