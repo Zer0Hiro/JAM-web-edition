@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-JAM Server -- Flask backend for ESP32 upload and JAMai chat.
+JAM Server -- Flask backend for ESP32 upload and JEMai chat.
 
 Compile and WAV preview are handled client-side via Pyodide.
 This server provides:
 - ESP32 upload via PlatformIO (/api/upload)
-- JAMai RAG chat assistant (/api/jamai/chat)
+- JEMai RAG chat assistant (/api/jemai/chat)
 
 Run:
     python3 server/app.py
@@ -35,11 +35,11 @@ CORS(app, origins=[
     "http://localhost:5173"
 ])
 try:
-    from server.jamai_chat_routes import jamai_chat_bp
+    from server.jemai_chat_routes import jemai_chat_bp
 except ImportError:
-    from jamai_chat_routes import jamai_chat_bp
+    from jemai_chat_routes import jemai_chat_bp
 
-app.register_blueprint(jamai_chat_bp)
+app.register_blueprint(jemai_chat_bp)
 
 
 @app.route("/api/upload", methods=["POST"])

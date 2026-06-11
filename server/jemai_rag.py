@@ -1,5 +1,5 @@
 """
-JAMai RAG — local retrieval over JAM lesson files and knowledge docs.
+JEMai RAG — local retrieval over JAM lesson files and knowledge docs.
 
 Chunks lessons and markdown reference into sections. Scores by weighted
 token overlap with domain boosts and intent classification.
@@ -13,7 +13,7 @@ _LESSONS_DIR = os.path.normpath(
     os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src', 'lessons')
 )
 _KNOWLEDGE_DIR = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), 'jamai_knowledge'
+    os.path.dirname(os.path.abspath(__file__)), 'jemai_knowledge'
 )
 
 # Generic + JAM-domain weak words that don't discriminate sources
@@ -43,6 +43,15 @@ _DOMAIN_BOOSTS = [
     ({'sequence', 'sequences', 'play'},                                                'DSL_README.md', 6),
     ({'syntax', 'grammar', 'validation', 'error', 'errors', 'example', 'examples'},   'DSL_README.md', 10),
     ({'note', 'notes', 'pitch', 'octave', 'frequency'},                               'DSL_README.md', 5),
+    ({'key', 'scale', 'major', 'minor', 'pentatonic', 'blues', 'dorian', 'phrygian'}, 'SYNTAX_GUIDE.md', 10),
+    ({'chord', 'chords', 'triad', 'harmony'},                                          'SYNTAX_GUIDE.md', 9),
+    ({'velocity', 'crescendo', 'decrescendo', 'dynamics', 'accent'},                  'SYNTAX_GUIDE.md', 9),
+    ({'fade', 'fade_in', 'fade_out', 'swing', 'humanize', 'legato', 'polyphony'},     'SYNTAX_GUIDE.md', 9),
+    ({'lfo', 'vibrato', 'tremolo', 'glide', 'portamento', 'pan', 'stereo'},           'SYNTAX_GUIDE.md', 9),
+    ({'reverb', 'delay', 'echo', 'cutoff', 'resonance', 'filter', 'chorus', 'detune', 'voices'}, 'SYNTAX_GUIDE.md', 8),
+    ({'pluck', 'handpan', 'bell', 'noise'},                                            'SYNTAX_GUIDE.md', 7),
+    ({'compose', 'composing', 'song', 'songs', 'melody', 'bassline', 'structure', 'arrangement', 'mood', 'write'}, 'COMPOSING_SONGS.md', 9),
+    ({'drum', 'drums', 'kick', 'snare', 'hat', 'beat', 'groove'},                     'COMPOSING_SONGS.md', 6),
 ]
 
 # Terms that signal the user is asking about JAM syntax/reference (not lesson narrative)
@@ -51,6 +60,10 @@ _SYNTAX_TERMS = {
     'drum', 'validation', 'syntax', 'grammar', 'volume', 'freq', 'frequency',
     'oscillator', 'error', 'errors', 'example', 'examples',
     'octave', 'attack', 'decay', 'sustain', 'release', 'envelope',
+    'key', 'scale', 'chord', 'chords', 'velocity', 'crescendo', 'decrescendo',
+    'fade', 'swing', 'humanize', 'legato', 'polyphony', 'lfo', 'glide', 'pan',
+    'reverb', 'delay', 'cutoff', 'resonance', 'chorus', 'detune', 'voices',
+    'pluck', 'handpan', 'bell', 'time_signature',
 }
 
 
@@ -258,7 +271,12 @@ def _build_lesson_chunks(fname, raw):
 
 def _build_md_chunks(fname, raw):
     stem = os.path.splitext(fname)[0]
-    doc_title = 'JAM Language Guide' if stem == 'DSL_README' else stem.replace('_', ' ').title()
+    _DOC_TITLES = {
+        'DSL_README': 'JAM Language Guide',
+        'SYNTAX_GUIDE': 'JAM Syntax Guide',
+        'COMPOSING_SONGS': 'Composing Songs in JAM',
+    }
+    doc_title = _DOC_TITLES.get(stem, stem.replace('_', ' ').title())
 
     parts = re.split(r'(?m)^(#{1,4}[^\n]+)\n', raw)
     chunks = []
@@ -364,11 +382,11 @@ def _score_chunk(chunk, q_tokens, intent, lesson_id):
 # Public API
 # ---------------------------------------------------------------------------
 
-def jamai_retrieve(question, lesson_id=None, top_k=3):
+def jemai_retrieve(question, lesson_id=None, top_k=3):
     """
     Retrieve top_k relevant chunks for the question.
     Deduplicates by source file (best chunk per file).
-    Returns list of result dicts compatible with jamai_chat_routes.
+    Returns list of result dicts compatible with jemai_chat_routes.
     """
     q_tokens = set(_tokenize(question))
     if not q_tokens:

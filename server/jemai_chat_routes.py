@@ -1,13 +1,15 @@
 from flask import Blueprint, request, jsonify
-from jamai_rag import jamai_retrieve
+from jemai_rag import jemai_retrieve
+from jemai_composer import is_compose_request, compose_song
 
-jamai_chat_bp = Blueprint("jamai_chat", __name__)
+jemai_chat_bp = Blueprint("jemai_chat", __name__)
 
-_SUGGESTIONS = ["Explain this lesson", "Give me a hint", "Translate hard words"]
+_SUGGESTIONS = ["Explain this lesson", "Give me a hint", "Write me a song"]
 
 _NO_MATCH = (
     "I could not find a direct match in the JAM lesson files yet. "
-    "Try asking about loop, beat, note, wave, envelope, or sound."
+    "Try asking about loop, beat, note, wave, envelope, or sound — "
+    "or ask me to write you a song!"
 )
 
 
@@ -65,8 +67,9 @@ def _build_answer(top):
     return "\n".join(lines) if lines else f"Found in {title}"
 
 
-@jamai_chat_bp.route("/api/jamai/chat", methods=["POST"])
-def jamai_chat():
+@jemai_chat_bp.route("/api/jemai/chat", methods=["POST"])
+@jemai_chat_bp.route("/api/jamai/chat", methods=["POST"])  # legacy alias
+def jemai_chat():
     data = request.get_json(silent=True) or {}
     message = data.get("message", "").strip()
     lesson_id = data.get("lessonId")
@@ -76,6 +79,30 @@ def jamai_chat():
     if not message:
         return jsonify({"answer": "Please write a question.", "sources": [], "suggestions": []}), 400
 
+    # Song-writing requests get a freshly composed JAM program
+    if is_compose_request(message):
+        song = compose_song(message)
+        answer = "\n".join([
+            f"Here is {song['label']} I composed for you:",
+            "```jem",
+            song["code"].rstrip(),
+            "```",
+            "Paste it into the Sandbox and press Play! "
+            "Ask me for a different mood (happy, sad, spooky, chill, epic, retro) "
+            "or tweak the notes yourself.",
+        ])
+        return jsonify({
+            "answer": answer,
+            "sources": [{
+                "title": "Composing Songs in JAM",
+                "id": "COMPOSING_SONGS/intro",
+                "file": "COMPOSING_SONGS.md",
+                "score": 1.0,
+                "source_type": "reference",
+            }],
+            "suggestions": ["Make it spooky", "Make it chill", "Explain this code"],
+        })
+
     lid = None
     if lesson_id is not None:
         try:
@@ -84,7 +111,7 @@ def jamai_chat():
             lid = None
 
     # Try backend RAG first
-    results = jamai_retrieve(message, lesson_id=lid, top_k=3)
+    results = jemai_retrieve(message, lesson_id=lid, top_k=3)
 
     # If we have backend results, use them (highest priority)
     if results:
