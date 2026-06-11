@@ -2,11 +2,11 @@ import { ChevronRight, Clock } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 
 const PHASE_COLORS = {
-  1: { bg: "rgba(34,211,238,0.1)", border: "rgba(34,211,238,0.3)", text: "#22d3ee" },
-  2: { bg: "rgba(52,211,153,0.1)", border: "rgba(52,211,153,0.3)", text: "#34d399" },
-  3: { bg: "rgba(249,115,22,0.1)", border: "rgba(249,115,22,0.3)", text: "#f97316" },
-  4: { bg: "rgba(167,139,250,0.1)", border: "rgba(167,139,250,0.3)", text: "#a78bfa" },
-  5: { bg: "rgba(244,63,94,0.1)", border: "rgba(244,63,94,0.3)", text: "#f43f5e" },
+  1: { bg: "rgba(175,169,236,0.1)", border: "rgba(175,169,236,0.3)", text: "var(--color-accent)" },
+  2: { bg: "rgba(133,183,235,0.1)", border: "rgba(133,183,235,0.3)", text: "var(--color-accent-support)" },
+  3: { bg: "rgba(175,169,236,0.1)", border: "rgba(175,169,236,0.3)", text: "var(--color-accent)" },
+  4: { bg: "rgba(133,183,235,0.1)", border: "rgba(133,183,235,0.3)", text: "var(--color-accent-support)" },
+  5: { bg: "rgba(175,169,236,0.1)", border: "rgba(175,169,236,0.3)", text: "var(--color-accent)" },
 };
 
 function DifficultyStars({ level, maxLevel = 5 }) {
@@ -31,8 +31,8 @@ export default function LessonCard({ lesson, onClick, completed = false }) {
       className="lesson-card w-full text-start p-5 rounded-xl border transition-all cursor-pointer"
       style={{
         backgroundColor: "var(--color-bg-card)",
-        borderColor: completed ? colors.text : "var(--color-border)",
-        boxShadow: completed ? `0 0 20px ${colors.bg}` : "none",
+        borderColor: completed ? "var(--color-success)" : "var(--color-border)",
+        boxShadow: completed ? "var(--shadow-md)" : "none",
       }}
     >
       <div className="flex items-start justify-between gap-3">
@@ -47,7 +47,7 @@ export default function LessonCard({ lesson, onClick, completed = false }) {
             </span>
             <DifficultyStars level={lesson.difficulty} />
             {completed && (
-              <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/20 text-green-400 font-medium">
+              <span className="text-xs px-2 py-0.5 rounded-full bg-success/20 text-success font-medium">
                 {t.lessonList.done}
               </span>
             )}

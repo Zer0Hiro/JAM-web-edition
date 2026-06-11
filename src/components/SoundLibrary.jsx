@@ -136,13 +136,13 @@ const OCTAVES = [1, 2, 3, 4, 5, 6, 7].map((oct) => ({
 }));
 
 const OCTAVE_COLORS = [
-  { bg: "rgba(139,92,246,0.18)", border: "#8b5cf6", text: "#c4b5fd", glow: "rgba(139,92,246,0.5)" },
-  { bg: "rgba(0,240,255,0.12)", border: "#00f0ff", text: "#67e8f9", glow: "rgba(0,240,255,0.4)" },
-  { bg: "rgba(255,0,170,0.12)", border: "#ff00aa", text: "#f9a8d4", glow: "rgba(255,0,170,0.4)" },
-  { bg: "rgba(249,115,22,0.15)", border: "#f97316", text: "#fdba74", glow: "rgba(249,115,22,0.4)" },
-  { bg: "rgba(34,211,238,0.12)", border: "#22d3ee", text: "#a5f3fc", glow: "rgba(34,211,238,0.4)" },
-  { bg: "rgba(255,0,170,0.10)", border: "#ff00aa", text: "#f9a8d4", glow: "rgba(255,0,170,0.35)" },
-  { bg: "rgba(139,92,246,0.15)", border: "#8b5cf6", text: "#c4b5fd", glow: "rgba(139,92,246,0.45)" },
+  { bg: "rgba(175,169,236,0.18)", border: "var(--color-accent-deep)", text: "var(--color-accent)", glow: "rgba(175,169,236,0.5)" },
+  { bg: "rgba(133,183,235,0.12)", border: "var(--color-accent-support)", text: "var(--color-accent-support)", glow: "rgba(133,183,235,0.4)" },
+  { bg: "rgba(175,169,236,0.12)", border: "var(--color-accent-deep)", text: "var(--color-accent)", glow: "rgba(175,169,236,0.4)" },
+  { bg: "rgba(175,169,236,0.15)", border: "var(--color-accent-deep)", text: "var(--color-accent)", glow: "rgba(175,169,236,0.4)" },
+  { bg: "rgba(133,183,235,0.12)", border: "var(--color-accent-support)", text: "var(--color-accent-support)", glow: "rgba(133,183,235,0.4)" },
+  { bg: "rgba(175,169,236,0.10)", border: "var(--color-accent-deep)", text: "var(--color-accent)", glow: "rgba(175,169,236,0.35)" },
+  { bg: "rgba(175,169,236,0.15)", border: "var(--color-accent-deep)", text: "var(--color-accent)", glow: "rgba(175,169,236,0.45)" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -152,14 +152,14 @@ const OCTAVE_COLORS = [
 const WAVE_IDS = ["sine", "sawtooth", "square", "triangle", "noise", "pluck", "handpan", "bell"];
 const WAVE_LABELS = ["SIN", "SAW", "SQUARE", "TRIANGLE", "NOISE", "PLUCK", "HANDPAN", "BELL"];
 const WAVE_COLORS = [
-  { color: "#85B7EB", glow: "rgba(133,183,235,0.4)", border: "rgba(133,183,235,0.5)", bg: "rgba(133,183,235,0.08)" },
-  { color: "#AFA9EC", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
-  { color: "#f97316", glow: "rgba(249,115,22,0.4)", border: "rgba(249,115,22,0.5)", bg: "rgba(249,115,22,0.08)" },
-  { color: "#7F77DD", glow: "rgba(127,119,221,0.4)", border: "rgba(127,119,221,0.5)", bg: "rgba(127,119,221,0.08)" },
-  { color: "#22d3ee", glow: "rgba(34,211,238,0.4)", border: "rgba(34,211,238,0.5)", bg: "rgba(34,211,238,0.08)" },
-  { color: "#eab308", glow: "rgba(234,179,8,0.4)", border: "rgba(234,179,8,0.5)", bg: "rgba(234,179,8,0.08)" },
-  { color: "#10b981", glow: "rgba(16,185,129,0.4)", border: "rgba(16,185,129,0.5)", bg: "rgba(16,185,129,0.08)" },
-  { color: "#e2b04a", glow: "rgba(226,176,74,0.4)", border: "rgba(226,176,74,0.5)", bg: "rgba(226,176,74,0.08)" },
+  { color: "var(--color-accent-support)", glow: "rgba(133,183,235,0.4)", border: "rgba(133,183,235,0.5)", bg: "rgba(133,183,235,0.08)" },
+  { color: "var(--color-accent)", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
+  { color: "var(--color-accent)", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
+  { color: "var(--color-accent-deep)", glow: "rgba(127,119,221,0.4)", border: "rgba(127,119,221,0.5)", bg: "rgba(127,119,221,0.08)" },
+  { color: "var(--color-accent-support)", glow: "rgba(133,183,235,0.4)", border: "rgba(133,183,235,0.5)", bg: "rgba(133,183,235,0.08)" },
+  { color: "var(--color-accent)", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
+  { color: "var(--color-accent-support)", glow: "rgba(133,183,235,0.4)", border: "rgba(133,183,235,0.5)", bg: "rgba(133,183,235,0.08)" },
+  { color: "var(--color-accent)", glow: "rgba(175,169,236,0.4)", border: "rgba(175,169,236,0.5)", bg: "rgba(175,169,236,0.08)" },
 ];
 
 const WAVE_POINTS_FNS = [
@@ -330,8 +330,8 @@ function NoteButton({ note, color }) {
       aria-label={`Play ${note.label}, ${note.freq} hertz`}
       style={{
         background: active ? color.border : color.bg,
-        border: `1.5px solid ${active ? color.border : "rgba(255,255,255,0.1)"}`,
-        boxShadow: active ? `0 0 14px ${color.glow}, 0 0 4px ${color.glow}` : "none",
+        border: `1.5px solid ${active ? color.border : "var(--color-border)"}`,
+        boxShadow: active ? "var(--shadow-md)" : "none",
         color: active ? "#fff" : color.text,
         transition: "all 0.15s ease",
         cursor: "pointer",
@@ -385,8 +385,8 @@ function WaveCard({ waveIdx, t }) {
       style={{
         background: active ? c.bg : "var(--color-bg-card)",
         border: `1.5px solid ${active ? c.border : "var(--color-border)"}`,
-        boxShadow: active ? `0 0 24px ${c.glow}` : "none",
-        borderRadius: "16px",
+        boxShadow: active ? "var(--shadow-md)" : "none",
+        borderRadius: "12px",
         padding: "24px 20px 20px",
         display: "flex",
         flexDirection: "column",
@@ -426,7 +426,7 @@ function WaveCard({ waveIdx, t }) {
             fontFamily: "var(--font-mono)",
             cursor: "pointer",
             transition: "all 0.15s ease",
-            boxShadow: active ? `0 0 10px ${c.glow}` : "none",
+            boxShadow: active ? "var(--shadow-md)" : "none",
             fontWeight: 600,
           }}
         >
@@ -498,9 +498,9 @@ export default function SoundLibrary() {
             style={{
               fontSize: "0.75rem",
               fontFamily: "var(--font-mono)",
-              color: "var(--color-accent-cyan)",
-              background: "rgba(0,240,255,0.1)",
-              border: "1px solid rgba(0,240,255,0.25)",
+              color: "var(--color-accent-support)",
+              background: "rgba(133,183,235,0.1)",
+              border: "1px solid rgba(133,183,235,0.25)",
               borderRadius: "6px",
               padding: "3px 10px",
               letterSpacing: "0.08em",
@@ -548,7 +548,7 @@ export default function SoundLibrary() {
               width: "36px",
               height: "36px",
               borderRadius: "10px",
-              background: "linear-gradient(135deg, #8b5cf6, #00f0ff)",
+              background: "var(--color-bg-elevated)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -647,9 +647,9 @@ export default function SoundLibrary() {
                     <span
                       style={{
                         fontSize: "0.68rem",
-                        background: "rgba(0,240,255,0.12)",
-                        border: "1px solid rgba(0,240,255,0.3)",
-                        color: "#00f0ff",
+                        background: "rgba(133,183,235,0.12)",
+                        border: "1px solid rgba(133,183,235,0.3)",
+                        color: "var(--color-accent-support)",
                         borderRadius: "4px",
                         padding: "1px 7px",
                         fontFamily: "var(--font-mono)",
@@ -680,22 +680,22 @@ export default function SoundLibrary() {
           style={{
             marginTop: "20px",
             padding: "12px 16px",
-            background: "rgba(139,92,246,0.08)",
-            border: "1px solid rgba(139,92,246,0.2)",
+            background: "rgba(175,169,236,0.08)",
+            border: "1px solid rgba(175,169,236,0.2)",
             borderRadius: "10px",
             fontSize: "0.82rem",
             color: "var(--color-text-secondary)",
             lineHeight: 1.5,
           }}
         >
-          <strong style={{ color: "#c4b5fd" }}>{t.soundLibrary.tip}</strong> {t.soundLibrary.tipText}{" "}
+          <strong style={{ color: "var(--color-accent)" }}>{t.soundLibrary.tip}</strong> {t.soundLibrary.tipText}{" "}
           <code
             style={{
               fontFamily: "var(--font-mono)",
-              background: "rgba(139,92,246,0.15)",
+              background: "rgba(175,169,236,0.15)",
               padding: "1px 5px",
               borderRadius: "4px",
-              color: "#a5b4fc",
+              color: "var(--color-accent)",
             }}
           >
             A4
@@ -704,10 +704,10 @@ export default function SoundLibrary() {
           <code
             style={{
               fontFamily: "var(--font-mono)",
-              background: "rgba(139,92,246,0.15)",
+              background: "rgba(175,169,236,0.15)",
               padding: "1px 5px",
               borderRadius: "4px",
-              color: "#a5b4fc",
+              color: "var(--color-accent)",
             }}
           >
             C#5
@@ -716,10 +716,10 @@ export default function SoundLibrary() {
           <code
             style={{
               fontFamily: "var(--font-mono)",
-              background: "rgba(139,92,246,0.15)",
+              background: "rgba(175,169,236,0.15)",
               padding: "1px 5px",
               borderRadius: "4px",
-              color: "#a5b4fc",
+              color: "var(--color-accent)",
             }}
           >
             G3
@@ -750,7 +750,7 @@ export default function SoundLibrary() {
               width: "36px",
               height: "36px",
               borderRadius: "10px",
-              background: "linear-gradient(135deg, #ff00aa, #f97316)",
+              background: "var(--color-bg-elevated)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -797,7 +797,7 @@ export default function SoundLibrary() {
               width: "36px",
               height: "36px",
               borderRadius: "10px",
-              background: "linear-gradient(135deg, #10b981, #e2b04a)",
+              background: "var(--color-bg-elevated)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -843,15 +843,15 @@ export default function SoundLibrary() {
           style={{
             marginTop: "28px",
             padding: "16px 20px",
-            background: "rgba(255,0,170,0.06)",
-            border: "1px solid rgba(255,0,170,0.2)",
+            background: "rgba(175,169,236,0.06)",
+            border: "1px solid rgba(175,169,236,0.2)",
             borderRadius: "10px",
             fontSize: "0.85rem",
             color: "var(--color-text-secondary)",
             lineHeight: 1.6,
           }}
         >
-          <strong style={{ color: "#f9a8d4" }}>{t.soundLibrary.whyDifferent}</strong>{" "}
+          <strong style={{ color: "var(--color-accent)" }}>{t.soundLibrary.whyDifferent}</strong>{" "}
           {t.soundLibrary.whyDifferentText}
         </div>
       </section>

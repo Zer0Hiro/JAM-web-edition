@@ -28,14 +28,14 @@ const STEP_IMAGES = {
 };
 
 const STEP_COLORS = [
-  "#22d3ee",
-  "#8b5cf6",
-  "#34d399",
-  "#f97316",
-  "#ff00aa",
-  "#00f0ff",
-  "#a78bfa",
-  "#f43f5e",
+  "#85b7eb",
+  "#afa9ec",
+  "#85b7eb",
+  "#afa9ec",
+  "#7f77dd",
+  "#85b7eb",
+  "#afa9ec",
+  "#e5666c",
 ];
 
 export default function ArduinoGuide({ onBack }) {
@@ -119,7 +119,7 @@ export default function ArduinoGuide({ onBack }) {
         {/* Progress bar */}
         <div className="h-1 bg-[var(--color-bg-secondary)]">
           <div
-            className="h-full bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)] transition-all duration-500"
+            className="h-full bg-gradient-to-r from-accent-deep to-accent-support transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -227,11 +227,11 @@ export default function ArduinoGuide({ onBack }) {
               <img
                 src={step.image}
                 alt={step.title}
-                className="mb-8 rounded-2xl w-full object-cover border border-[var(--color-border)]"
+                className="mb-8 rounded-xl w-full object-cover border border-[var(--color-border)]"
               />
             ) : (
               <div
-                className="mb-8 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
+                className="mb-8 rounded-xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
                 style={{
                   borderColor: `${color}40`,
                   backgroundColor: `${color}08`,
@@ -298,7 +298,7 @@ export default function ArduinoGuide({ onBack }) {
                   {activeStep < steps.length - 1 && (
                     <button
                       onClick={() => setActiveStep(activeStep + 1)}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-[var(--color-text-primary)] border-2 border-[var(--color-border)] hover:border-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-[var(--color-text-primary)] border-2 border-[var(--color-border)] hover:border-accent-support transition-colors cursor-pointer bg-transparent"
                     >
                       {t.arduinoGuide.nextStep}
                       <ChevronRight size={16} />
@@ -311,7 +311,7 @@ export default function ArduinoGuide({ onBack }) {
             {/* All done celebration */}
             {allDone && (
               <div
-                className="mt-8 p-6 rounded-2xl border-2 text-center"
+                className="mt-8 p-6 rounded-xl border-2 text-center"
                 style={{
                   borderColor: `${color}40`,
                   backgroundColor: `${color}08`,

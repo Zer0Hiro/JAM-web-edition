@@ -101,7 +101,7 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
 
       {/* Badge */}
       <div className="hero-badge hero-stagger mb-8">
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium glass-chip text-[var(--color-accent-purple)]">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium glass-chip text-accent">
           <Zap size={14} />
           {t.hero.badge}
         </span>
@@ -132,8 +132,8 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
         <button
           onClick={onStartLearning}
           className="hero-cta hero-stagger group flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-lg
-                     bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)]
-                     transition-shadow hover:shadow-[0_0_40px_rgba(133,183,235,0.45)] cursor-pointer border-0"
+                     bg-accent-support text-[var(--color-bg-primary)]
+                     transition-shadow hover:shadow-card cursor-pointer border-0"
         >
           <Volume2 size={20} />
           {t.hero.startLearning}
@@ -143,7 +143,7 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
           onClick={onTryEditor}
           className="hero-cta hero-stagger flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-lg
                      glass-chip text-[var(--color-text-primary)]
-                     hover:text-[var(--color-accent-magenta)] transition-colors cursor-pointer"
+                     hover:text-accent transition-colors cursor-pointer"
         >
           {t.hero.tryEditor}
         </button>
@@ -152,7 +152,7 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
           onClick={onBuildYourOwn}
           className="hero-cta hero-stagger flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-lg
                      glass-chip text-[var(--color-text-primary)]
-                     hover:text-[var(--color-accent-orange)] transition-colors cursor-pointer"
+                     hover:text-accent transition-colors cursor-pointer"
         >
           <Cpu size={20} />
           {t.hero.buildYourOwn}

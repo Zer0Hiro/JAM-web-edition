@@ -77,7 +77,7 @@ export default function Sandbox({ initialCode }) {
 function QuickRef({ title, items }) {
   return (
     <div className="p-4 rounded-xl bg-[var(--color-bg-card)] border border-[var(--color-border)]">
-      <h4 className="text-sm font-semibold text-[var(--color-accent-cyan)] mb-2">
+      <h4 className="text-sm font-semibold text-[var(--color-accent-support)] mb-2">
         {title}
       </h4>
       <ul className="space-y-1">

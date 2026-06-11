@@ -3,6 +3,8 @@ import LessonCard from "./LessonCard";
 import { useLanguage } from "../i18n/context";
 import useReveal from "../hooks/useReveal";
 
+const PHASE_TONES = ["#afa9ec", "#85b7eb"];
+
 export default function LessonList({ onSelectLesson, completedLessons = new Set() }) {
   const { t, lang } = useLanguage();
   const phases = getPhasesForLang(lang);
@@ -25,7 +27,7 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
 
         {/* Progress overview */}
         <div className="lesson-reveal flex items-center justify-center gap-6 mb-12 flex-wrap">
-          {phases.map((phase) => {
+          {phases.map((phase, idx) => {
             const completed = phase.lessons.filter((l) =>
               completedLessons.has(l.id)
             ).length;
@@ -37,7 +39,7 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
               <div key={phase.id} className="flex items-center gap-2">
                 <div
                   className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: phase.color }}
+                  style={{ backgroundColor: PHASE_TONES[idx % 2] }}
                 />
                 <span className="text-xs text-[var(--color-text-muted)]">
                   {phaseT?.title || phase.title}
@@ -47,7 +49,7 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
                     className="h-full rounded-full transition-all"
                     style={{
                       width: `${pct}%`,
-                      backgroundColor: phase.color,
+                      backgroundColor: PHASE_TONES[idx % 2],
                     }}
                   />
                 </div>
@@ -60,7 +62,7 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
         </div>
 
         {/* Phase sections */}
-        {phases.map((phase) => {
+        {phases.map((phase, idx) => {
           const phaseT = t.phases[phase.id];
           return (
             <div key={phase.id} className="lesson-reveal mb-12">
@@ -69,8 +71,8 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold"
                   style={{
-                    backgroundColor: `${phase.color}15`,
-                    color: phase.color,
+                    backgroundColor: `${PHASE_TONES[idx % 2]}15`,
+                    color: PHASE_TONES[idx % 2],
                   }}
                 >
                   {phase.id}

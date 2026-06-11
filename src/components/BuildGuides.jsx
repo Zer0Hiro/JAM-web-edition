@@ -18,7 +18,7 @@ const guides = [
     steps: "9 steps",
     level: "Beginner",
     icon: Cpu,
-    accent: "var(--color-accent-cyan)",
+    accent: "var(--color-accent-support)",
     active: true,
   },
   {
@@ -30,7 +30,7 @@ const guides = [
     steps: "6 steps",
     level: "Intermediate",
     icon: Mic2,
-    accent: "var(--color-accent-magenta)",
+    accent: "var(--color-accent)",
     active: true,
   },
   {
@@ -42,7 +42,7 @@ const guides = [
     steps: "Soon",
     level: "Beginner",
     icon: SlidersHorizontal,
-    accent: "var(--color-accent-purple)",
+    accent: "var(--color-accent)",
     active: false,
   },
   {
@@ -54,7 +54,7 @@ const guides = [
     steps: "Soon",
     level: "Advanced",
     icon: Speaker,
-    accent: "var(--color-accent-orange)",
+    accent: "var(--color-accent)",
     active: false,
   },
 ];
@@ -67,18 +67,17 @@ function GuideCard({ guide, onOpen }) {
       type="button"
       onClick={guide.active && onOpen ? onOpen : undefined}
       disabled={!guide.active || !onOpen}
-      className={`group text-start rounded-2xl border p-6 min-h-[280px] transition-all duration-200 ${
+      className={`group text-start rounded-xl border p-6 min-h-[280px] transition-all duration-200 ${
         guide.active
           ? "cursor-pointer hover:-translate-y-1 hover:shadow-2xl"
           : "cursor-not-allowed opacity-70"
       }`}
       style={{
-        background:
-          "linear-gradient(180deg, var(--color-bg-card), var(--color-bg-secondary))",
+        background: "var(--color-bg-card)",
         borderColor: guide.active
-          ? `${guide.accent}66`
+          ? `color-mix(in srgb, ${guide.accent} 40%, transparent)`
           : "var(--color-border)",
-        boxShadow: guide.active ? `0 0 24px ${guide.accent}18` : "none",
+        boxShadow: guide.active ? "var(--shadow-md)" : "none",
       }}
     >
       {/* Header row */}
@@ -88,8 +87,8 @@ function GuideCard({ guide, onOpen }) {
           className="rounded-xl w-12 h-12 flex items-center justify-center"
           style={{
             color: guide.accent,
-            background: `${guide.accent}18`,
-            border: `1px solid ${guide.accent}33`,
+            background: `color-mix(in srgb, ${guide.accent} 9%, transparent)`,
+            border: `1px solid color-mix(in srgb, ${guide.accent} 20%, transparent)`,
           }}
         >
           <Icon size={22} />
@@ -177,15 +176,14 @@ export default function BuildGuides({ onOpenArduinoGuide, onOpenVoiceSoundGuide 
         <div
           className="absolute inset-0 -z-10 opacity-60"
           style={{
-            background:
-              "radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.12) 0%, transparent 50%), radial-gradient(ellipse at 85% 30%, rgba(255,0,170,0.08) 0%, transparent 45%)",
+            background: "var(--color-bg-card)",
           }}
         />
 
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="text-center mb-14">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] border border-[var(--color-accent-cyan)]/20 mb-6">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-accent-support/10 text-accent-support border border-accent-support/20 mb-6">
               Hardware paths
             </span>
 

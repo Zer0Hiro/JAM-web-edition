@@ -27,13 +27,13 @@ export default function LessonView({
   const [showFunFact, setShowFunFact] = useState(false);
 
   const PHASE_COLORS = {
-    1: "#22d3ee",
-    2: "#34d399",
-    3: "#f97316",
-    4: "#a78bfa",
-    5: "#f43f5e",
+    1: "#afa9ec",
+    2: "#85b7eb",
+    3: "#afa9ec",
+    4: "#85b7eb",
+    5: "#afa9ec",
   };
-  const phaseColor = PHASE_COLORS[lesson.phase] || "#22d3ee";
+  const phaseColor = PHASE_COLORS[lesson.phase] || "#afa9ec";
 
   function toggleChallenge(id) {
     setExpandedChallenges((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -50,7 +50,7 @@ export default function LessonView({
             className="bg-[var(--color-bg-primary)] rounded-lg p-4 text-sm overflow-x-auto my-3 border border-[var(--color-border)] text-left"
             style={{ fontFamily: "var(--font-mono)" }}
           >
-            <code className="text-[var(--color-accent-cyan)]">{code}</code>
+            <code className="text-[var(--color-accent-support)]">{code}</code>
           </pre>
         );
       }
@@ -58,7 +58,7 @@ export default function LessonView({
       let html = paragraph
         .replace(/\*\*(.+?)\*\*/g, '<strong class="text-[var(--color-text-primary)] font-semibold">$1</strong>')
         .replace(/\*(.+?)\*/g, '<em>$1</em>')
-        .replace(/`(.+?)`/g, '<code dir="ltr" class="bg-[var(--color-bg-primary)] px-1.5 py-0.5 rounded text-sm text-[var(--color-accent-cyan)] inline-block" style="font-family: var(--font-mono)">$1</code>')
+        .replace(/`(.+?)`/g, '<code dir="ltr" class="bg-[var(--color-bg-primary)] px-1.5 py-0.5 rounded text-sm text-[var(--color-accent-support)] inline-block" style="font-family: var(--font-mono)">$1</code>')
         .replace(/\n- /g, '</p><p class="ms-4 before:content-[\'•_\'] text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">')
         .replace(/\n(\d+)\. /g, '</p><p class="ms-4 text-[var(--color-text-secondary)] text-sm leading-relaxed mb-1">$1. ');
 
@@ -197,7 +197,7 @@ export default function LessonView({
             {/* Challenges */}
             {lesson.challenges && lesson.challenges.length > 0 && (
               <div className="mb-8">
-                <div className="p-5 rounded-2xl border-2 border-dashed" style={{ borderColor: `${phaseColor}40`, backgroundColor: `${phaseColor}08` }}>
+                <div className="p-5 rounded-xl border-2 border-dashed" style={{ borderColor: `${phaseColor}40`, backgroundColor: `${phaseColor}08` }}>
                   <h2 className="text-lg font-bold mb-1 flex items-center gap-2">
                     <Sparkles size={20} style={{ color: phaseColor }} />
                     {t.lessonView.tryThese}
@@ -253,13 +253,13 @@ export default function LessonView({
               <div className="mb-8">
                 <button
                   onClick={() => setShowFunFact(!showFunFact)}
-                  className="flex items-center gap-2 text-sm font-medium text-[var(--color-accent-orange)] hover:text-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent border-0 p-0"
+                  className="flex items-center gap-2 text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-accent-support)] transition-colors cursor-pointer bg-transparent border-0 p-0"
                 >
                   <Lightbulb size={16} />
                   {showFunFact ? t.lessonView.hideFunFact : t.lessonView.showFunFact}
                 </button>
                 {showFunFact && (
-                  <div className="mt-3 p-4 rounded-xl bg-orange-950/20 border border-orange-500/20 text-sm text-[var(--color-text-secondary)]">
+                  <div className="mt-3 p-4 rounded-xl bg-accent/20 border border-accent/20 text-sm text-[var(--color-text-secondary)]">
                     {lesson.funFact}
                   </div>
                 )}
@@ -272,14 +272,14 @@ export default function LessonView({
                 <button
                   onClick={() => onComplete && onComplete(lesson.id)}
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm
-                             bg-green-500 text-white hover:bg-green-600 transition-colors cursor-pointer border-0"
+                             bg-success text-white hover:bg-success/90 transition-colors cursor-pointer border-0"
                 >
                   <CheckCircle2 size={16} />
                   {t.lessonView.markComplete}
                 </button>
               )}
               {completed && (
-                <span className="flex items-center gap-2 text-sm text-green-400 font-medium">
+                <span className="flex items-center gap-2 text-sm text-success font-medium">
                   <CheckCircle2 size={16} />
                   {t.lessonView.completed}
                 </span>
@@ -289,7 +289,7 @@ export default function LessonView({
                   onClick={onNext}
                   className="flex items-center gap-2 px-6 py-2.5 rounded-xl font-semibold text-sm
                              text-[var(--color-text-primary)] border-2 border-[var(--color-border)]
-                             hover:border-[var(--color-accent-cyan)] transition-colors cursor-pointer bg-transparent"
+                             hover:border-[var(--color-accent-support)] transition-colors cursor-pointer bg-transparent"
                 >
                   {t.lessonView.nextLesson}
                   <ArrowRight size={16} />

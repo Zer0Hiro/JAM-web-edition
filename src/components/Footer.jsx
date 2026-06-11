@@ -24,7 +24,7 @@ export default function Footer() {
               href="https://sensorium.github.io/Mozzi/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-colors no-underline"
+              className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-support)] transition-colors no-underline"
             >
               {t.footer.mozzi}
               <ExternalLink size={12} />
@@ -33,7 +33,7 @@ export default function Footer() {
               href="https://github.com/Zer0Hiro/jamWeb"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-cyan)] transition-colors no-underline"
+              className="flex items-center gap-1 text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-accent-support)] transition-colors no-underline"
             >
               {t.footer.github}
               <ExternalLink size={12} />

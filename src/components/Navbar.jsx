@@ -58,8 +58,8 @@ export default function Navbar({ onNavigate, currentView }) {
             onClick={() => handleNav("musicLibrary")}
             className={`hidden md:flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-sm font-semibold transition-all duration-150 cursor-pointer border
               ${currentView === "musicLibrary"
-                ? "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/15 border-[var(--color-accent-cyan)]/60 shadow-[0_0_12px_rgba(0,240,255,0.25)]"
-                : "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/5 border-[var(--color-accent-cyan)]/25 hover:bg-[var(--color-accent-cyan)]/12 hover:border-[var(--color-accent-cyan)]/50 hover:shadow-[0_0_8px_rgba(0,240,255,0.18)]"
+                ? "text-accent-support bg-accent-support/15 border-accent-support/60 shadow-card"
+                : "text-accent-support bg-accent-support/5 border-accent-support/25 hover:bg-accent-support/12 hover:border-accent-support/50 hover:shadow-card"
               }`}
           >
             {t.nav.musicLibrary}
@@ -75,7 +75,7 @@ export default function Navbar({ onNavigate, currentView }) {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer bg-transparent border-0
                 ${
                   currentView === item.view
-                    ? "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/10"
+                    ? "text-accent-support bg-accent-support/10"
                     : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-card)]"
                 }`}
             >
@@ -109,7 +109,7 @@ export default function Navbar({ onNavigate, currentView }) {
                     onClick={() => { setLang(l.code); setLangOpen(false); }}
                     className={`w-full text-start px-4 py-2 text-sm transition-colors cursor-pointer bg-transparent border-0 flex items-center gap-2
                       ${lang === l.code
-                        ? "text-[var(--color-accent-cyan)]"
+                        ? "text-accent-support"
                         : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-secondary)]"
                       }`}
                   >
@@ -141,7 +141,7 @@ export default function Navbar({ onNavigate, currentView }) {
               className={`w-full text-start px-4 py-3 rounded-lg text-sm font-medium transition-colors cursor-pointer bg-transparent border-0
                 ${
                   currentView === item.view
-                    ? "text-[var(--color-accent-cyan)] bg-[var(--color-accent-cyan)]/10"
+                    ? "text-accent-support bg-accent-support/10"
                     : "text-[var(--color-text-secondary)]"
                 }`}
             >
@@ -166,7 +166,7 @@ export default function Navbar({ onNavigate, currentView }) {
                 onClick={() => { setLang(l.code); setMobileOpen(false); }}
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm cursor-pointer border-0 transition-colors
                   ${lang === l.code
-                    ? "bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)]"
+                    ? "bg-accent-support/10 text-accent-support"
                     : "bg-transparent text-[var(--color-text-secondary)]"
                   }`}
               >

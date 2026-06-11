@@ -18,12 +18,12 @@ import voiceStep6 from "../assets/2_6.jpeg";
 const STORAGE_KEY = "jam-voice-sound-guide-progress";
 
 const STEP_COLORS = [
-  "#ff00aa",
-  "#8b5cf6",
-  "#22d3ee",
-  "#f97316",
-  "#00f0ff",
-  "#a78bfa",
+  "#7f77dd",
+  "#afa9ec",
+  "#85b7eb",
+  "#afa9ec",
+  "#85b7eb",
+  "#afa9ec",
 ];
 
 const steps = [
@@ -153,7 +153,7 @@ export default function VoiceSoundGuide({ onBack }) {
         {/* Progress bar */}
         <div className="h-1 bg-[var(--color-bg-secondary)]">
           <div
-            className="h-full bg-gradient-to-r from-[var(--color-accent-magenta)] to-[var(--color-accent-purple)] transition-all duration-500"
+            className="h-full bg-gradient-to-r from-accent-deep to-accent-support transition-all duration-500"
             style={{ width: `${progress}%` }}
           />
         </div>
@@ -226,11 +226,11 @@ export default function VoiceSoundGuide({ onBack }) {
               <img
                 src={step.image}
                 alt={step.title}
-                className="mb-8 rounded-2xl w-full object-cover border border-[var(--color-border)]"
+                className="mb-8 rounded-xl w-full object-cover border border-[var(--color-border)]"
               />
             ) : (
               <div
-                className="mb-8 rounded-2xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
+                className="mb-8 rounded-xl border-2 border-dashed flex flex-col items-center justify-center py-16 px-8"
                 style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
               >
                 <ImageIcon size={48} style={{ color, opacity: 0.4 }} />
@@ -281,7 +281,7 @@ export default function VoiceSoundGuide({ onBack }) {
                   {activeStep < steps.length - 1 && (
                     <button
                       onClick={() => setActiveStep(activeStep + 1)}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-[var(--color-text-primary)] border-2 border-[var(--color-border)] hover:border-[var(--color-accent-magenta)] transition-colors cursor-pointer bg-transparent"
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-[var(--color-text-primary)] border-2 border-[var(--color-border)] hover:border-accent transition-colors cursor-pointer bg-transparent"
                     >
                       Next step
                       <ChevronRight size={16} />
@@ -294,7 +294,7 @@ export default function VoiceSoundGuide({ onBack }) {
             {/* All done */}
             {allDone && (
               <div
-                className="mt-8 p-6 rounded-2xl border-2 text-center"
+                className="mt-8 p-6 rounded-xl border-2 text-center"
                 style={{ borderColor: `${color}40`, backgroundColor: `${color}08` }}
               >
                 <p className="text-2xl font-bold mb-2">All set!</p>

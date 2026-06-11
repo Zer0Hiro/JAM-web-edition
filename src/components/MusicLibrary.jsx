@@ -35,7 +35,7 @@ const tracks = [
     artist: "Johann Sebastian Bach",
     cover: bachCover,
     code: dedent(bachCode),
-    accent: "var(--color-accent-cyan)",
+    accent: "var(--color-accent-support)",
   },
   {
     id: "mario-theme",
@@ -43,7 +43,7 @@ const tracks = [
     artist: "Koji Kondo",
     cover: marioCover,
     code: dedent(marioCode),
-    accent: "var(--color-accent-magenta)",
+    accent: "var(--color-accent)",
   },
   {
     id: "bloody-tears",
@@ -51,7 +51,7 @@ const tracks = [
     artist: "Konami Kukeiha Club",
     cover: bloodyTearsCover,
     code: dedent(bloodyTearsCode),
-    accent: "var(--color-accent-purple)",
+    accent: "var(--color-accent)",
   },
   {
     id: "smells-like-teen-spirit",
@@ -59,7 +59,7 @@ const tracks = [
     artist: "Nirvana",
     cover: nirvanaCover,
     code: dedent(nirvanaCode),
-    accent: "var(--color-accent-orange)",
+    accent: "var(--color-accent)",
   },
   {
     id: "megalovania",
@@ -67,7 +67,7 @@ const tracks = [
     artist: "Toby Fox",
     cover: megalovaniaCover,
     code: dedent(megalovaniaCode),
-    accent: "var(--color-accent-cyan)",
+    accent: "var(--color-accent-support)",
   },
   {
     id: "pacman-theme",
@@ -75,7 +75,7 @@ const tracks = [
     artist: "Toru Iwatani / Namco",
     cover: pacmanCover,
     code: dedent(pacmanCode),
-    accent: "var(--color-accent-magenta)",
+    accent: "var(--color-accent)",
   },
   {
     id: "smoke-on-the-water",
@@ -83,7 +83,7 @@ const tracks = [
     artist: "Deep Purple",
     cover: smokeCover,
     code: dedent(smokeCode),
-    accent: "var(--color-accent-purple)",
+    accent: "var(--color-accent)",
   },
   {
     id: "harry-potter-theme",
@@ -91,7 +91,7 @@ const tracks = [
     artist: "John Williams",
     cover: harryPotterCover,
     code: dedent(harryPotterCode),
-    accent: "var(--color-accent-cyan)",
+    accent: "var(--color-accent-support)",
   },
   {
     id: "bell-waltz",
@@ -99,18 +99,18 @@ const tracks = [
     artist: "JAM Original",
     cover: bellWaltzCover,
     code: dedent(bellWaltzCode),
-    accent: "var(--color-accent-orange)",
+    accent: "var(--color-accent)",
   },
 ];
 
 function TrackCard({ track, onOpen }) {
   return (
     <div
-      className="group rounded-2xl border overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
+      className="group rounded-xl border overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
       style={{
-        background: "linear-gradient(180deg, var(--color-bg-card), var(--color-bg-secondary))",
-        borderColor: `${track.accent}55`,
-        boxShadow: `0 0 18px ${track.accent}12`,
+        background: "var(--color-bg-card)",
+        borderColor: `color-mix(in srgb, ${track.accent} 33%, transparent)`,
+        boxShadow: "var(--shadow-md)",
       }}
     >
       {/* Cover image — square */}
@@ -126,7 +126,7 @@ function TrackCard({ track, onOpen }) {
           style={{
             background: "var(--color-bg-primary)",
             color: track.accent,
-            border: `1px solid ${track.accent}55`,
+            border: `1px solid color-mix(in srgb, ${track.accent} 33%, transparent)`,
           }}
         >
           JEM
@@ -145,7 +145,7 @@ function TrackCard({ track, onOpen }) {
         <button
           type="button"
           onClick={() => onOpen(track.code)}
-          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-full text-xs font-bold text-white cursor-pointer border-0 transition-all duration-150 bg-orange-500 hover:bg-orange-400 hover:shadow-[0_0_12px_rgba(249,115,22,0.55)]"
+          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-full text-xs font-bold text-white cursor-pointer border-0 transition-all duration-150 bg-accent hover:bg-accent-deep hover:shadow-card"
         >
           Open in Editor
         </button>
@@ -165,15 +165,14 @@ export default function MusicLibrary({ onOpenInEditor }) {
         <div
           className="absolute inset-0 -z-10 opacity-60"
           style={{
-            background:
-              "radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.12) 0%, transparent 50%), radial-gradient(ellipse at 85% 30%, rgba(255,0,170,0.08) 0%, transparent 45%)",
+            background: "var(--color-bg-elevated)",
           }}
         />
 
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] border border-[var(--color-accent-cyan)]/20 mb-5">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-accent-support/10 text-accent-support border border-accent-support/20 mb-5">
               Ready-made songs
             </span>
 

@@ -4,7 +4,7 @@ import { gsap } from "../utils/gsap";
 import useReveal from "../hooks/useReveal";
 
 const ICONS = [Code, Headphones, Cpu, BookOpen, Music, Gamepad2];
-const COLORS = ["#85B7EB", "#AFA9EC", "#7F77DD", "#34d399", "#f97316", "#f43f5e"];
+const COLORS = ["#85b7eb", "#afa9ec", "#85b7eb", "#afa9ec", "#85b7eb", "#afa9ec"];
 
 /** 3D tilt toward the cursor (desktop hover only). */
 function handleTiltMove(e) {
@@ -56,12 +56,12 @@ export default function FeatureCards() {
             return (
               <div
                 key={idx}
-                className="feature-card group relative p-6 rounded-2xl bg-[var(--color-bg-card)]/70 backdrop-blur-sm
+                className="feature-card group relative p-6 rounded-xl bg-[var(--color-bg-card)]/70 backdrop-blur-sm
                            border border-[var(--color-border)] overflow-hidden will-change-transform"
                 onMouseMove={handleTiltMove}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = color + "60";
-                  e.currentTarget.style.boxShadow = `0 20px 60px -20px ${color}40, 0 0 30px ${color}12`;
+                  e.currentTarget.style.boxShadow = "var(--shadow-md)";
                 }}
                 onMouseLeave={(e) => {
                   handleTiltLeave(e);

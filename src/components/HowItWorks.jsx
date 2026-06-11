@@ -4,7 +4,7 @@ import { useLanguage } from "../i18n/context";
 import { gsap, prefersReducedMotion } from "../utils/gsap";
 
 const ICONS = [FileCode, Play, Cpu, Speaker];
-const COLORS = ["#85B7EB", "#AFA9EC", "#7F77DD", "#34d399"];
+const COLORS = ["#85B7EB", "#AFA9EC", "#7F77DD", "#85B7EB"];
 const NUMBERS = ["01", "02", "03", "04"];
 
 export default function HowItWorks() {
@@ -75,7 +75,7 @@ export default function HowItWorks() {
             className="hiw-line hidden md:block absolute left-1/2 top-0 bottom-0 w-px origin-top"
             style={{
               background:
-                "linear-gradient(to bottom, #85B7EB, #AFA9EC, #7F77DD, #34d399)",
+                "linear-gradient(to bottom, #85B7EB, #AFA9EC, #7F77DD, #85B7EB)",
             }}
           />
 
@@ -109,11 +109,11 @@ export default function HowItWorks() {
                   {/* Icon node */}
                   <div className="relative z-10">
                     <div
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center backdrop-blur-sm transition-transform duration-300 hover:scale-110"
+                      className="w-16 h-16 rounded-xl flex items-center justify-center backdrop-blur-sm transition-transform duration-300 hover:scale-110"
                       style={{
                         backgroundColor: `${color}15`,
                         border: `2px solid ${color}35`,
-                        boxShadow: `0 0 30px ${color}20`,
+                        boxShadow: "var(--shadow-md)",
                       }}
                     >
                       <Icon size={28} style={{ color }} />

@@ -300,17 +300,17 @@ export default function CodeEditor({
       <div className="flex items-center justify-between px-4 py-2 bg-[var(--color-bg-elevated)] border-b border-[var(--color-border)]">
         <div className="flex items-center gap-2">
           <div className="flex gap-1.5 me-3">
-            <div className="w-3 h-3 rounded-full bg-red-500/80" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-            <div className="w-3 h-3 rounded-full bg-green-500/80" />
+            <div className="w-3 h-3 rounded-full bg-danger/80" />
+            <div className="w-3 h-3 rounded-full bg-warning/80" />
+            <div className="w-3 h-3 rounded-full bg-success/80" />
           </div>
           <span className="text-sm text-[var(--color-text-muted)] font-mono">
             sketch.jam
           </span>
           {uploadStatus && (
-            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${uploadStatus === "uploading" ? "bg-yellow-500/20 text-yellow-300" :
-              uploadStatus === "success" ? "bg-green-500/20 text-green-300" :
-                "bg-red-500/20 text-red-300"
+            <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${uploadStatus === "uploading" ? "bg-warning/20 text-warning" :
+              uploadStatus === "success" ? "bg-success/20 text-success" :
+                "bg-danger/20 text-danger"
               }`}>
               {uploadStatus === "uploading" ? <Loader2 size={10} className="animate-spin" /> :
                 uploadStatus === "success" ? <Check size={10} /> :
@@ -348,7 +348,7 @@ export default function CodeEditor({
                 <button
                   onClick={() => { handleCompile(); setShowMenu(false); }}
                   disabled={isCompiling}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-accent-purple)]
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-accent
                              hover:bg-[var(--color-bg-secondary)] transition-colors cursor-pointer border-0 text-left
                              disabled:opacity-50"
                 >
@@ -358,7 +358,7 @@ export default function CodeEditor({
                 {wavData && (
                   <button
                     onClick={() => { handleDownloadWav(); setShowMenu(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-accent-magenta)]
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-accent
                                hover:bg-[var(--color-bg-secondary)] transition-colors cursor-pointer border-0 text-left"
                   >
                     <FileAudio size={14} />
@@ -368,7 +368,7 @@ export default function CodeEditor({
                 {cppCode && (
                   <button
                     onClick={() => { setShowCpp(!showCpp); setShowMenu(false); }}
-                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[var(--color-accent-cyan)]
+                    className="w-full flex items-center gap-2 px-3 py-2 text-sm text-accent-support
                                hover:bg-[var(--color-bg-secondary)] transition-colors cursor-pointer border-0 text-left"
                   >
                     <Code size={14} />
@@ -385,7 +385,7 @@ export default function CodeEditor({
               onClick={handleUpload}
               disabled={uploadStatus === "uploading"}
               className="flex items-center gap-1.5 px-3 h-8 text-sm rounded-s-lg
-                         bg-[var(--color-accent-magenta)] text-white font-medium
+                         bg-accent-deep text-white font-medium
                          hover:opacity-90 transition-opacity cursor-pointer
                          disabled:opacity-50 border-0"
               title={t.editor.uploadBoard}
@@ -401,7 +401,7 @@ export default function CodeEditor({
               <button
                 onClick={() => { setShowBoardSelector(!showBoardSelector); setShowPinSelector(false); setShowMenu(false); }}
                 className="flex items-center gap-1 px-1.5 h-8 text-sm rounded-e-lg
-                           bg-[var(--color-accent-magenta)] text-white font-medium
+                           bg-accent-deep text-white font-medium
                            hover:opacity-90 transition-opacity cursor-pointer border-0
                            border-l border-l-white/20"
                 title={t.editor.selectBoard}
@@ -421,7 +421,7 @@ export default function CodeEditor({
                       className={`w-full text-left px-3 py-1.5 text-sm cursor-pointer border-0
                                   hover:bg-[var(--color-bg-secondary)] transition-colors
                                   ${selectedBoard === b.id
-                          ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
+                          ? "text-accent font-semibold bg-[var(--color-bg-secondary)]"
                           : "text-[var(--color-text-secondary)]"
                         }`}
                     >
@@ -431,7 +431,7 @@ export default function CodeEditor({
                   {selectedBoard === "esp32" && (
                     <>
                       <div className="border-t border-[var(--color-border)] my-1" />
-                      <div className="px-3 py-1 text-xs text-[var(--color-text-tertiary)]">{t.editor.selectPin}</div>
+                      <div className="px-3 py-1 text-xs text-ink-muted">{t.editor.selectPin}</div>
                       <div className="max-h-[150px] overflow-y-auto">
                         {[2, 4, 5, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 25, 27, 32, 33].map((pin) => (
                           <button
@@ -440,7 +440,7 @@ export default function CodeEditor({
                             className={`w-full text-left px-3 py-1 text-sm cursor-pointer border-0
                                         hover:bg-[var(--color-bg-secondary)] transition-colors
                                         ${selectedPin === pin
-                                ? "text-[var(--color-accent-magenta)] font-semibold bg-[var(--color-bg-secondary)]"
+                                ? "text-accent font-semibold bg-[var(--color-bg-secondary)]"
                                 : "text-[var(--color-text-secondary)]"
                               }`}
                           >
@@ -464,8 +464,8 @@ export default function CodeEditor({
                        ${isLoadingPlay
                 ? "btn-compiling"
                 : isPlaying
-                  ? "bg-red-500 text-white hover:bg-red-600"
-                  : "bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)] hover:opacity-90"
+                  ? "bg-danger text-white hover:bg-danger/90"
+                  : "bg-accent-support text-[var(--color-bg-primary)] hover:opacity-90"
               }`}
           >
             {isLoadingPlay ? (
@@ -490,8 +490,8 @@ export default function CodeEditor({
         <div className="h-1 bg-[var(--color-bg-secondary)]">
           <div
             className={`h-full transition-all duration-100 ${isLoadingPlay && !isPlaying
-              ? "bg-[var(--color-accent-cyan)] animate-pulse w-full"
-              : "bg-gradient-to-r from-[var(--color-accent-cyan)] to-[var(--color-accent-magenta)]"
+              ? "bg-accent-support animate-pulse w-full"
+              : "bg-gradient-to-r from-accent-support to-accent"
               }`}
             style={isPlaying ? { width: `${progress * 100}%` } : undefined}
           />
@@ -517,12 +517,12 @@ export default function CodeEditor({
 
       {/* Error / success display */}
       {error && (
-        <div className="px-4 py-3 bg-red-950/50 border-t border-red-500/30 text-red-300 text-sm">
+        <div className="px-4 py-3 bg-danger/10 border-t border-danger/30 text-danger text-sm">
           <span className="font-semibold">{t.editor.oops}</span> {error}
         </div>
       )}
       {warnings && warnings.length > 0 && (
-        <div className="px-4 py-3 bg-yellow-950/50 border-t border-yellow-500/30 text-yellow-300 text-sm">
+        <div className="px-4 py-3 bg-warning/10 border-t border-warning/30 text-warning text-sm">
           <span className="font-semibold">⚠️</span> {warnings.join("; ")}
         </div>
       )}
@@ -530,8 +530,8 @@ export default function CodeEditor({
       {compileResult && (
         <div
           className={`px-4 py-3 border-t text-sm ${compileResult.type === "success"
-            ? "bg-green-950/50 border-green-500/30 text-green-300"
-            : "bg-blue-950/50 border-blue-500/30 text-blue-300"
+            ? "bg-success/10 border-success/30 text-success"
+            : "bg-accent-support/10 border-accent-support/30 text-accent-support"
             }`}
         >
           {compileResult.message}
