@@ -1,37 +1,107 @@
-import WaveformVisualizer from "./WaveformVisualizer";
+import { useLayoutEffect, useRef, lazy, Suspense } from "react";
 import { Volume2, Zap, ArrowDown, Cpu } from "lucide-react";
 import { useLanguage } from "../i18n/context";
+import { gsap, SplitText, prefersReducedMotion } from "../utils/gsap";
+
+// three.js is heavy — load the scene after first paint
+const HeroScene = lazy(() => import("./HeroScene"));
+
+/** Magnetic hover: button leans toward the cursor (desktop only). */
+function magnetize(el) {
+  if (!el || window.matchMedia("(hover: none)").matches) return () => {};
+  const xTo = gsap.quickTo(el, "x", { duration: 0.4, ease: "power3.out" });
+  const yTo = gsap.quickTo(el, "y", { duration: 0.4, ease: "power3.out" });
+  const onMove = (e) => {
+    const r = el.getBoundingClientRect();
+    xTo((e.clientX - (r.left + r.width / 2)) * 0.25);
+    yTo((e.clientY - (r.top + r.height / 2)) * 0.35);
+  };
+  const onLeave = () => {
+    xTo(0);
+    yTo(0);
+  };
+  el.addEventListener("pointermove", onMove);
+  el.addEventListener("pointerleave", onLeave);
+  return () => {
+    el.removeEventListener("pointermove", onMove);
+    el.removeEventListener("pointerleave", onLeave);
+  };
+}
 
 export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const rootRef = useRef(null);
+  const titleRef = useRef(null);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+
+    const ctx = gsap.context(() => {
+      const split = new SplitText(titleRef.current, {
+        type: "words",
+        mask: "words", // clip container per word for the reveal
+        wordsClass: "hero-word",
+      });
+
+      // background-clip:text doesn't reach through the mask wrappers —
+      // re-apply the gradient on each split word inside the highlight span
+      split.words.forEach((w) => {
+        if (w.closest(".gradient-text")) w.classList.add("gradient-text");
+      });
+
+      gsap.set(".hero-stagger", { autoAlpha: 0, y: 28 });
+      gsap.set(split.words, { yPercent: 120, opacity: 0 });
+
+      const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+      tl.to(".hero-badge", { autoAlpha: 1, y: 0, duration: 0.7 }, 0.15)
+        .to(
+          split.words,
+          { yPercent: 0, opacity: 1, duration: 1.1, stagger: 0.07 },
+          0.25
+        )
+        .to(".hero-sub", { autoAlpha: 1, y: 0, duration: 0.8 }, 0.65)
+        .to(
+          ".hero-cta",
+          { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.09 },
+          0.85
+        )
+        .to(".hero-scroll", { autoAlpha: 1, y: 0, duration: 0.8 }, 1.3);
+
+      return () => split.revert();
+    }, rootRef);
+
+    const cleanups = gsap.utils
+      .toArray(".hero-cta", rootRef.current)
+      .map(magnetize);
+
+    return () => {
+      ctx.revert();
+      cleanups.forEach((fn) => fn());
+    };
+  }, [lang]);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden">
-      {/* Background gradient */}
+    <section
+      ref={rootRef}
+      className="relative min-h-screen flex flex-col items-center justify-center px-4 overflow-hidden"
+    >
+      {/* Three.js particle wave terrain */}
+      <Suspense fallback={null}>
+        <HeroScene />
+      </Suspense>
+
+      {/* Soft radial vignette over the scene */}
       <div
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 30%, rgba(127,119,221,0.15) 0%, transparent 60%), " +
-            "radial-gradient(ellipse at 20% 80%, rgba(133,183,235,0.08) 0%, transparent 50%), " +
-            "radial-gradient(ellipse at 80% 80%, rgba(175,169,236,0.08) 0%, transparent 50%)",
-        }}
-      />
-
-      {/* Grid overlay */}
-      <div
-        className="absolute inset-0 -z-10 opacity-20"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), " +
-            "linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
+            "radial-gradient(ellipse at 50% 35%, transparent 0%, var(--color-bg-primary) 95%)",
         }}
       />
 
       {/* Badge */}
-      <div className="mb-6 fade-in-up" style={{ animationDelay: "0.1s" }}>
-        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-[var(--color-accent-purple)]/10 text-[var(--color-accent-purple)] border border-[var(--color-accent-purple)]/20">
+      <div className="hero-badge hero-stagger mb-8">
+        <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium glass-chip text-[var(--color-accent-purple)]">
           <Zap size={14} />
           {t.hero.badge}
         </span>
@@ -39,41 +109,40 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
 
       {/* Main title */}
       <h1
-        className="hero-title text-center font-bold leading-tight mb-4 fade-in-up"
-        style={{ fontSize: "4rem", animationDelay: "0.2s" }}
+        ref={titleRef}
+        className="hero-title text-center font-bold mb-6"
+        style={{
+          fontSize: "clamp(2.6rem, 7.5vw, 6.5rem)",
+          lineHeight: 1.04,
+          letterSpacing: "-0.03em",
+          maxWidth: "14ch",
+        }}
       >
         {t.hero.titleBefore}
         <span className="gradient-text">{t.hero.titleHighlight}</span>
       </h1>
 
       {/* Subtitle */}
-      <p
-        className="hero-subtitle text-center text-xl text-[var(--color-text-secondary)] max-w-2xl mb-8 fade-in-up"
-        style={{ animationDelay: "0.3s" }}
-      >
+      <p className="hero-sub hero-stagger text-center text-lg md:text-xl text-[var(--color-text-secondary)] max-w-2xl mb-10">
         {t.hero.subtitle}
       </p>
 
       {/* CTA buttons */}
-      <div
-        className="flex flex-wrap items-center justify-center gap-4 mb-12 fade-in-up"
-        style={{ animationDelay: "0.4s" }}
-      >
+      <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
         <button
           onClick={onStartLearning}
-          className="group flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-lg
+          className="hero-cta hero-stagger group flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-lg
                      bg-[var(--color-accent-cyan)] text-[var(--color-bg-primary)]
-                     hover:scale-105 transition-transform pulse-glow cursor-pointer border-0"
+                     transition-shadow hover:shadow-[0_0_40px_rgba(133,183,235,0.45)] cursor-pointer border-0"
         >
-          <Volume2 size={20} className="group-hover:animate-bounce" />
+          <Volume2 size={20} />
           {t.hero.startLearning}
         </button>
 
         <button
           onClick={onTryEditor}
-          className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-lg
-                     bg-transparent text-[var(--color-text-primary)]
-                     border-2 border-[var(--color-border)] hover:border-[var(--color-accent-magenta)]
+          className="hero-cta hero-stagger flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-lg
+                     glass-chip text-[var(--color-text-primary)]
                      hover:text-[var(--color-accent-magenta)] transition-colors cursor-pointer"
         >
           {t.hero.tryEditor}
@@ -81,9 +150,8 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
 
         <button
           onClick={onBuildYourOwn}
-          className="flex items-center gap-2 px-8 py-3.5 rounded-xl font-semibold text-lg
-                     bg-transparent text-[var(--color-text-primary)]
-                     border-2 border-[var(--color-accent-orange)]/40 hover:border-[var(--color-accent-orange)]
+          className="hero-cta hero-stagger flex items-center gap-2 px-8 py-3.5 rounded-full font-semibold text-lg
+                     glass-chip text-[var(--color-text-primary)]
                      hover:text-[var(--color-accent-orange)] transition-colors cursor-pointer"
         >
           <Cpu size={20} />
@@ -91,26 +159,12 @@ export default function Hero({ onStartLearning, onTryEditor, onBuildYourOwn }) {
         </button>
       </div>
 
-      {/* Waveform */}
-      <div
-        className="w-full max-w-4xl fade-in-up"
-        style={{ animationDelay: "0.5s" }}
-      >
-        <WaveformVisualizer
-          width={1200}
-          height={180}
-          color="#85B7EB"
-          secondaryColor="#AFA9EC"
-          active={true}
-        />
-      </div>
-
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 flex flex-col items-center gap-2 text-[var(--color-text-muted)] animate-bounce">
-        <span className="text-xs uppercase tracking-widest">
+      <div className="hero-scroll hero-stagger absolute bottom-8 flex flex-col items-center gap-2 text-[var(--color-text-muted)]">
+        <span className="text-xs uppercase tracking-[0.25em]">
           {t.hero.scrollToExplore}
         </span>
-        <ArrowDown size={16} />
+        <ArrowDown size={16} className="animate-bounce" />
       </div>
     </section>
   );

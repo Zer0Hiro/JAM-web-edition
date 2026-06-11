@@ -1,18 +1,20 @@
 import { getPhasesForLang } from "../lessons";
 import LessonCard from "./LessonCard";
 import { useLanguage } from "../i18n/context";
+import useReveal from "../hooks/useReveal";
 
 export default function LessonList({ onSelectLesson, completedLessons = new Set() }) {
   const { t, lang } = useLanguage();
   const phases = getPhasesForLang(lang);
   const totalLessons = phases.reduce((sum, p) => sum + p.lessons.length, 0);
+  const sectionRef = useReveal(".lesson-reveal", { stagger: 0.1, start: "top 80%" });
 
   return (
-    <section id="lessons" className="py-20 px-4">
+    <section ref={sectionRef} id="lessons" className="py-24 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Section header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-3">
+        <div className="lesson-reveal text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
             {t.lessonList.titleBefore}
             <span className="gradient-text">{t.lessonList.titleHighlight}</span>
           </h2>
@@ -22,7 +24,7 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
         </div>
 
         {/* Progress overview */}
-        <div className="flex items-center justify-center gap-6 mb-12 flex-wrap">
+        <div className="lesson-reveal flex items-center justify-center gap-6 mb-12 flex-wrap">
           {phases.map((phase) => {
             const completed = phase.lessons.filter((l) =>
               completedLessons.has(l.id)
@@ -61,7 +63,7 @@ export default function LessonList({ onSelectLesson, completedLessons = new Set(
         {phases.map((phase) => {
           const phaseT = t.phases[phase.id];
           return (
-            <div key={phase.id} className="mb-12">
+            <div key={phase.id} className="lesson-reveal mb-12">
               {/* Phase header */}
               <div className="flex items-center gap-3 mb-4">
                 <div

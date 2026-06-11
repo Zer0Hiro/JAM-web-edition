@@ -185,17 +185,47 @@ body {
   transform: translateY(-4px);
 }
 
-/* === Responsive typography === */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem !important;
-  }
-  .hero-subtitle {
-    font-size: 1.1rem !important;
-  }
+/* === Selection === */
+::selection {
+  background: var(--color-accent-purple);
+  color: #fff;
 }
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 1.8rem !important;
+
+/* === Glass chip (badges, secondary CTAs) === */
+.glass-chip {
+  background: color-mix(in srgb, var(--color-bg-card) 55%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border) 80%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* === Film grain overlay (subtle, fixed) === */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+:root[data-theme="light"] .grain::after {
+  opacity: 0.025;
+}
+
+/* === Hero word reveal containers (GSAP SplitText) === */
+.hero-word {
+  will-change: transform;
+}
+
+/* === Reduced motion: kill decorative animation === */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-text,
+  .pulse-glow,
+  .animate-bounce {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

@@ -102,7 +102,7 @@ export default function App() {
 
   // Render main views
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen grain">
       <Navbar onNavigate={handleNavigate} currentView={currentView} />
 
       {currentView === "home" && (

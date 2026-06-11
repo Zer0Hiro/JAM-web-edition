@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X, Globe, Sun, Moon } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 import { useTheme } from "../context/ThemeContext";
@@ -7,8 +7,16 @@ import logoSvg from "../assets/logo.svg";
 export default function Navbar({ onNavigate, currentView }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { t, lang, setLang, langs } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const navItems = [
     { label: t.nav.home, view: "home" },
@@ -24,8 +32,18 @@ export default function Navbar({ onNavigate, currentView }) {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--color-bg-primary)]/80 backdrop-blur-lg border-b border-[var(--color-border)]">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl transition-all duration-300 border-b
+        ${scrolled
+          ? "bg-[var(--color-bg-primary)]/85 border-[var(--color-border)] shadow-[0_8px_30px_rgba(0,0,0,0.12)]"
+          : "bg-transparent border-transparent"
+        }`}
+    >
+      <div
+        className={`max-w-6xl mx-auto px-4 flex items-center justify-between transition-all duration-300 ${
+          scrolled ? "py-2.5" : "py-4"
+        }`}
+      >
         {/* Logo + Music Library (left group) */}
         <div className="flex items-center gap-3">
           <button
