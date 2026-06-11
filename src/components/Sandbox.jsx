@@ -67,7 +67,13 @@ export default function Sandbox({ initialCode, immersive = false }) {
     if (!root) return;
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      // Suspend CSS hover transitions on animated targets while revealing
+      const animated = root.querySelectorAll(".sandbox-editor, .sandbox-ref, .sandbox-sub");
+      animated.forEach((el) => el.classList.add("gsap-revealing"));
+      const tl = gsap.timeline({
+        defaults: { ease: "power3.out" },
+        onComplete: () => animated.forEach((el) => el.classList.remove("gsap-revealing")),
+      });
 
       const headline = root.querySelector(".sandbox-headline");
       if (headline) {
@@ -89,12 +95,12 @@ export default function Sandbox({ initialCode, immersive = false }) {
       tl.from(".sandbox-sub", { autoAlpha: 0, y: 24, duration: 0.7 }, "-=0.4");
       tl.from(
         ".sandbox-editor",
-        { autoAlpha: 0, y: 60, scale: 0.985, duration: 0.9 },
+        { autoAlpha: 0, y: 60, scale: 0.985, duration: 0.9, clearProps: "transform,opacity,visibility" },
         "-=0.35"
       );
       tl.from(
         ".sandbox-ref",
-        { autoAlpha: 0, y: 36, duration: 0.6, stagger: 0.1 },
+        { autoAlpha: 0, y: 36, duration: 0.6, stagger: 0.1, clearProps: "transform,opacity,visibility" },
         "-=0.5"
       );
     }, root);

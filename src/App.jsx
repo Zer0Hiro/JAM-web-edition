@@ -1,5 +1,9 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import { initPyodide } from "./utils/pyodideCompiler";
+import { ScrollTrigger } from "./utils/gsap";
+
+// Site-wide particle backdrop (three.js) — loaded after first paint
+const LessonsScene = lazy(() => import("./components/three/LessonsScene"));
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import FeatureCards from "./components/FeatureCards";
@@ -15,7 +19,7 @@ import BuildGuides from "./components/BuildGuides";
 import VoiceSoundGuide from "./components/VoiceSoundGuide";
 import MusicLibrary from "./components/MusicLibrary";
 import Footer from "./components/Footer";
-import { getLessonById, getNextLesson, getPrevLesson } from "./lessons";
+import { getLessonById, getNextLesson, getPrevLesson, getPhasesForLang } from "./lessons";
 import useProgress from "./hooks/useProgress";
 import { useLanguage } from "./i18n/context";
 import { JAMaiAssistant } from "./components/JAMai";
@@ -32,9 +36,11 @@ export default function App() {
     try { initPyodide(); } catch {}
   }, []);
 
-  // Scroll to top on view change
+  // Scroll to top on view change; re-measure scroll triggers for the new layout
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    const raf = requestAnimationFrame(() => ScrollTrigger.refresh());
+    return () => cancelAnimationFrame(raf);
   }, [currentView, selectedLesson?.id]);
 
   const handleNavigate = useCallback((view) => {
@@ -80,6 +86,11 @@ export default function App() {
     }
   }, [selectedLessonId, lang]);
 
+  // Phase colors drive the backdrop's color journey on the lessons view;
+  // other views get the calm accent-colored field (empty array)
+  const backdropColors =
+    currentView === "lessons" ? getPhasesForLang(lang).map((p) => p.color) : [];
+
   // Render lesson view
   if (currentView === "lesson" && selectedLesson) {
     const next = getNextLesson(selectedLesson.id, lang);
@@ -87,6 +98,9 @@ export default function App() {
 
     return (
       <>
+        <Suspense fallback={null}>
+          <LessonsScene />
+        </Suspense>
         <LessonView
           lesson={selectedLesson}
           onBack={() => handleNavigate("lessons")}
@@ -105,6 +119,9 @@ export default function App() {
   // Render main views
   return (
     <div className="min-h-screen grain">
+      <Suspense fallback={null}>
+        <LessonsScene key={currentView === "lessons" ? "lessons" : "site"} phaseColors={backdropColors} />
+      </Suspense>
       <Navbar onNavigate={handleNavigate} currentView={currentView} />
 
       {currentView === "home" && (

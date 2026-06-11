@@ -1,4 +1,7 @@
+import { Play, ArrowRight } from "lucide-react";
 import Footer from "./Footer";
+import PageHeader from "./PageHeader";
+import useStaggerReveal from "../hooks/useStaggerReveal";
 
 import bachCode from "../assets/music/bach-toccata.jem?raw";
 import bachCover from "../assets/music/bach-toccata.jpg";
@@ -105,28 +108,63 @@ const tracks = [
 
 function TrackCard({ track, onOpen }) {
   return (
-    <div
-      className="group rounded-2xl border overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-2xl"
+    <button
+      type="button"
+      onClick={() => onOpen(track.code)}
+      className="track-card card-spotlight group w-full text-start rounded-2xl border overflow-hidden
+                 cursor-pointer relative transition-all duration-300
+                 bg-[var(--color-bg-card)] border-[var(--color-border)]
+                 hover:-translate-y-1.5"
       style={{
-        background: "linear-gradient(180deg, var(--color-bg-card), var(--color-bg-secondary))",
-        borderColor: `${track.accent}55`,
-        boxShadow: `0 0 18px ${track.accent}12`,
+        "--spot-color": `${track.accent}14`,
+        "--track-accent": track.accent,
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = `${track.accent}66`;
+        e.currentTarget.style.boxShadow = `0 16px 40px -16px ${track.accent}40`;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "";
+        e.currentTarget.style.boxShadow = "";
       }}
     >
-      {/* Cover image — square */}
+      {/* Cover */}
       <div className="relative w-full aspect-square overflow-hidden">
         <img
           src={track.cover}
           alt={track.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          loading="lazy"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.06]"
         />
-        {/* JEM badge */}
+        {/* Bottom gradient so info reads over busy art */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-1/2 pointer-events-none"
+          style={{ background: "linear-gradient(to top, var(--color-bg-card), transparent)" }}
+          aria-hidden="true"
+        />
+        {/* Play chip slides in on hover */}
         <span
-          className="absolute top-2 end-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
+          className="absolute bottom-2 end-2 inline-flex items-center justify-center w-9 h-9 rounded-full
+                     opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0
+                     transition-all duration-300"
           style={{
-            background: "var(--color-bg-primary)",
+            background: track.accent,
+            color: "var(--color-bg-primary)",
+            boxShadow: `0 4px 16px ${track.accent}66`,
+          }}
+          aria-hidden="true"
+        >
+          <Play size={15} fill="currentColor" />
+        </span>
+        {/* Format tag */}
+        <span
+          className="absolute top-2 start-2 text-[10px] font-bold px-2 py-0.5 rounded-md tracking-widest"
+          style={{
+            fontFamily: "var(--font-mono)",
+            background: "color-mix(in srgb, var(--color-bg-primary) 75%, transparent)",
             color: track.accent,
-            border: `1px solid ${track.accent}55`,
+            border: `1px solid ${track.accent}44`,
+            backdropFilter: "blur(6px)",
           }}
         >
           JEM
@@ -134,60 +172,48 @@ function TrackCard({ track, onOpen }) {
       </div>
 
       {/* Info */}
-      <div className="p-3">
+      <div className="relative p-3.5">
         <h3 className="text-sm font-bold text-[var(--color-text-primary)] leading-snug mb-0.5 line-clamp-2">
           {track.title}
         </h3>
-        <p className="text-xs text-[var(--color-text-secondary)] mb-3">
+        <p
+          className="text-[11px] text-[var(--color-text-muted)] mb-3 truncate"
+          style={{ fontFamily: "var(--font-mono)" }}
+        >
           {track.artist}
         </p>
 
-        <button
-          type="button"
-          onClick={() => onOpen(track.code)}
-          className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-full text-xs font-bold text-white cursor-pointer border-0 transition-all duration-150 bg-orange-500 hover:bg-orange-400 hover:shadow-[0_0_12px_rgba(249,115,22,0.55)]"
+        <span
+          className="inline-flex items-center gap-1.5 text-xs font-semibold transition-colors"
+          style={{ color: track.accent }}
         >
           Open in Editor
-        </button>
+          <ArrowRight
+            size={13}
+            className="rtl:rotate-180 transition-transform duration-300 group-hover:translate-x-1 rtl:group-hover:-translate-x-1"
+          />
+        </span>
       </div>
-    </div>
+    </button>
   );
 }
 
 export default function MusicLibrary({ onOpenInEditor }) {
+  const gridRef = useStaggerReveal(".track-card", { y: 44, stagger: 0.06 });
+
   return (
-    <div
-      className="pt-16 min-h-screen"
-      style={{ background: "var(--color-bg-primary)" }}
-    >
-      <section className="relative px-4 py-16 overflow-hidden">
-        {/* Decorative background */}
-        <div
-          className="absolute inset-0 -z-10 opacity-60"
-          style={{
-            background:
-              "radial-gradient(ellipse at 50% 0%, rgba(0,240,255,0.12) 0%, transparent 50%), radial-gradient(ellipse at 85% 30%, rgba(255,0,170,0.08) 0%, transparent 45%)",
-          }}
-        />
-
+    <div className="pt-16 min-h-screen">
+      <section className="relative px-4 pb-16">
         <div className="max-w-5xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-10">
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium bg-[var(--color-accent-cyan)]/10 text-[var(--color-accent-cyan)] border border-[var(--color-accent-cyan)]/20 mb-5">
-              Ready-made songs
-            </span>
-
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Music <span className="gradient-text">Library</span>
-            </h1>
-
-            <p className="text-lg text-[var(--color-text-secondary)] max-w-xl mx-auto">
-              Explore ready-made JEM songs and open their code in the editor.
-            </p>
-          </div>
+          <PageHeader
+            eyebrow="Ready-made songs"
+            subtitle="Explore ready-made JEM songs and open their code in the editor."
+          >
+            Music <span className="gradient-text">Library</span>
+          </PageHeader>
 
           {/* Grid — 4 columns */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {tracks.map((track) => (
               <TrackCard
                 key={track.id}

@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef } from "react";
 import { ArrowRight, GraduationCap, FlaskConical } from "lucide-react";
 import { getPhasesForLang } from "../lessons";
 import { useLanguage } from "../i18n/context";
-import { gsap, prefersReducedMotion } from "../utils/gsap";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "../utils/gsap";
 
 /**
  * Home page gateways to the two main experiences. Replaces the old
@@ -29,15 +29,34 @@ export default function HomePortals({
     const root = rootRef.current;
     if (!root) return;
     const ctx = gsap.context(() => {
-      gsap.from(".portal-card", {
-        autoAlpha: 0,
-        y: 64,
-        scale: 0.97,
-        duration: 1,
-        stagger: 0.15,
-        ease: "power3.out",
-        scrollTrigger: { trigger: root, start: "top 75%", once: true },
-      });
+      const cards = gsap.utils.toArray(".portal-card");
+      // Suspend CSS hover transitions while GSAP drives the same properties
+      cards.forEach((el) => el.classList.add("gsap-revealing"));
+      gsap.set(cards, { autoAlpha: 0, y: 64, scale: 0.97 });
+      const show = () =>
+        gsap.to(cards, {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 1,
+          stagger: 0.15,
+          ease: "power3.out",
+          clearProps: "transform,opacity,visibility",
+          onComplete: () => cards.forEach((el) => el.classList.remove("gsap-revealing")),
+        });
+      // Re-entering the home view can restore an arbitrary scroll offset,
+      // which leaves a ScrollTrigger armed with stale measurements and the
+      // cards stuck hidden. If the section is already on screen, just play.
+      if (root.getBoundingClientRect().top < window.innerHeight * 0.95) {
+        show();
+      } else {
+        ScrollTrigger.create({
+          trigger: root,
+          start: "top 80%",
+          once: true,
+          onEnter: show,
+        });
+      }
     }, root);
     return () => ctx.revert();
   }, []);

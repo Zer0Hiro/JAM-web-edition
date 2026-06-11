@@ -211,6 +211,14 @@ body {
   background: var(--spot-color, rgba(133, 183, 235, 0.12));
 }
 
+/* GSAP entrance in progress: CSS hover transitions (transition-all etc.)
+   would re-interpolate every GSAP frame with their own duration, leaving
+   elements half-faded and laggy. Suppress them until the reveal ends. */
+.gsap-revealing,
+.gsap-revealing * {
+  transition: none !important;
+}
+
 /* === Home portal equalizer === */
 @keyframes eq-bounce {
   0%, 100% { transform: scaleY(0.25); }

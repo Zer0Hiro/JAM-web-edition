@@ -1,6 +1,8 @@
-import { useRef, useCallback, useEffect, useState } from "react";
+import { useRef, useCallback, useEffect, useLayoutEffect, useState } from "react";
 import Footer from "./Footer";
+import PageHeader from "./PageHeader";
 import { useLanguage } from "../i18n/context";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "../utils/gsap";
 
 // ---------------------------------------------------------------------------
 // Audio helpers
@@ -330,12 +332,13 @@ function NoteButton({ note, color }) {
       aria-label={`Play ${note.label}, ${note.freq} hertz`}
       style={{
         background: active ? color.border : color.bg,
-        border: `1.5px solid ${active ? color.border : "rgba(255,255,255,0.1)"}`,
+        border: `1px solid ${active ? color.border : "rgba(255,255,255,0.08)"}`,
         boxShadow: active ? `0 0 14px ${color.glow}, 0 0 4px ${color.glow}` : "none",
         color: active ? "#fff" : color.text,
+        transform: active ? "translateY(-2px)" : "none",
         transition: "all 0.15s ease",
         cursor: "pointer",
-        borderRadius: "8px",
+        borderRadius: "10px",
         padding: note.isSharp ? "6px 4px" : "8px 6px",
         minWidth: note.isSharp ? "42px" : "50px",
         fontSize: "0.72rem",
@@ -382,27 +385,36 @@ function WaveCard({ waveIdx, t }) {
 
   return (
     <div
+      className="card-spotlight group relative overflow-hidden rounded-2xl border
+                 bg-[var(--color-bg-card)] p-5 flex flex-col gap-3.5 select-none
+                 transition-all duration-300 hover:-translate-y-1"
       style={{
-        background: active ? c.bg : "var(--color-bg-card)",
-        border: `1.5px solid ${active ? c.border : "var(--color-border)"}`,
-        boxShadow: active ? `0 0 24px ${c.glow}` : "none",
-        borderRadius: "16px",
-        padding: "24px 20px 20px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "14px",
-        transition: "all 0.2s ease",
-        userSelect: "none",
+        "--spot-color": c.bg,
+        borderColor: active ? c.border : "var(--color-border)",
+        boxShadow: active
+          ? `0 0 24px ${c.glow}`
+          : undefined,
+      }}
+      onMouseEnter={(e) => {
+        if (!active) e.currentTarget.style.boxShadow = `0 16px 40px -18px ${c.glow}`;
+      }}
+      onMouseLeave={(e) => {
+        if (!active) e.currentTarget.style.boxShadow = "";
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      {/* Accent hairline along the top edge */}
+      <span
+        className="absolute top-0 inset-x-0 h-px pointer-events-none"
+        style={{ background: `linear-gradient(90deg, transparent, ${c.color}66, transparent)` }}
+        aria-hidden="true"
+      />
+
+      <div className="relative flex items-center justify-between">
         <span
+          className="text-[12px] font-bold tracking-[0.18em] uppercase"
           style={{
             fontFamily: "var(--font-mono)",
-            fontWeight: 700,
-            fontSize: "1.1rem",
             color: c.color,
-            letterSpacing: "0.08em",
             textShadow: active ? `0 0 10px ${c.glow}` : "none",
           }}
         >
@@ -416,45 +428,33 @@ function WaveCard({ waveIdx, t }) {
           onTouchStart={startSound}
           onClick={startSound}
           aria-label={`Preview ${label} wave`}
+          className="rounded-full px-3 py-1 text-[11px] font-semibold cursor-pointer
+                     transition-all duration-200 border"
           style={{
-            background: active ? c.border : "transparent",
-            border: `1.5px solid ${c.border}`,
-            borderRadius: "8px",
-            color: active ? "#fff" : c.color,
-            padding: "5px 12px",
-            fontSize: "0.75rem",
             fontFamily: "var(--font-mono)",
-            cursor: "pointer",
-            transition: "all 0.15s ease",
+            background: active ? c.border : `${c.color}0a`,
+            borderColor: active ? c.border : `${c.color}40`,
+            color: active ? "#fff" : c.color,
             boxShadow: active ? `0 0 10px ${c.glow}` : "none",
-            fontWeight: 600,
           }}
         >
           {active ? t.soundLibrary.playing : t.soundLibrary.hearIt}
         </button>
       </div>
 
-      <div style={{ display: "flex", justifyContent: "center", padding: "4px 0" }}>
+      <div className="relative flex justify-center py-1">
         <WaveShape waveIdx={waveIdx} width={200} height={64} />
       </div>
 
-      <p
-        style={{
-          fontSize: "0.85rem",
-          color: "var(--color-text-secondary)",
-          lineHeight: 1.5,
-          margin: 0,
-        }}
-      >
+      <p className="relative text-sm leading-relaxed text-[var(--color-text-secondary)] m-0">
         {t.soundLibrary.waveDescs[descKey]}
       </p>
 
       <div
+        className="relative mt-auto pt-3 border-t text-[11px] text-[var(--color-text-muted)]"
         style={{
-          fontSize: "0.7rem",
           fontFamily: "var(--font-mono)",
-          color: "var(--color-text-muted)",
-          opacity: 0.8,
+          borderColor: "color-mix(in srgb, var(--color-border) 60%, transparent)",
         }}
       >
         {t.soundLibrary.playsA4}
@@ -470,6 +470,28 @@ function WaveCard({ waveIdx, t }) {
 export default function SoundLibrary() {
   const { t } = useLanguage();
   const [visibleOctaves, setVisibleOctaves] = useState(new Set([3, 4, 5]));
+  const pageRef = useRef(null);
+
+  // Reveal each section as it scrolls in (plays immediately when a view
+  // switch lands with the section already on screen)
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    const root = pageRef.current;
+    if (!root) return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray(".sl-section").forEach((el) => {
+        gsap.set(el, { autoAlpha: 0, y: 40 });
+        const show = () =>
+          gsap.to(el, { autoAlpha: 1, y: 0, duration: 0.8, ease: "power3.out" });
+        if (el.getBoundingClientRect().top < window.innerHeight * 0.9) {
+          show();
+        } else {
+          ScrollTrigger.create({ trigger: el, start: "top 85%", once: true, onEnter: show });
+        }
+      });
+    }, root);
+    return () => ctx.revert();
+  }, []);
 
   function toggleOctave(oct) {
     setVisibleOctaves((prev) => {
@@ -484,58 +506,15 @@ export default function SoundLibrary() {
   }
 
   return (
-    <div className="pt-16 min-h-screen" style={{ background: "var(--color-bg-primary)" }}>
+    <div ref={pageRef} className="pt-16 min-h-screen">
       {/* Page header */}
-      <div
-        style={{
-          maxWidth: "1100px",
-          margin: "0 auto",
-          padding: "48px 24px 32px",
-        }}
-      >
-        <div style={{ marginBottom: "8px", display: "flex", alignItems: "center", gap: "10px" }}>
-          <span
-            style={{
-              fontSize: "0.75rem",
-              fontFamily: "var(--font-mono)",
-              color: "var(--color-accent-cyan)",
-              background: "rgba(0,240,255,0.1)",
-              border: "1px solid rgba(0,240,255,0.25)",
-              borderRadius: "6px",
-              padding: "3px 10px",
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-            }}
-          >
-            {t.soundLibrary.interactive}
-          </span>
-        </div>
-        <h1
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: "clamp(2rem, 5vw, 3.2rem)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            marginBottom: "12px",
-          }}
-          className="gradient-text"
-        >
-          {t.soundLibrary.title}
-        </h1>
-        <p
-          style={{
-            fontSize: "1.05rem",
-            color: "var(--color-text-secondary)",
-            maxWidth: "600px",
-            lineHeight: 1.6,
-          }}
-        >
-          {t.soundLibrary.subtitle}
-        </p>
-      </div>
+      <PageHeader eyebrow={t.soundLibrary.interactive} subtitle={t.soundLibrary.subtitle}>
+        <span className="gradient-text">{t.soundLibrary.title}</span>
+      </PageHeader>
 
       {/* Section 1 — Note Explorer */}
       <section
+        className="sl-section"
         style={{
           maxWidth: "1100px",
           margin: "0 auto",
@@ -586,17 +565,14 @@ export default function SoundLibrary() {
               <button
                 key={octave}
                 onClick={() => toggleOctave(octave)}
+                className="rounded-full px-3.5 py-1.5 text-[12px] font-semibold cursor-pointer
+                           border transition-all duration-200 hover:-translate-y-0.5"
                 style={{
-                  background: on ? col.border : "transparent",
-                  border: `1.5px solid ${col.border}`,
-                  color: on ? "#fff" : col.text,
-                  borderRadius: "20px",
-                  padding: "5px 14px",
-                  fontSize: "0.78rem",
                   fontFamily: "var(--font-mono)",
-                  cursor: "pointer",
-                  transition: "all 0.15s ease",
-                  fontWeight: 600,
+                  background: on ? col.bg : "transparent",
+                  borderColor: on ? col.border : "var(--color-border)",
+                  color: on ? col.text : "var(--color-text-muted)",
+                  boxShadow: on ? `0 0 12px ${col.glow ?? col.border}22` : "none",
                 }}
               >
                 {t.soundLibrary.octave} {octave}
@@ -612,14 +588,27 @@ export default function SoundLibrary() {
             return (
               <div
                 key={octave}
-                style={{
-                  background: "var(--color-bg-card)",
-                  border: `1px solid var(--color-border)`,
-                  borderRadius: "14px",
-                  padding: "18px 20px",
-                  borderInlineStart: `4px solid ${col.border}`,
-                }}
+                className="card-spotlight relative overflow-hidden rounded-2xl border
+                           border-[var(--color-border)] bg-[var(--color-bg-card)] p-5
+                           transition-all duration-300"
+                style={{ "--spot-color": col.bg }}
               >
+                {/* Accent hairline + giant ghost octave number */}
+                <span
+                  className="absolute top-0 inset-x-0 h-px pointer-events-none"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${col.border}, transparent)`,
+                  }}
+                  aria-hidden="true"
+                />
+                <span
+                  className="absolute -top-4 end-2 text-[72px] font-black leading-none select-none
+                             pointer-events-none tracking-tighter opacity-[0.06]"
+                  style={{ color: col.text, fontFamily: "var(--font-mono)" }}
+                  aria-hidden="true"
+                >
+                  {octave}
+                </span>
                 <div
                   style={{
                     display: "flex",
@@ -730,6 +719,7 @@ export default function SoundLibrary() {
 
       {/* Section 2 — Wave Comparison */}
       <section
+        className="sl-section"
         style={{
           maxWidth: "1100px",
           margin: "0 auto",

@@ -1,11 +1,8 @@
-import { useLayoutEffect, useRef, lazy, Suspense } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { getPhasesForLang } from "../lessons";
 import LessonCard from "./LessonCard";
 import { useLanguage } from "../i18n/context";
 import { gsap, ScrollTrigger, SplitText, prefersReducedMotion } from "../utils/gsap";
-
-// three.js is heavy — load the backdrop after first paint
-const LessonsScene = lazy(() => import("./three/LessonsScene"));
 
 /**
  * The lessons journey. With `immersive` (dedicated lessons view) it gets a
@@ -144,12 +141,7 @@ export default function LessonList({
 
   return (
     <section ref={rootRef} id="lessons" className={immersive ? "pb-24 px-4 relative" : "py-24 px-4"}>
-      {immersive && (
-        <Suspense fallback={null}>
-          <LessonsScene phaseColors={phases.map((p) => p.color)} />
-        </Suspense>
-      )}
-
+      {/* Particle backdrop is mounted at App level (site-wide) */}
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         {immersive ? (
