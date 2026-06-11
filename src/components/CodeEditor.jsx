@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { StreamLanguage } from "@codemirror/language";
 import { cpp } from "@codemirror/lang-cpp";
-import { oneDark } from "@codemirror/theme-one-dark";
+import { jamEditorTheme } from "./jamEditorTheme";
 import { Play, Square, Download, RotateCcw, Loader2, Code, ChevronDown, ChevronUp, FileAudio, Cpu, Check, AlertTriangle, Upload, MoreVertical } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 import { previewJam, compileJam } from "../utils/pyodideCompiler";
@@ -503,7 +503,7 @@ export default function CodeEditor({
         <CodeMirror
           value={code}
           height="360px"
-          theme={oneDark}
+          theme={jamEditorTheme}
           extensions={[jamLanguage]}
           onChange={handleChange}
           basicSetup={{
@@ -559,7 +559,7 @@ export default function CodeEditor({
             <CodeMirror
               value={cppCode}
               height="300px"
-              theme={oneDark}
+              theme={jamEditorTheme}
               extensions={[cpp()]}
               editable={false}
               basicSetup={{
