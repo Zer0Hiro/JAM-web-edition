@@ -6,6 +6,7 @@ import { oneDark } from "@codemirror/theme-one-dark";
 import { Play, Square, Download, RotateCcw, Loader2, Code, ChevronDown, ChevronUp, FileAudio, Cpu, Check, AlertTriangle, Upload, MoreVertical } from "lucide-react";
 import { useLanguage } from "../i18n/context";
 import { previewJam, compileJam, renderFullJam, cancelAll } from "../utils/pyodideCompiler";
+import { setAnalyser, clearAnalyser } from "../utils/audioBus";
 
 // ── Simple JEM syntax highlighting mode ─────────────────────────────────
 const jamLanguage = StreamLanguage.define({
@@ -70,13 +71,21 @@ class WavPlayer {
 
     this.source = this.ctx.createBufferSource();
     this.source.buffer = audioBuffer;
-    this.source.connect(this.ctx.destination);
+
+    // Route through an analyser so visualizer scenes can react to playback
+    const analyser = this.ctx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.78;
+    this.source.connect(analyser);
+    analyser.connect(this.ctx.destination);
+    setAnalyser(analyser);
 
     this.duration = audioBuffer.duration;
     this.startTime = this.ctx.currentTime;
 
     this.source.onended = () => {
       this._stopTracking();
+      clearAnalyser();
       if (this.onComplete) this.onComplete();
     };
 
@@ -104,6 +113,7 @@ class WavPlayer {
 
   stop() {
     this._stopTracking();
+    clearAnalyser();
     if (this.source) {
       try { this.source.stop(); } catch { }
       this.source = null;

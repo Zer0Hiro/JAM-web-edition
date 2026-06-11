@@ -127,6 +127,7 @@ export default function App() {
       {currentView === "lessons" && (
         <div className="pt-16">
           <LessonList
+            immersive
             onSelectLesson={handleSelectLesson}
             completedLessons={completedLessons}
           />
@@ -136,7 +137,7 @@ export default function App() {
 
       {currentView === "sandbox" && (
         <div className="pt-16">
-          <Sandbox initialCode={sandboxInitialCode} />
+          <Sandbox immersive initialCode={sandboxInitialCode} />
           <Footer />
         </div>
       )}
